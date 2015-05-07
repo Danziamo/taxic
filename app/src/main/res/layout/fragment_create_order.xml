@@ -1,0 +1,126 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/main_background"
+    tools:context="taxi.city.citytaxidriver.OrderDetailsActivity.OrderDetailsFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/linearLayoutOkCancelGroup">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_tiny">
+
+            <TextView
+                style="@style/TextTitle"
+                android:text="Укажите адрес:" />
+
+            <EditText
+                style="@style/mediumEditText"
+                android:id="@+id/editTextStartAddress" />
+
+            <TextView
+                style="@style/TextTitle"
+                android:text="Укажите телефон:"/>
+
+            <EditText
+                style="@style/mediumEditText"
+                android:id="@+id/editTextClientPhone"
+                android:inputType="phone" />
+
+            <TextView
+                style="@style/TextTitle"
+                android:text="Доп. инфо:" />
+
+            <EditText
+                style="@style/mediumEditText"
+                android:id="@+id/editTextDescription"/>
+
+            <TextView
+                style="@style/TextTitle"
+                android:text="Оплата"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <Button
+                    style="@style/mediumButton.Green"
+                    android:id="@+id/buttonByCounter"
+                    android:text="По счётчку"
+                    android:layout_marginRight="20dp" />
+                <Button
+                    style="@style/mediumButton.Yellow"
+                    android:id="@+id/buttonByFixed"
+                    android:text="Фиксированная"
+                    android:layout_marginLeft="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/linearLayoutFixedPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:visibility="gone">
+
+                <EditText
+                    style="@style/mediumEditText"
+                    android:id="@+id/editTextFixedPrice"
+                    android:hint="Укажите фиксированную сумму"
+                    android:inputType="number" />
+
+                <TextView
+                    style="@style/TextTitle"
+                    android:text="Куда вас доставить:"/>
+
+                <EditText
+                    style="@style/mediumEditText"
+                    android:id="@+id/editTextEndAddress"
+                    android:hint="Адрес куда надо доставить"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutOkCancelGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <Button
+            style="@style/mediumButton.Green"
+            android:text="Заказать"
+            android:id="@+id/buttonOk"
+            android:layout_marginRight="20dp" />
+
+        <Button
+            style="@style/mediumButton.Red"
+            android:text="Отмена"
+            android:id="@+id/buttonCancel"
+            android:layout_marginLeft="20dp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

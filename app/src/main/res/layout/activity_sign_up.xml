@@ -38,25 +38,28 @@
                 android:layout_centerHorizontal="true"
                 android:hint="Введите номер телефона" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/etrPassword"
-                android:layout_below="@+id/etrPhone"
-                android:layout_centerHorizontal="true"
-                android:hint="Пароль" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:ems="10"
-                android:id="@+id/etrPassowd2"
-                android:layout_below="@+id/etrPassword"
-                android:layout_centerHorizontal="true"
-                android:hint="Повторить пароль" />
+                <EditText
+                    android:layout_width="286dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/etrPassword"
+                    android:layout_below="@+id/etrPhone"
+                    android:layout_centerHorizontal="true"
+                    android:hint="Пароль"
+                    android:layout_weight="9" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnShowPassword"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <AutoCompleteTextView
                 android:layout_width="match_parent"

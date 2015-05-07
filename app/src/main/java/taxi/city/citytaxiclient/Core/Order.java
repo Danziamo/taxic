@@ -2,15 +2,13 @@ package taxi.city.citytaxiclient.Core;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import taxi.city.citytaxiclient.Enums.OrderStatus;
+import taxi.city.citytaxiclient.Enums.OStatus;
 
 /**
  * Created by Daniyar on 3/27/2015.
@@ -19,18 +17,24 @@ public class Order {
     private static Order mInstance = null;
     public int id;
     public String orderTime;
-    public LatLng startPoint;
-    public LatLng endPoint;
+    public LatLng addressStart;
+    public LatLng addressStop;
+    public int clientId;
     public String clientPhone;
-    public OrderStatus.STATUS status;
+    public OStatus status;
     public String waitTime;
     public int tariff;
     public int driver;
     public String description;
+    public String addressStartName;
+    public String addressStopName;
+    public String driverPhone;
 
-    public long time;
+    public String time;
     public double sum;
     public double distance;
+    public double waitSum;
+    public double fixedPrice;
 
     private Order() {
 
@@ -65,8 +69,7 @@ public class Order {
 
     private String getTimeNow() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String currentDateandTime = sdf.format(new Date());
-        return currentDateandTime;
+        return sdf.format(new Date());
     }
 
     public JSONObject getOrderAsJson() throws JSONException {
@@ -74,33 +77,34 @@ public class Order {
         //obj.put("id", this.id);
         obj.put("client_phone", this.clientPhone);
         obj.put("status", this.status);
-        obj.put("address_start", LatLngToString(this.startPoint));
-        obj.put("address_stop", "");
+        obj.put("address_start", LatLngToString(this.addressStart));
         obj.put("wait_time", "00:00:00");
         obj.put("tariff", 1);
-        obj.put("driver", "");
         obj.put("order_time", getTimeNow());
-        obj.put("description", this.description);
         obj.put("order_sum", 0);
         obj.put("order_distance", 0);
-        obj.put("order_travel_time", "00:00");
-
+        obj.put("order_travel_time", "00:00:00");
+        obj.put("address_start_name", this.addressStartName);
+        obj.put("address_stop_name", this.addressStopName == null ? JSONObject.NULL : this.addressStopName);
+        obj.put("description", this.description);
+        obj.put("client", this.clientId);
+        obj.put("fixed_price", this.fixedPrice);
         return obj;
     }
 
     public void clear() {
-        mInstance = null;
         this.id = 0;
         this.waitTime = null;
-        this.startPoint = null;
-        this.endPoint = null;
+        //this.addressStart = null;
+        this.addressStop = null;
         this.status = null;
-        this.tariff = 0;
+        this.tariff = 1;
         this.driver = 0;
         this.orderTime = null;
         this.clientPhone = null;
         this.distance = 0;
-        this.time = 0;
+        this.time = "00:00:00";
+        this.waitSum = 0;
         this.sum = 0;
     }
 }

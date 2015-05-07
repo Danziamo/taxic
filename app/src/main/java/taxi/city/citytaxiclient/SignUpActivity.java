@@ -7,6 +7,7 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,13 +15,16 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.apache.http.HttpStatus;
@@ -31,17 +35,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import taxi.city.citytaxiclient.Core.Order;
 import taxi.city.citytaxiclient.Service.ApiService;
 
 
 public class SignUpActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private EditText mPasswordView;
-    private EditText mPassword2View;
     private AutoCompleteTextView mPhoneView;
     private AutoCompleteTextView mFirstNameView;
     private AutoCompleteTextView mLastNameView;
     private AutoCompleteTextView mEmailView;
+
+    private static final int CONFIRM_SIGN_UP = 2;
+    private static final int FINISH_SIGN_UP = 1;
 
     private View mProgressView;
     private View mLoginFormView;
@@ -59,7 +66,6 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
 
     private void Initialize() {
         mPasswordView = (EditText) findViewById(R.id.etrPassword);
-        mPassword2View = (EditText) findViewById(R.id.etrPassowd2);
         mFirstNameView = (AutoCompleteTextView) findViewById(R.id.etrFirstName);
         mLastNameView = (AutoCompleteTextView) findViewById(R.id.etrLastName);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.etrEmail);
@@ -73,8 +79,34 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
             }
         });
 
+        ImageButton btnShowPassword = (ImageButton)findViewById(R.id.btnShowPassword);
+        btnShowPassword.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    mPasswordView.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    mPasswordView.setSelection(mPasswordView.length());
+                    return true;
+                }
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    mPasswordView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    mPasswordView.setSelection(mPasswordView.length());
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
         mLoginFormView = findViewById(R.id.svSignUp);
         mProgressView = findViewById(R.id.signup_progress);
+    }
+
+    private boolean isValidEmailAddress(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
     }
 
     public void attemptSignUp() {
@@ -89,7 +121,6 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
         // Store values at the time of the login attempt.
         String phone = mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
-        String password2 = mPassword2View.getText().toString();
         String email = mEmailView.getText().toString();
         String firstName = mFirstNameView.getText().toString();
         String lastName = mLastNameView.getText().toString();
@@ -109,15 +140,9 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
             cancel = true;
         }
 
-        if (!isEmailValid(email)) {
+        if (!isEmailValid(email) || !isValidEmailAddress(email)) {
             mEmailView.setError("Email неверный");
             focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (TextUtils.isEmpty(password2) || !password2.equals(password)) {
-            mPassword2View.setError("Пароль не совападает");
-            focusView = mPassword2View;
             cancel = true;
         }
 
@@ -147,7 +172,7 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
         }
     }
 
-    private class UserSignUpTask extends AsyncTask<Void, Void, Integer> {
+    private class UserSignUpTask extends AsyncTask<Void, Void, JSONObject> {
 
         private final String mPhone;
         private final String mPassword;
@@ -155,6 +180,7 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
         private final String mLastName;
         private final String mEmail;
         private final String mRole;
+        private JSONObject json = new JSONObject();
 
         UserSignUpTask(String phone, String password, String email, String firstName, String lastName) {
             mPhone = phone;
@@ -162,40 +188,50 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
             mFirstName = firstName;
             mLastName = lastName;
             mEmail = email;
-            mRole = "user";
-        }
+            mRole = "driver";
 
-        @Override
-        protected Integer doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            // Simulate network access.
-            JSONObject json = new JSONObject();
             try {
                 json.put("phone", mPhone);
                 json.put("password", mPassword);
-                json.put("email", mEmail);
+                json.put("email", mEmail == null || mEmail.length() == 0 ? JSONObject.NULL : mEmail);
                 json.put("first_name", mFirstName);
                 json.put("last_name", mLastName);
-                json.put("role", mRole);
+                //json.put("role", mRole);
+                json.put("activation_code", "11111");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            // Simulate network access.
             return api.signUpRequest(json, "users/");
         }
 
         @Override
-        protected void onPostExecute(final Integer statusCode) {
+        protected void onPostExecute(final JSONObject result) {
             mSignUpTask = null;
             showProgress(false);
+            int statusCode = -1;
+            try {
+                if(result != null && result.has("status_code")) {
+                    statusCode = result.getInt("status_code");
+                }
 
-            if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_ACCEPTED || statusCode == HttpStatus.SC_CREATED) {
-                Intent intent=new Intent();
-                intent.putExtra("MESSAGE", "Пользователь успешно создан");
-                setResult(1, intent);
-                finish();
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Сервис недоступен", Toast.LENGTH_LONG).show();
+                if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_ACCEPTED || statusCode == HttpStatus.SC_CREATED) {
+                    Order.getInstance().clear();
+                    ConfirmSignUp(result);
+                } else if (statusCode == 400) {
+                    if (result.has("phone")) {
+                        Toast.makeText(getApplicationContext(), "Пользователь с таким номером уже существует", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Сервис недоступен", Toast.LENGTH_LONG).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 
@@ -203,6 +239,23 @@ public class SignUpActivity extends ActionBarActivity implements LoaderManager.L
         protected void onCancelled() {
             mSignUpTask = null;
             showProgress(false);
+        }
+    }
+
+    private void ConfirmSignUp(JSONObject object) {
+        Intent intent = new Intent(this, ConfirmSignUpActivity.class);
+        intent.putExtra("data", object.toString());
+        startActivityForResult(intent, CONFIRM_SIGN_UP);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CONFIRM_SIGN_UP) {
+            Intent intent = new Intent();
+            intent.putExtra("MESSAGE", "Пользователь успешно создан и активирован");
+            setResult(FINISH_SIGN_UP, intent);
+            finish();
         }
     }
 

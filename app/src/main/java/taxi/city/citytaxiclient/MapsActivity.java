@@ -4,15 +4,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +32,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import taxi.city.citytaxiclient.Core.Order;
+import taxi.city.citytaxiclient.Core.User;
+import taxi.city.citytaxiclient.Enums.OStatus;
+import taxi.city.citytaxiclient.Service.ApiService;
 
 public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
@@ -35,27 +50,80 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private Order order = Order.getInstance();
+
     private static final int MAKE_ORDER_ID = 1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    Button btn;
-    TextView tvAddress;
+
+    private Order order;
+    private ApiService api;
+    private User user;
+
     private Location currLocation = null;
+    private CheckOrderStatusTask task = null;
+    private DeclineOrderTask declineTask = null;
+    private static final String PREFS_NAME = "MyPrefsFile";
+
+    Button btnMake;
+    Button btnUpdate;
+    Button btnDecline;
+    TextView tvAddress;
+    TextView tvOrderStatus;
+    ImageView ivIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        order = Order.getInstance();
+        api = ApiService.getInstance();
+        user = User.getInstance();
+
+        if (user == null || user.id == 0)
+        {
+            Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         CheckEnableGPS();
 
         setGooglePlayServices();
         setUpMapIfNeeded();
 
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
-        btn = (Button) findViewById(R.id.makeOrder);
-        btn.setOnClickListener(this);
+        tvOrderStatus = (TextView) findViewById(R.id.textViewOrderStatus);
+        ivIcon = (ImageView) findViewById(R.id.imageViewSearchIcon);
+        ivIcon.setVisibility(View.GONE);
+        btnMake = (Button) findViewById(R.id.makeOrder);
+        btnMake.setOnClickListener(this);
+        btnMake.setEnabled(false);
+
+        btnUpdate = (Button) findViewById(R.id.updateOrder);
+        btnUpdate.setEnabled(false);
+        btnUpdate.setOnClickListener(this);
+
+        btnDecline = (Button) findViewById(R.id.buttonDeclineOrder);
+        btnDecline.setOnClickListener(this);
+        btnDecline.setVisibility(View.GONE);
 
         setLocationRequest();
+        CheckPreviousSession();
+    }
+
+    private void CheckPreviousSession() {
+        if (order.id != 0) {
+            if (task != null) {
+                return;
+            }
+
+            task = new CheckOrderStatusTask();
+            task.execute((Void) null);
+        } else {
+            btnMake.setEnabled(true);
+            ivIcon.setVisibility(View.VISIBLE);
+        }
     }
 
     private void CheckEnableGPS(){
@@ -99,7 +167,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(10)
-                .setInterval(1000)        // 10 seconds, in milliseconds
+                .setInterval(10*1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
     }
 
@@ -115,6 +183,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        CheckPreviousSession();
         mGoogleApiClient.connect();
     }
 
@@ -142,25 +211,27 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 mMap.setMyLocationEnabled(true);
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     public void onCameraChange(CameraPosition arg0) {
-                        LatLng cameraPosition = new LatLng(arg0.target.latitude, arg0.target.longitude);
-                        String displayText = "Поиск адреса...";
-                        order.description = null;
-                        if (currLocation != null) {
-                            Location cameraLocation = new Location("someprovider");
-                            cameraLocation.setLatitude(arg0.target.latitude);
-                            cameraLocation.setLongitude(arg0.target.longitude);
-                            if (currLocation.distanceTo(cameraLocation) > 30*1000) {
-                                order.startPoint = new LatLng(currLocation.getLatitude(), currLocation.getLongitude());
-                            }
-                            else {
-                                order.startPoint = cameraPosition;
-                            }
+                        if (order.id == 0 || order.status == OStatus.FINISHED || order.status == OStatus.CANCELED) {
+                            LatLng cameraPosition = new LatLng(arg0.target.latitude, arg0.target.longitude);
+                            String displayText = "Поиск адреса...";
+                            order.addressStartName = null;
+                            if (currLocation != null) {
+                                Location cameraLocation = new Location("someprovider");
+                                cameraLocation.setLatitude(arg0.target.latitude);
+                                cameraLocation.setLongitude(arg0.target.longitude);
+                                if (currLocation.distanceTo(cameraLocation) > 30 * 1000) {
+                                    order.addressStart = new LatLng(currLocation.getLatitude(), currLocation.getLongitude());
+                                } else {
+                                    order.addressStart = cameraPosition;
+                                }
+                            } else
+                                order.addressStart = cameraPosition;
+                            tvAddress.setText(displayText);
+                            LocationAddress.getAddressFromLocation(arg0.target.latitude, arg0.target.longitude,
+                                    getApplicationContext(), new GeocoderHandler());
+                        } else {
+                            tvAddress.setText(null);
                         }
-                        else
-                            order.startPoint = cameraPosition;
-                        tvAddress.setText(displayText);
-                        LocationAddress.getAddressFromLocation(arg0.target.latitude, arg0.target.longitude,
-                                getApplicationContext(), new GeocoderHandler());
                     }
                 });
             }
@@ -175,10 +246,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             locationAddress = bundle.getString("address");
             switch (message.what) {
                 case 1:
-                    order.description = locationAddress;
+                    order.addressStartName = locationAddress;
                     break;
                 default:
-                    order.description = null;
+                    order.addressStartName = null;
             }
             tvAddress.setText(locationAddress);
         }
@@ -194,6 +265,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onStart() {
         super.onStart();
+        CheckPreviousSession();
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
@@ -271,21 +343,129 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             case R.id.makeOrder:
                 MakeOrder();
                 break;
+            case R.id.updateOrder:
+                CheckPreviousSession();
+                break;
+            case R.id.buttonDeclineOrder:
+                DeclineOrder();
+                break;
         }
     }
 
+    private void DeclineOrder() {
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(MapsActivity.this);
+        //final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+        final String title = "Напишите причину отказа";
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setTitle(title)
+                .setView(input)
+                .setPositiveButton("ОК",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+
+                            }
+                        })
+                .setNegativeButton("Отмена",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                d.cancel();
+                            }
+                        });
+        //builder.create().show();
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = input.getText().toString();
+                if (text.trim().length() < 6) {
+                    input.setError("Должно быть 6 символов");
+                } else {
+                    mMap.clear();
+                    DeclineTask(text);
+                    dialog.dismiss();
+                }
+            }
+
+        });
+    }
+
+    private void DeclineTask(String reason) {
+        if (declineTask != null) {
+            declineTask = null;
+        }
+
+        declineTask = new DeclineOrderTask(reason);
+        declineTask.execute((Void) null);
+    }
+
     private void MakeOrder() {
-        Intent intent = new Intent(this, MakeOrderActivity.class);
+        Intent intent = new Intent(this, CreateOrderActivity.class);
         startActivityForResult(intent, MAKE_ORDER_ID);
+    }
+
+    private void setOrderButton() {
+        if (order.status == null) {
+            tvOrderStatus.setText(null);
+        }
+        else if (order.status == OStatus.NEW || order.status == OStatus.ACCEPTED
+                || order.status == OStatus.CANCELED)
+            tvOrderStatus.setText("Статус: " + order.id + " - " + order.status);
+        else
+            tvOrderStatus.setText("Статус: " + order.id + " - " + order.status +
+                    "\nВремя ождания: " + order.waitTime +
+                    "\nСумма ожидания: " + order.waitSum +
+                    "\nСумма поездки: " + String.valueOf(order.sum - order.waitSum) +
+                    "\nВремя поездки: " + order.time +
+                    "\nОбщая сумма:" + String.valueOf(order.sum) +
+                    "\nПуть: "+ order.distance);
+
+        if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING || order.status == OStatus.NEW) {
+            btnDecline.setVisibility(View.VISIBLE);
+        } else {
+            btnDecline.setVisibility(View.GONE);
+        }
+        if (order.status != OStatus.FINISHED && order.status != OStatus.CANCELED && order.status != null) {
+            btnMake.setEnabled(false);
+            btnMake.setBackgroundColor(0xf0d7cccc);
+            btnUpdate.setBackgroundColor(0xf08e5011);
+            btnUpdate.setEnabled(true);
+            ivIcon.setVisibility(View.GONE);
+        } else {
+            btnMake.setEnabled(true);
+            btnUpdate.setEnabled(false);
+            btnUpdate.setBackgroundColor(0xf0d7cccc);
+            btnMake.setBackgroundColor(0xf08e5011);
+            ivIcon.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MAKE_ORDER_ID) {
-            if (data != null && data.getExtras() != null)
-            Toast.makeText(getApplicationContext(), data.getExtras().getString("MESSAGE"), Toast.LENGTH_LONG).show();
+            if (data != null && data.getExtras() != null) {
+                int code = Integer.valueOf(data.getExtras().getString("MESSAGE"));
+
+                if (code == 1) {
+                    setOrderButton();
+                    savePreferencesOrder(order);
+                    ivIcon.setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(), "Заказ успешно создан", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Ошибка при создании запроса. Попробуйте ещё раз", Toast.LENGTH_LONG).show();
+                }
+            }
         }
+    }
+
+    private void savePreferencesOrder(Order mOrder) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("orderIdKey", String.valueOf(mOrder.id));
+        editor.apply();
     }
 
     @Override
@@ -294,5 +474,206 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         startMain.addCategory( Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
+    }
+
+    private class CheckOrderStatusTask extends AsyncTask<Void, Void, JSONObject> {
+
+        CheckOrderStatusTask() {}
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            // Simulate network access.
+            JSONObject result = api.getOrderRequest("orders/" + order.id + "/");
+            try {
+                if (result != null && result.getInt("status_code") == HttpStatus.SC_OK && result.has("driver")) {
+                    JSONObject driver = api.getOrderRequest("users/" + result.getInt("driver") + "/");
+                    if (driver != null && driver.getInt("status_code") == HttpStatus.SC_OK && driver.has("phone")) {
+                        result.put("driver_phone", driver.getString("phone"));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject result) {
+            task = null;
+            int statusCode;
+            String status;
+            if (result != null) {
+                try {
+                    statusCode = result.getInt("status_code");
+                    if (statusCode == HttpStatus.SC_OK) {
+                        status = result.getString("status");
+                        setStatus(status);
+                        order.id = result.getInt("id");
+                        order.sum = result.getDouble("order_sum");
+                        order.distance = result.getDouble("order_distance");
+                        order.waitTime = result.getString("wait_time");
+                        order.time = result.getString("order_travel_time");
+                        order.waitSum = getFormattedDouble(result.getString("wait_time_price"));
+                        if (result.has("driver_phone")) {
+                            order.driverPhone = result.getString("driver_phone");
+                        }
+                        displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
+                        setOrderButton();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            task = null;
+        }
+    }
+
+    private double getFormattedDouble(String s) {
+        double r = 0;
+        try {
+            r = Double.valueOf(s);
+        } catch (Exception e) {
+
+        }
+        return r;
+    }
+
+    private void displayDriverOnMap(LatLng position) {
+        if (order.status == OStatus.FINISHED) {
+            mMap.clear();
+            return;
+        }
+        if (position == null)  {
+            return;
+        }
+
+        if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING || order.status == OStatus.ONTHEWAY) {
+            mMap.clear();
+            String markerTitle = order.driverPhone == null ? "Ваш водитель" : order.driverPhone;
+            mMap.addMarker(new MarkerOptions().position(position).title(markerTitle));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    final AlertDialog.Builder builder =
+                            new AlertDialog.Builder(MapsActivity.this);
+                    //final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+                    final String message = "Вы уверены что хотите позвонить?";
+                    final String title = order.clientPhone;
+
+                    builder.setMessage(message)
+                            .setTitle(title)
+                            .setPositiveButton("Позвонить",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface d, int id) {
+                                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                            callIntent.setData(Uri.parse("tel:" + order.clientPhone));
+                                            startActivity(callIntent);
+                                            d.dismiss();
+                                        }
+                                    })
+                            .setNegativeButton("Отмена",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface d, int id) {
+                                            d.cancel();
+                                        }
+                                    });
+                    builder.create().show();
+                }
+            });
+        } else {
+            mMap.clear();
+        }
+    }
+
+    private LatLng stringToLatLng(String s) {
+        if (s == null || s.equals("null"))
+            return null;
+        String[] geo = s.replace("(", "").replace(")", "").split(" ");
+
+        double latitude = Double.valueOf(geo[1].trim());
+        double longitude = Double.valueOf(geo[2].trim());
+        return new LatLng(latitude, longitude);
+    }
+
+    private void setStatus(String s) {
+        switch (s) {
+            case "new":
+                order.status = OStatus.NEW;
+                break;
+            case "accepted":
+                order.status = OStatus.ACCEPTED;
+                break;
+            case "sos":
+                order.status = OStatus.SOS;
+                break;
+            case "canceled":
+                order.status = OStatus.CANCELED;
+                break;
+            case "finished":
+                order.status = OStatus.FINISHED;
+                break;
+            case "ontheway":
+                order.status = OStatus.ONTHEWAY;
+                break;
+            case "waiting":
+                order.status = OStatus.WAITING;
+                break;
+        }
+    }
+
+    private class DeclineOrderTask extends AsyncTask<Void, Void, JSONObject> {
+        private String mReason;
+
+        DeclineOrderTask(String reason) {
+            mReason = reason;
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            // Simulate network access.
+            JSONObject object = new JSONObject();
+            try {
+                object.put("status", OStatus.CANCELED.toString());
+                object.put("description", mReason);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return api.patchRequest(object, "orders/" + order.id + "/");
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject result) {
+            declineTask = null;
+            int statusCode;
+            if (result != null) {
+                try {
+                    statusCode = result.getInt("status_code");
+                    if (statusCode == HttpStatus.SC_OK) {
+                        order.clear();
+                        setOrderButton();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //Toast.makeText(getApplicationContext(), "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            declineTask = null;
+        }
     }
 }

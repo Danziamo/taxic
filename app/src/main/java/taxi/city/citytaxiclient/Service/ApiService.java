@@ -5,6 +5,7 @@ import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -15,6 +16,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import taxi.city.citytaxiclient.RequestMethods.HttpPatch;
 
 /**
  * Created by Daniyar on 3/26/2015.
@@ -73,9 +76,9 @@ public class ApiService {
         return res;
     }
 
-    public int signUpRequest(JSONObject data, String apiUrl) {
+    public JSONObject signUpRequest(JSONObject data, String apiUrl) {
         HttpClient httpclient = new DefaultHttpClient();
-        int statusCode = -1;
+        JSONObject json = new JSONObject();
 
         try {
             HttpPost request = new HttpPost(url + apiUrl);
@@ -87,27 +90,115 @@ public class ApiService {
 
             // Execute HTTP Post Request
             HttpResponse response = httpclient.execute(request);
-            statusCode = response.getStatusLine().getStatusCode();
+            json = parseData(response);
 
-            Log.d(TAG, parseData(response, statusCode).toString());
+            Log.d(TAG, json.toString());
 
-        } catch (ClientProtocolException e) {
-            statusCode = -1;
-            // TODO Auto-generated catch block
         } catch (IOException e) {
-            statusCode = -1;
+            json = null;
             // TODO Auto-generated catch block
         } catch (Exception e) {
             e.printStackTrace();
             e.getMessage();
-            statusCode = -1;
+            json = null;
         }
-        return statusCode;
+        return json;
     }
 
-    public int createOrderRequest(JSONObject data, String apiUrl) {
+    public JSONObject activateRequest(JSONObject data, String apiUrl) {
+        HttpClient httpClient = new DefaultHttpClient();
+        JSONObject json = new JSONObject();
+
+        try {
+            HttpPatch request = new HttpPatch(url + apiUrl);
+            // Add your data
+            request.addHeader("content-type", "application/json");
+
+            JSONObject object = new JSONObject();
+            object.put("activation_code", data.getString("activation_code"));
+            StringEntity params = new StringEntity(object.toString(), HTTP.UTF_8);
+            request.setEntity(params);
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpClient.execute(request);
+            json = parseData(response);
+
+            Log.d(TAG, json.toString());
+
+        } catch (IOException e) {
+            json = null;
+            // TODO Auto-generated catch block
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+            json = null;
+        }
+        return json;
+    }
+
+    public JSONObject patchRequest(JSONObject data, String apiUrl) {
+        HttpClient httpClient = new DefaultHttpClient();
+        JSONObject json = new JSONObject();
+
+        try {
+            HttpPatch request = new HttpPatch(url + apiUrl);
+            // Add your data
+            request.addHeader("content-type", "application/json");
+            request.addHeader("Authorization", "Token " + this.token);
+
+            StringEntity params = new StringEntity(data.toString(), HTTP.UTF_8);
+            request.setEntity(params);
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpClient.execute(request);
+            json = parseData(response);
+
+            Log.d(TAG, json.toString());
+
+        } catch (IOException e) {
+            json = null;
+            // TODO Auto-generated catch block
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+            json = null;
+        }
+        return json;
+    }
+
+
+    public JSONObject getOrderRequest(String apiUrl) {
         HttpClient httpclient = new DefaultHttpClient();
-        int res;
+        JSONObject res;
+
+        try {
+            HttpGet request = new HttpGet(url + apiUrl);
+            // Add your data
+            request.addHeader("content-type", "application/json");
+            request.setHeader("Authorization", "Token " + this.token);
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpclient.execute(request);
+            int statusCode = response.getStatusLine().getStatusCode();
+            res = parseData(response, statusCode);
+        } catch (ClientProtocolException e) {
+            res = null;
+            // TODO Auto-generated catch block
+        } catch (IOException e) {
+            res = null;
+            // TODO Auto-generated catch block
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+            res = null;
+        }
+
+        return res;
+    }
+
+    public JSONObject createOrderRequest(JSONObject data, String apiUrl) {
+        HttpClient httpclient = new DefaultHttpClient();
+        JSONObject res;
 
         try {
             HttpPost request = new HttpPost(url + apiUrl);
@@ -120,19 +211,45 @@ public class ApiService {
 
             // Execute HTTP Post Request
             HttpResponse response = httpclient.execute(request);
-            res = response.getStatusLine().getStatusCode();
+            res = parseData(response);
         } catch (ClientProtocolException e) {
-            res = -1;
+            res = null;
             // TODO Auto-generated catch block
         } catch (IOException e) {
-            res = -1;
+            res = null;
             // TODO Auto-generated catch block
         } catch (Exception e) {
             e.printStackTrace();
             e.getMessage();
-            res = -1;
+            res = null;
         }
         return res;
+    }
+
+    protected JSONObject parseData(HttpResponse response) {
+        JSONObject result = new JSONObject();
+        try {
+            result.put("status_code", response.getStatusLine().getStatusCode());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+
+            result = new JSONObject(sb.toString());
+            result.put("status_code", response.getStatusLine().getStatusCode());
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     protected JSONObject parseData(HttpResponse response, int statusCode) {

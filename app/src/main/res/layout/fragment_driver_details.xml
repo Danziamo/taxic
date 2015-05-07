@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main_background">
+
+        <TextView
+            style="@style/TextTitle"
+            android:id="@+id/textViewTitle"
+            android:text="Ваш водитель и авто" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/textViewTitle"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/linearLayout7">
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Фамилия "
+                android:id="@+id/textViewLastName" />
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Имя"
+                android:id="@+id/textViewFirstName" />
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Телефон: (+996) XXX XXX-XXX"
+                android:id="@+id/textViewDriverPhone" />
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Марка автомобиля"
+                android:id="@+id/textViewCarBrand" />
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Модель автомобиля"
+                android:id="@+id/textViewCarModel" />
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Цвет автомобиля"
+                android:id="@+id/textViewCarColor" />
+
+            <TextView
+                style="@style/mediumEditText"
+                android:hint="Номер автомобиля"
+                android:id="@+id/textViewCarNumber" />
+        </LinearLayout>
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayoutBackExitGroup"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp">
+
+        <Button
+            style="@style/mediumButton.Yellow"
+            android:text="Назад"
+            android:layout_marginRight="25dp"
+            android:id="@+id/button43"
+ />
+
+        <Button
+            style="@style/mediumButton.Red"
+            android:text="Выход"
+            android:layout_marginLeft="25dp"
+            android:id="@+id/button44"
+ />
+    </LinearLayout>
+
+    </RelativeLayout>

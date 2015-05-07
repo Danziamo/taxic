@@ -6,4 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_sing_up">SingUpActivity</string>
+    <string name="title_activity_confirm_sign_up">ConfirmSIgnUpActivity</string>
+    <string name="title_activity_user_details">UserDetailsActivity</string>
+    <string name="title_activity_create_order">CreateOrderActivity</string>
+    <string name="title_activity_driver_details">DriverDetails</string>
+    <string name="title_activity_garaj">GarajActivity</string>
 </resources>
