@@ -1,35 +1,25 @@
 package taxi.city.citytaxiclient;
 
-import android.app.DialogFragment;
-import android.content.DialogInterface;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.Core.User;
@@ -40,6 +30,11 @@ import taxi.city.citytaxiclient.Utils.Helper;
  * A placeholder fragment containing a simple view.
  */
 public class UserDetailsActivityFragment extends Fragment implements View.OnClickListener {
+
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    private String mParam1;
+
     private EditText etLastName;
     private EditText etFirstName;
     private EditText etPhone;
@@ -60,7 +55,23 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private User user;
     private UserUpdateTask mTask = null;
 
+    public static UserDetailsActivityFragment newInstance(int position) {
+        UserDetailsActivityFragment fragment = new UserDetailsActivityFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, String.valueOf(position));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public UserDetailsActivityFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+        }
     }
 
     @Override

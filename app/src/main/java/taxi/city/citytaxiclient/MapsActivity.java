@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,6 +44,7 @@ import taxi.city.citytaxiclient.Core.Order;
 import taxi.city.citytaxiclient.Core.User;
 import taxi.city.citytaxiclient.Enums.OStatus;
 import taxi.city.citytaxiclient.Service.ApiService;
+import taxi.city.citytaxiclient.Utils.Helper;
 
 public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
@@ -63,9 +65,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private DeclineOrderTask declineTask = null;
     private static final String PREFS_NAME = "MyPrefsFile";
 
-    Button btnMake;
-    Button btnUpdate;
-    Button btnDecline;
+    Button btnOk;
+    Button btnRefresh;
+    Button btnSettings;
+
     TextView tvAddress;
     TextView tvOrderStatus;
     ImageView ivIcon;
@@ -96,17 +99,14 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderStatus = (TextView) findViewById(R.id.textViewOrderStatus);
         ivIcon = (ImageView) findViewById(R.id.imageViewSearchIcon);
         ivIcon.setVisibility(View.GONE);
-        btnMake = (Button) findViewById(R.id.makeOrder);
-        btnMake.setOnClickListener(this);
-        btnMake.setEnabled(false);
+        btnOk = (Button) findViewById(R.id.buttonOk);
+        btnOk.setOnClickListener(this);
 
-        btnUpdate = (Button) findViewById(R.id.updateOrder);
-        btnUpdate.setEnabled(false);
-        btnUpdate.setOnClickListener(this);
+        btnRefresh = (Button) findViewById(R.id.updateOrder);
+        btnRefresh.setOnClickListener(this);
 
-        btnDecline = (Button) findViewById(R.id.buttonDeclineOrder);
-        btnDecline.setOnClickListener(this);
-        btnDecline.setVisibility(View.GONE);
+        btnSettings = (Button) findViewById(R.id.buttonSettings);
+        btnSettings.setOnClickListener(this);
 
         setLocationRequest();
         CheckPreviousSession();
@@ -121,7 +121,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             task = new CheckOrderStatusTask();
             task.execute((Void) null);
         } else {
-            btnMake.setEnabled(true);
+            btnOk.setEnabled(true);
             ivIcon.setVisibility(View.VISIBLE);
         }
     }
@@ -167,7 +167,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setSmallestDisplacement(10)
-                .setInterval(10*1000)        // 10 seconds, in milliseconds
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
     }
 
@@ -255,13 +255,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -274,9 +267,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onStop() {
         super.onStop();
-        /*if (mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
-        }*/
+        }
     }
 
     @Override
@@ -340,16 +333,30 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.makeOrder:
-                MakeOrder();
+            case R.id.buttonOk:
+                if (order.status != OStatus.NEW && order.status != OStatus.WAITING && order.status != OStatus.ACCEPTED) {
+                    MakeOrder();
+                } else {
+                    DeclineOrder();
+                }
                 break;
             case R.id.updateOrder:
                 CheckPreviousSession();
                 break;
-            case R.id.buttonDeclineOrder:
-                DeclineOrder();
+            case R.id.buttonSettings:
+                goToSettings();
+                break;
+            case R.id.buttonRefresh:
+                CheckPreviousSession();
+                break;
+            default:
                 break;
         }
+    }
+
+    private void goToSettings() {
+        Intent intent = new Intent(this, AccountActivity.class);
+        startActivity(intent);
     }
 
     private void DeclineOrder() {
@@ -406,7 +413,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         startActivityForResult(intent, MAKE_ORDER_ID);
     }
 
-    private void setOrderButton() {
+    private void updateViews() {
         if (order.status == null) {
             tvOrderStatus.setText(null);
         }
@@ -422,23 +429,16 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     "\nОбщая сумма:" + String.valueOf(order.sum) +
                     "\nПуть: "+ order.distance);
 
-        if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING || order.status == OStatus.NEW) {
-            btnDecline.setVisibility(View.VISIBLE);
+        if (order.status == OStatus.NEW || order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING) {
+            btnOk.setBackgroundResource(R.drawable.button_shape_red);
+            btnOk.setText("Отмена");
+            btnOk.setVisibility(View.VISIBLE);
+        } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY) {
+            btnOk.setVisibility(View.INVISIBLE);
         } else {
-            btnDecline.setVisibility(View.GONE);
-        }
-        if (order.status != OStatus.FINISHED && order.status != OStatus.CANCELED && order.status != null) {
-            btnMake.setEnabled(false);
-            btnMake.setBackgroundColor(0xf0d7cccc);
-            btnUpdate.setBackgroundColor(0xf08e5011);
-            btnUpdate.setEnabled(true);
-            ivIcon.setVisibility(View.GONE);
-        } else {
-            btnMake.setEnabled(true);
-            btnUpdate.setEnabled(false);
-            btnUpdate.setBackgroundColor(0xf0d7cccc);
-            btnMake.setBackgroundColor(0xf08e5011);
-            ivIcon.setVisibility(View.VISIBLE);
+            btnOk.setBackgroundResource(R.drawable.button_shape_azure);
+            btnOk.setText("Заказать");
+            btnOk.setVisibility(View.VISIBLE);
         }
     }
 
@@ -450,7 +450,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 int code = Integer.valueOf(data.getExtras().getString("MESSAGE"));
 
                 if (code == 1) {
-                    setOrderButton();
+                    updateViews();
                     savePreferencesOrder(order);
                     ivIcon.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), "Заказ успешно создан", Toast.LENGTH_LONG).show();
@@ -489,7 +489,17 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 if (result != null && result.getInt("status_code") == HttpStatus.SC_OK && result.has("driver")) {
                     JSONObject driver = api.getOrderRequest("users/" + result.getInt("driver") + "/");
                     if (driver != null && driver.getInt("status_code") == HttpStatus.SC_OK && driver.has("phone")) {
+                        JSONObject driverCar = api.getArrayRequest("usercars/driver="+result.getString("driver"));
                         result.put("driver_phone", driver.getString("phone"));
+                        result.put("driver_first_name", driver.getString("first_name"));
+                        result.put("driver_last_name", driver.getString("last_name"));
+                        if (driverCar != null && Helper.isSuccess(driverCar) && driverCar.has("result")) {
+                            JSONArray array = driverCar.getJSONArray("result");
+                            if (array.length() > 0) {
+                                JSONObject car = array.getJSONObject(0);
+                                result.put("driver")
+                            }
+                        }
                     }
                 }
             } catch (JSONException e) {
@@ -507,8 +517,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 try {
                     statusCode = result.getInt("status_code");
                     if (statusCode == HttpStatus.SC_OK) {
-                        status = result.getString("status");
-                        setStatus(status);
+                        order.status = Helper.getStatus(result.getString("status"));
                         order.id = result.getInt("id");
                         order.sum = result.getDouble("order_sum");
                         order.distance = result.getDouble("order_distance");
@@ -519,7 +528,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             order.driverPhone = result.getString("driver_phone");
                         }
                         displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
-                        setOrderButton();
+                        updateViews();
                     }
 
                 } catch (JSONException e) {
@@ -627,6 +636,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             case "waiting":
                 order.status = OStatus.WAITING;
                 break;
+            case "pending":
+                order.status = OStatus.PENDING;
+                break;
         }
     }
 
@@ -660,7 +672,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     statusCode = result.getInt("status_code");
                     if (statusCode == HttpStatus.SC_OK) {
                         order.clear();
-                        setOrderButton();
+                        updateViews();
                     }
 
                 } catch (JSONException e) {

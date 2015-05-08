@@ -17,6 +17,7 @@ public class User implements Serializable {
     public String password;
     public String email;
     public String dateOfBirth;
+    public double balance;
 
     private User() {}
 
@@ -36,6 +37,7 @@ public class User implements Serializable {
             this.phone = json.getString("phone");
             this.dateOfBirth = json.getString("date_of_birth");
             this.email = json.getString("email");
+            this.balance = json.getDouble("balance");
         } catch (JSONException e) {
             e.printStackTrace();
         }

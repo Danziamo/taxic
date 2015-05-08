@@ -11,4 +11,13 @@
     <string name="title_activity_create_order">CreateOrderActivity</string>
     <string name="title_activity_driver_details">DriverDetails</string>
     <string name="title_activity_garaj">GarajActivity</string>
+    <string name="title_activity_tabbed">TabbedActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="title_activity_account">AccountActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

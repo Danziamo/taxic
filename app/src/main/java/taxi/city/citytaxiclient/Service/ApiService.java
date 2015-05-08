@@ -1,5 +1,6 @@
 package taxi.city.citytaxiclient.Service;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -10,6 +11,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -196,6 +198,35 @@ public class ApiService {
         return res;
     }
 
+    public JSONObject getArrayRequest(String apiUrl) {
+        JSONObject result = new JSONObject();
+        try {
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpGet request = new HttpGet(url + apiUrl);
+            // Add your data
+            //request.addHeader("content-type", "application/json");
+            request.setHeader("Authorization", "Token " + this.token);
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpclient.execute(request);
+            int statusCode = response.getStatusLine().getStatusCode();
+            result.put("status_code", statusCode);
+
+            JSONArray object = parseDataArray(response);
+            result.put("result", object);
+        } catch (ClientProtocolException e) {
+            result = null;
+            // TODO Auto-generated catch block
+        } catch (IOException e) {
+            result = null;
+            // TODO Auto-generated catch block
+        } catch (JSONException e) {
+            result = null;
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public JSONObject createOrderRequest(JSONObject data, String apiUrl) {
         HttpClient httpclient = new DefaultHttpClient();
         JSONObject res;
@@ -245,6 +276,26 @@ public class ApiService {
 
             result = new JSONObject(sb.toString());
             result.put("status_code", response.getStatusLine().getStatusCode());
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    protected JSONArray parseDataArray(HttpResponse response) {
+        JSONArray result = null;
+        try {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+            StringBuilder sb = new StringBuilder();
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+
+            Log.d("Response", sb.toString());
+            result = new JSONArray(sb.toString());
         } catch (JSONException | IOException e) {
             e.printStackTrace();
         }

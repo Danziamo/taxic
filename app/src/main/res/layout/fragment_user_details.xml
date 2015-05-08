@@ -6,12 +6,6 @@
 
     tools:context="taxi.city.citytaxidriver.UserDetailsActivity.UserDetailsFragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background"
-        android:scaleType="centerCrop"/>
-
     <TextView
         style="@style/TextTitle"
         android:text="Настройки клиента"

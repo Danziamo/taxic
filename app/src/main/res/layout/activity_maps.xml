@@ -5,37 +5,10 @@
     android:layout_width="match_parent"
     tools:context="taxi.city.citytaxiclient.MapsActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_shadow"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/llInfo">
-
-        <TextView
-            android:id="@+id/textViewAddressLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF"
-            android:text="Текущий адрес:"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewAddressLabel"
-            android:background="#FFFFFF"
-            android:text="Поиск адреса..."
-            android:id="@+id/textViewAddress"/>
-    </LinearLayout>
-
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map"
-        android:layout_below="@+id/llInfo"
         android:name="com.google.android.gms.maps.SupportMapFragment">
 
         <RelativeLayout
@@ -43,58 +16,313 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id = "@+id/textViewOrderStatus"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="5dp"
-                android:textSize="20dp"/>
+                style="@style/mediumEditText"
+                android:background="@drawable/search_address_style"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:drawableRight="@drawable/ic_action_search_map"
+                android:hint="Адрес выбранной точки"
+                android:id="@+id/textViewAddress"/>
 
-
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:layout_centerInParent="true"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/imageViewSearchIcon"
-                android:src="@drawable/gettaxi"/>
-
-            <Button
-                android:id="@+id/makeOrder"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:background="#f08e5011"
-                android:text = "ЗАКАЗАТЬ"
-                android:textColor="#FFFFFF"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="5dp"/>
-
-            <Button
-                android:id="@+id/updateOrder"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:text = "Обновить"
-                android:layout_above="@+id/makeOrder"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="5dp"/>
-
-            <Button
+            <LinearLayout
+                android:id="@+id/mainLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/textViewAddress"
+                android:background="#80ffffff"
+                android:padding="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutOrderStatus"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:text="Статус:"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:gravity="center|right"
+                        android:layout_marginRight="20dp"
+                        android:text="В пути"
+                        android:textColor="@color/blue_btn_bg_color"
+                        android:textSize="@dimen/text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutMapWaitTime"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="Ожидание:"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="00:00"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_weight="3.5"
+                        android:id="@+id/textViewWaitTime"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="мин"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutOrderWaitSum"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="Сумма:"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="right"
+                        android:text="000000"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:id="@+id/textViewOrderWaitSum"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="сом"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutOrderDistance"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="Расстояние:"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="right"
+                        android:text="00000"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:id="@+id/textViewOrderDistance"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="км"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutOrderTravelSum"
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="Сумма проезда:"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="right"
+                        android:text="000000"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:id="@+id/textViewOrderTravelSum"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="сом"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size"
+                        android:layout_marginLeft="20dp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:id="@+id/viewCenter"
                 android:layout_centerVertical="true"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:text = "Отказать"
-                android:id="@+id/buttonDeclineOrder"
-                android:layout_above="@id/updateOrder"
-                />
+                android:visibility="invisible">
+
+            </View>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="65dp"
+                android:layout_toRightOf="@id/viewCenter"
+                android:layout_alignBottom="@id/viewCenter"
+                android:id="@+id/imageViewSearchIcon"
+                android:background="@drawable/flag"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutTotalSum"
+                android:layout_above="@id/linearLayoutButtonGroupOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#80ffffff"
+                android:padding="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:weightSum="10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:text="Итого:"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:gravity="right"
+                        android:text="000000"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_large"
+                        android:id="@+id/textViewOrderTotalSum"
+                        android:layout_marginLeft="20dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.5"
+                        android:text="сом"
+                        android:textColor="@color/blacktext2"
+                        android:textSize="@dimen/text_size_medium"
+                        android:layout_marginLeft="20dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/linearLayoutButtonGroupOrder">
+
+                <Button
+                    style="@style/mediumButton.Green"
+                    android:text="Вызвать"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/buttonOk" />
+
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/button_refresh_blue"
+                    android:id="@+id/buttonRefresh"
+                    android:layout_marginLeft="20dp" />
+
+                <Button
+                    style="@style/mediumButton.Black"
+                    android:text="Личный кабинет"
+                    android:id="@+id/buttonSettings"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp" />
+            </LinearLayout>
+
         </RelativeLayout>
 
     </fragment>
-
 </RelativeLayout>
 
