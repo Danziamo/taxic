@@ -34,7 +34,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter implements PagerSlidi
             case 1:
                 return UserDetailsActivityFragment.newInstance(position);
             default:
-                return AccountDetailsActivityFragment.newInstance(position);
+                return HistoryOrderFragment.newInstance(position);
         }
 
     }

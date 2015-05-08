@@ -78,6 +78,7 @@ public class Order {
         obj.put("client_phone", this.clientPhone);
         obj.put("status", this.status);
         obj.put("address_start", LatLngToString(this.addressStart));
+        obj.put("address_stop", JSONObject.NULL);
         obj.put("wait_time", "00:00:00");
         obj.put("tariff", 1);
         obj.put("order_time", getTimeNow());
@@ -89,13 +90,15 @@ public class Order {
         obj.put("description", this.description);
         obj.put("client", this.clientId);
         obj.put("fixed_price", this.fixedPrice);
+        obj.put("wait_time", "00:00:00");
+        obj.put("wait_time_price", 0);
         return obj;
     }
 
     public void clear() {
         this.id = 0;
-        this.waitTime = null;
         //this.addressStart = null;
+        this.waitTime = null;
         this.addressStop = null;
         this.status = null;
         this.tariff = 1;
@@ -106,5 +109,20 @@ public class Order {
         this.time = "00:00:00";
         this.waitSum = 0;
         this.sum = 0;
+    }
+
+    public double getTotalSum() {
+        if (this.fixedPrice >= 50) return this.fixedPrice;
+        return this.sum + this.waitSum;
+    }
+
+    public double getWaitSum() {
+        if (this.fixedPrice >= 50) return 0;
+        return this.waitSum;
+    }
+
+    public double getTravelSum() {
+        if (this.fixedPrice >= 50) return fixedPrice;
+        return this.sum;
     }
 }
