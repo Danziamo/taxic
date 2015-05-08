@@ -60,6 +60,7 @@
                         android:gravity="center|right"
                         android:layout_marginRight="20dp"
                         android:text="В пути"
+                        android:id="@+id/textViewOrderStatus"
                         android:textColor="@color/blue_btn_bg_color"
                         android:textSize="@dimen/text_size" />
 
@@ -243,50 +244,43 @@
 
             <LinearLayout
                 android:id="@+id/linearLayoutTotalSum"
-                android:layout_above="@id/linearLayoutButtonGroupOrder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#80ffffff"
                 android:padding="5dp"
                 android:layout_marginTop="20dp"
+                android:weightSum="10"
+                android:layout_above="@+id/linearLayoutButtonGroupOrder"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:weightSum="10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="Итого:"
+                    android:textColor="@color/blacktext2"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginLeft="20dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="5"
-                        android:text="Итого:"
-                        android:textColor="@color/blacktext2"
-                        android:textSize="@dimen/text_size_medium"
-                        android:layout_marginLeft="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3.5"
+                    android:gravity="right"
+                    android:text="000000"
+                    android:textColor="@color/blacktext2"
+                    android:textSize="@dimen/text_size_large"
+                    android:id="@+id/textViewOrderTotalSum"
+                    android:layout_marginLeft="20dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3.5"
-                        android:gravity="right"
-                        android:text="000000"
-                        android:textColor="@color/blacktext2"
-                        android:textSize="@dimen/text_size_large"
-                        android:id="@+id/textViewOrderTotalSum"
-                        android:layout_marginLeft="20dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
-                        android:text="сом"
-                        android:textColor="@color/blacktext2"
-                        android:textSize="@dimen/text_size_medium"
-                        android:layout_marginLeft="20dp" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:text="сом"
+                    android:textColor="@color/blacktext2"
+                    android:textSize="@dimen/text_size_medium"
+                    android:layout_marginLeft="20dp" />
 
             </LinearLayout>
 

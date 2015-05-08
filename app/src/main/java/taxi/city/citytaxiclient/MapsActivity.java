@@ -40,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import taxi.city.citytaxiclient.Core.Driver;
 import taxi.city.citytaxiclient.Core.Order;
 import taxi.city.citytaxiclient.Core.User;
 import taxi.city.citytaxiclient.Enums.OStatus;
@@ -102,7 +103,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         btnOk = (Button) findViewById(R.id.buttonOk);
         btnOk.setOnClickListener(this);
 
-        btnRefresh = (Button) findViewById(R.id.updateOrder);
+        btnRefresh = (Button) findViewById(R.id.buttonRefresh);
         btnRefresh.setOnClickListener(this);
 
         btnSettings = (Button) findViewById(R.id.buttonSettings);
@@ -340,9 +341,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     DeclineOrder();
                 }
                 break;
-            case R.id.updateOrder:
-                CheckPreviousSession();
-                break;
             case R.id.buttonSettings:
                 goToSettings();
                 break;
@@ -497,7 +495,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             JSONArray array = driverCar.getJSONArray("result");
                             if (array.length() > 0) {
                                 JSONObject car = array.getJSONObject(0);
-                                result.put("driver")
+                                result.put("driver_brand", car.getString("brand"));
+                                result.put("driver_model", car.getString("brand_model"));
+                                result.put("driver_number", car.getString("car_number"));
+                                result.put("driver_color", car.getString("color"));
                             }
                         }
                     }
@@ -526,6 +527,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                         order.waitSum = getFormattedDouble(result.getString("wait_time_price"));
                         if (result.has("driver_phone")) {
                             order.driverPhone = result.getString("driver_phone");
+                            order.driver = new Driver(result);
                         }
                         displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
                         updateViews();
@@ -679,7 +681,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     e.printStackTrace();
                 }
             } else {
-                //Toast.makeText(getApplicationContext(), "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
             }
         }
 

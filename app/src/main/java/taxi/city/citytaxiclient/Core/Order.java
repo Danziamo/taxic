@@ -24,11 +24,11 @@ public class Order {
     public OStatus status;
     public String waitTime;
     public int tariff;
-    public int driver;
     public String description;
     public String addressStartName;
     public String addressStopName;
     public String driverPhone;
+    public Driver driver;
 
     public String time;
     public double sum;
@@ -99,7 +99,7 @@ public class Order {
         this.addressStop = null;
         this.status = null;
         this.tariff = 1;
-        this.driver = 0;
+        this.driver = null;
         this.orderTime = null;
         this.clientPhone = null;
         this.distance = 0;
