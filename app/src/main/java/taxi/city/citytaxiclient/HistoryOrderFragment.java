@@ -69,7 +69,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history_order, container, false);
         user = User.getInstance();
-        limit = 10;
+        limit = 1;
 
         lvMain = (ListView) rootView.findViewById(R.id.orderList);
 
@@ -79,6 +79,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
         lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -93,7 +94,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                             break;
                         }
                     }
-                    goOrderDetails();
+                    goOrderDetails(orderDetail);
                 }
                 catch (Exception e) {
                 }
@@ -103,7 +104,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
         return rootView;
     }
 
-    private void goOrderDetails() {
+    private void goOrderDetails(OrderDetail detail) {
 
     }
 
@@ -115,7 +116,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                 if (!row.has("status") || row.getString("status").equals(OStatus.CANCELED.toString()))
                     continue;
                 OrderDetail details = new OrderDetail(row, user.id);
-                list.add(orderDetail);
+                list.add(details);
 
             }
             OrderDetailsAdapter adapter = new OrderDetailsAdapter(getActivity(), list);
@@ -188,7 +189,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
             if (result != null) {
                 InitListView(result);
             } else {
-                Toast.makeText(getActivity(), "Не удалось получить данные с сервера", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Не удалось получить данные с сервера", Toast.LENGTH_SHORT).show();
             }
         }
 
