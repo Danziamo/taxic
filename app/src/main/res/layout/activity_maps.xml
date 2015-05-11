@@ -67,7 +67,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayoutMapWaitTime"
+                    android:id="@+id/linearLayoutOrderWaitTime"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,7 +309,7 @@
 
                 <Button
                     style="@style/mediumButton.Black"
-                    android:text="Личный кабинет"
+                    android:text="Настройки"
                     android:id="@+id/buttonSettings"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="20dp" />

@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -13,12 +14,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.text.InputType;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.User;
@@ -49,7 +53,6 @@ import taxi.city.citytaxiclient.utils.Helper;
 
 public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
-    private static final String TAG = "MapsActivity";
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -65,6 +68,14 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private CheckOrderStatusTask task = null;
     private DeclineOrderTask declineTask = null;
     private static final String PREFS_NAME = "MyPrefsFile";
+
+    LinearLayout llMain;
+    LinearLayout llOrderStatus;
+    LinearLayout llOrderWaitTime;
+    LinearLayout llOrderWaitSum;
+    LinearLayout llOrderDistance;
+    LinearLayout llOrderSum;
+    LinearLayout llOrderTotalSum;
 
     Button btnOk;
     Button btnRefresh;
@@ -96,10 +107,19 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         setGooglePlayServices();
         setUpMapIfNeeded();
 
+        llMain = (LinearLayout) findViewById(R.id.mainLayout);
+        llOrderStatus = (LinearLayout) findViewById(R.id.linearLayoutOrderStatus);
+        llOrderWaitTime = (LinearLayout) findViewById(R.id.linearLayoutOrderWaitTime);
+        llOrderWaitSum = (LinearLayout) findViewById(R.id.linearLayoutOrderWaitSum);
+        llOrderDistance = (LinearLayout) findViewById(R.id.linearLayoutOrderDistance);
+        llOrderSum = (LinearLayout) findViewById(R.id.linearLayoutOrderTravelSum);
+        llOrderTotalSum = (LinearLayout) findViewById(R.id.linearLayoutTotalSum);
+
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
         tvOrderStatus = (TextView) findViewById(R.id.textViewOrderStatus);
         ivIcon = (ImageView) findViewById(R.id.imageViewSearchIcon);
         ivIcon.setVisibility(View.GONE);
+
         btnOk = (Button) findViewById(R.id.buttonOk);
         btnOk.setOnClickListener(this);
 
@@ -141,27 +161,26 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     public void displayPromptForEnablingGPS()
     {
-
-        final AlertDialog.Builder builder =
-                new AlertDialog.Builder(MapsActivity.this);
-        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-        final String message = "Активируйте геолокацию.";
-
-        builder.setMessage(message)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                MapsActivity.this.startActivity(new Intent(action));
-                                d.dismiss();
-                            }
-                        })
-                .setNegativeButton("Отмена",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                d.cancel();
-                            }
-                        });
-        builder.create().show();
+        SweetAlertDialog pDialog = new SweetAlertDialog(MapsActivity.this, SweetAlertDialog.NORMAL_TYPE);
+        pDialog .setTitleText("Активируйте геолокацию")
+                .setContentText(order.clientPhone)
+                .setConfirmText("ОК")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+                        MapsActivity.this.startActivity(new Intent(action));
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .setCancelText("Отмена")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
     }
 
     private void setLocationRequest() {
@@ -188,19 +207,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         mGoogleApiClient.connect();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * If it isn't installed {@link SupportMapFragment} (and
-     * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
-     * install/update the Google Play services APK on their device.
-     * <p/>
-     * A user can return to this FragmentActivity after following the prompt and correctly
-     * installing/updating/enabling the Google Play services. Since the FragmentActivity may not
-     * have been completely destroyed during this process (it is likely that it would only be
-     * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
-     * method in {@link #onResume()} to guarantee that it will be called.
-     */
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -284,9 +290,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        // Connected to Google Play services!
-        // The good stuff goes here.
-        Log.i(TAG, "Location services connected.");
         startLocationUpdates();
 
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -321,7 +324,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 e.printStackTrace();
             }
         } else {
-            Log.i(TAG, "Location services connection failed with code " + result.getErrorCode());
+
         }
     }
 
@@ -338,7 +341,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 if (order.status != OStatus.NEW && order.status != OStatus.WAITING && order.status != OStatus.ACCEPTED) {
                     MakeOrder();
                 } else {
-                    DeclineOrder();
+                    cancelOrder();
                 }
                 break;
             case R.id.buttonSettings:
@@ -357,44 +360,47 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         startActivity(intent);
     }
 
-    private void DeclineOrder() {
-        final AlertDialog.Builder builder =
-                new AlertDialog.Builder(MapsActivity.this);
-        //final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-        final String title = "Напишите причину отказа";
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        builder.setTitle(title)
-                .setView(input)
-                .setPositiveButton("ОК",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
+    private void cancelOrder() {
 
-                            }
-                        })
-                .setNegativeButton("Отмена",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                d.cancel();
-                            }
-                        });
-        //builder.create().show();
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.alertdialog_decline_order);
+
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+
+        wlp.gravity = Gravity.BOTTOM;
+        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        window.setAttributes(wlp);
+
+        final EditText reason = (EditText) dialog.findViewById(R.id.editTextDeclineReason);
+        Button btnOkDialog = (Button) dialog.findViewById(R.id.buttonOkDecline);
+        Button btnCancelDialog = (Button) dialog.findViewById(R.id.buttonCancelDecline);
+        // if button is clicked, close the custom dialog
+        btnOkDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = input.getText().toString();
-                if (text.trim().length() < 6) {
-                    input.setError("Должно быть 6 символов");
-                } else {
-                    mMap.clear();
-                    DeclineTask(text);
-                    dialog.dismiss();
+                order.status = OStatus.NEW;
+                String reasonText = reason.getText().toString();
+                if (reasonText.length() < 6) {
+                    reason.setError("Нужно как минимум 6 символов");
+                    reason.requestFocus();
+                    return;
                 }
+                DeclineTask(reasonText);
+                updateViews();
+                dialog.dismiss();
             }
-
         });
+
+        btnCancelDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+
     }
 
     private void DeclineTask(String reason) {
@@ -412,31 +418,30 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     }
 
     private void updateViews() {
-        if (order.status == null) {
-            tvOrderStatus.setText(null);
-        }
-        else if (order.status == OStatus.NEW || order.status == OStatus.ACCEPTED
-                || order.status == OStatus.CANCELED)
-            tvOrderStatus.setText("Статус: " + order.id + " - " + order.status);
-        else
-            tvOrderStatus.setText("Статус: " + order.id + " - " + order.status +
-                    "\nВремя ождания: " + order.waitTime +
-                    "\nСумма ожидания: " + order.waitSum +
-                    "\nСумма поездки: " + String.valueOf(order.sum - order.waitSum) +
-                    "\nВремя поездки: " + order.time +
-                    "\nОбщая сумма:" + String.valueOf(order.sum) +
-                    "\nПуть: "+ order.distance);
-
         if (order.status == OStatus.NEW || order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING) {
-            btnOk.setBackgroundResource(R.drawable.button_shape_red);
+            llMain.setVisibility(View.VISIBLE);
+            llOrderTotalSum.setVisibility(View.GONE);
+            llOrderSum.setVisibility(View.GONE);
+            llOrderDistance.setVisibility(View.GONE);
+            llOrderWaitSum.setVisibility(View.GONE);
+            llOrderWaitTime.setVisibility(View.GONE);
+            llOrderStatus.setVisibility(View.VISIBLE);
             btnOk.setText("Отмена");
-            btnOk.setVisibility(View.VISIBLE);
-        } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY) {
-            btnOk.setVisibility(View.INVISIBLE);
+            btnOk.setBackgroundResource(R.drawable.red_button_background);
+        } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY){
+            llMain.setVisibility(View.VISIBLE);
+            llOrderTotalSum.setVisibility(View.VISIBLE);
+            llOrderSum.setVisibility(View.VISIBLE);
+            llOrderDistance.setVisibility(View.VISIBLE);
+            llOrderWaitSum.setVisibility(View.VISIBLE);
+            llOrderWaitTime.setVisibility(View.VISIBLE);
+            llOrderStatus.setVisibility(View.VISIBLE);
+            btnOk.setVisibility(View.GONE);
         } else {
-            btnOk.setBackgroundResource(R.drawable.button_shape_azure);
+            llMain.setVisibility(View.GONE);
+            llOrderTotalSum.setVisibility(View.GONE);
             btnOk.setText("Заказать");
-            btnOk.setVisibility(View.VISIBLE);
+            btnOk.setBackgroundResource(R.drawable.button_shape_azure);
         }
     }
 
@@ -451,9 +456,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     updateViews();
                     savePreferencesOrder(order);
                     ivIcon.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "Заказ успешно создан", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Заказ успешно создан", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Ошибка при создании запроса. Попробуйте ещё раз", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Ошибка при создании запроса. Попробуйте ещё раз", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -613,35 +618,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         double latitude = Double.valueOf(geo[1].trim());
         double longitude = Double.valueOf(geo[2].trim());
         return new LatLng(latitude, longitude);
-    }
-
-    private void setStatus(String s) {
-        switch (s) {
-            case "new":
-                order.status = OStatus.NEW;
-                break;
-            case "accepted":
-                order.status = OStatus.ACCEPTED;
-                break;
-            case "sos":
-                order.status = OStatus.SOS;
-                break;
-            case "canceled":
-                order.status = OStatus.CANCELED;
-                break;
-            case "finished":
-                order.status = OStatus.FINISHED;
-                break;
-            case "ontheway":
-                order.status = OStatus.ONTHEWAY;
-                break;
-            case "waiting":
-                order.status = OStatus.WAITING;
-                break;
-            case "pending":
-                order.status = OStatus.PENDING;
-                break;
-        }
     }
 
     private class DeclineOrderTask extends AsyncTask<Void, Void, JSONObject> {

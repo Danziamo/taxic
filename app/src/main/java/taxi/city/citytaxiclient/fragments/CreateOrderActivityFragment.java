@@ -10,15 +10,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.enums.OStatus;
 import taxi.city.citytaxiclient.service.ApiService;
+import taxi.city.citytaxiclient.utils.Helper;
 
 
 /**
@@ -27,6 +30,7 @@ import taxi.city.citytaxiclient.service.ApiService;
 public class CreateOrderActivityFragment extends Fragment implements View.OnClickListener {
 
     private boolean isFixed = false;
+    SweetAlertDialog pDialog;
     Button btnMake;
     Button btnCancel;
     Button btnFixed;
@@ -131,9 +135,8 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         order.fixedPrice = 0;
         order.addressStopName = null;
 
-        /*mTask = new MakeOrderTask();
-        mTask.execute((Void) null);*/
-        return;
+        mTask = new MakeOrderTask();
+        mTask.execute((Void) null);
     }
 
     private class MakeOrderTask extends AsyncTask<Void, Void, JSONObject> {
@@ -153,34 +156,35 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            /*try {
-                int statusCode = result.getInt("status_code");
+            mTask = null;
+            try {
                 order.id = result.getInt("id");
-                orderTask = null;
-                if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_CREATED || statusCode == HttpStatus.SC_ACCEPTED) {
-                    Intent intent = new Intent();
-                    intent.putExtra("MESSAGE", "1");
-                    setResult(MAKE_ORDER_ID, intent);
-                    btnMakeOrder.setEnabled(true);
-                    finish();
-
-                } else {
-                    Intent intent = new Intent();
-                    intent.putExtra("MESSAGE", "2");
-                    setResult(MAKE_ORDER_ID, intent);
-                    btnMakeOrder.setEnabled(true);
-                    finish();
+                mTask = null;
+                if (Helper.isSuccess(result)) {
+                    getActivity().finish();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "Не удалось", Toast.LENGTH_LONG).show();
-                btnMakeOrder.setEnabled(true);
-            }*/
+                Toast.makeText(getActivity(), "Не удалось отправить данные на сервер", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override
         protected void onCancelled() {
             mTask = null;
+        }
+    }
+
+    public void showProgress(final boolean show) {
+        if (show) {
+            pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper()
+                    .setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Обновление");
+            pDialog.setCancelable(true);
+            pDialog.show();
+        } else {
+            if (pDialog != null) pDialog.dismissWithAnimation();
         }
     }
 }
