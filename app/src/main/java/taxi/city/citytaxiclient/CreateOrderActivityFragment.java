@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -87,15 +88,19 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             case R.id.buttonByFixed:
                 if (!isFixed) {
                     btnFixed.setBackgroundResource(R.drawable.button_shape_yellow);
-                    btnCounter.setBackgroundResource(R.drawable.button_shape_azure);
+                    btnCounter.setBackgroundResource(R.drawable.button_shape_dark_blue);
+                    btnFixed.setTextColor(Color.BLACK);
+                    btnCounter.setTextColor(Color.WHITE);
                     llFixedPrice.setVisibility(View.VISIBLE);
                 }
                 isFixed = true;
                 break;
             case R.id.buttonByCounter:
                 if (isFixed) {
-                    btnFixed.setBackgroundResource(R.drawable.button_shape_azure);
+                    btnFixed.setBackgroundResource(R.drawable.button_shape_dark_blue);
                     btnCounter.setBackgroundResource(R.drawable.button_shape_yellow);
+                    btnFixed.setTextColor(Color.WHITE);
+                    btnCounter.setTextColor(Color.BLACK);
                     llFixedPrice.setVisibility(View.GONE);
                 }
                 isFixed = false;
@@ -170,7 +175,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "���. ���������� ������", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Не удалось", Toast.LENGTH_LONG).show();
                 btnMakeOrder.setEnabled(true);
             }*/
         }

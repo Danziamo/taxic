@@ -1,18 +1,14 @@
 package taxi.city.citytaxiclient;
 
-import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -153,7 +149,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                 fetchData();
                 swipeLayout.setRefreshing(false);
             }
-        }, 5000);
+        }, 1000);
     }
 
     public class FetchOrderTask extends AsyncTask<Void, Void, JSONArray> {
