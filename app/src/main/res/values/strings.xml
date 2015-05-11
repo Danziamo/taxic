@@ -5,6 +5,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_exit">Exit</string>
     <string name="title_activity_sing_up">SingUpActivity</string>
     <string name="title_activity_confirm_sign_up">ConfirmSIgnUpActivity</string>
     <string name="title_activity_user_details">UserDetailsActivity</string>
@@ -16,7 +17,7 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="title_activity_account">AccountActivity</string>
+    <string name="title_activity_account">Настройки</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,11 +1,9 @@
-package taxi.city.citytaxiclient.Core;
+package taxi.city.citytaxiclient.core;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-
-import taxi.city.citytaxiclient.Utils.Helper;
 
 /**
  * Created by taxi on 08/05/15.

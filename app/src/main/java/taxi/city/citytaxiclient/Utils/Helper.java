@@ -1,4 +1,4 @@
-package taxi.city.citytaxiclient.Utils;
+package taxi.city.citytaxiclient.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import taxi.city.citytaxiclient.Core.Order;
-import taxi.city.citytaxiclient.Enums.OStatus;
+import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.enums.OStatus;
 
 /**
  * Created by Daniyar on 4/16/2015.

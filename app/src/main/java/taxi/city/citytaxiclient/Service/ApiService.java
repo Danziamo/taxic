@@ -1,6 +1,5 @@
-package taxi.city.citytaxiclient.Service;
+package taxi.city.citytaxiclient.service;
 
-import android.text.TextUtils;
 import android.util.Log;
 
 import org.apache.http.HttpResponse;
@@ -19,7 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import taxi.city.citytaxiclient.RequestMethods.HttpPatch;
+import taxi.city.citytaxiclient.requestMethods.HttpPatch;
 
 /**
  * Created by Daniyar on 3/26/2015.

@@ -40,12 +40,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import taxi.city.citytaxiclient.Core.Driver;
-import taxi.city.citytaxiclient.Core.Order;
-import taxi.city.citytaxiclient.Core.User;
-import taxi.city.citytaxiclient.Enums.OStatus;
-import taxi.city.citytaxiclient.Service.ApiService;
-import taxi.city.citytaxiclient.Utils.Helper;
+import taxi.city.citytaxiclient.core.Driver;
+import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.core.User;
+import taxi.city.citytaxiclient.enums.OStatus;
+import taxi.city.citytaxiclient.service.ApiService;
+import taxi.city.citytaxiclient.utils.Helper;
 
 public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, View.OnClickListener {
 
@@ -658,6 +658,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             JSONObject object = new JSONObject();
             try {
                 object.put("status", OStatus.CANCELED.toString());
+                object.put("driver", order.driver);
                 object.put("description", mReason);
             } catch (JSONException e) {
                 e.printStackTrace();

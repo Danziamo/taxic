@@ -3,10 +3,15 @@ package taxi.city.citytaxiclient;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-public class TabsPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
+import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
+import taxi.city.citytaxiclient.fragments.HistoryOrderFragment;
+import taxi.city.citytaxiclient.fragments.UserDetailsActivityFragment;
+
+public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
     private final String[] TITLES = { "Счёт", "Личные", "История" };
     private final int[] ICONS = {R.drawable.ic_action_account, R.drawable.ic_action_personal ,R.drawable.ic_action_history};
@@ -19,11 +24,6 @@ public class TabsPagerAdapter extends FragmentPagerAdapter implements PagerSlidi
     @Override
     public int getCount() {
         return ICONS.length;
-    }
-
-    @Override
-    public int getPageIconResId(int position) {
-        return ICONS[position];
     }
 
     @Override

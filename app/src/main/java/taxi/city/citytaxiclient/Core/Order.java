@@ -1,4 +1,4 @@
-package taxi.city.citytaxiclient.Core;
+package taxi.city.citytaxiclient.core;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import taxi.city.citytaxiclient.Enums.OStatus;
+import taxi.city.citytaxiclient.enums.OStatus;
 
 /**
  * Created by Daniyar on 3/27/2015.

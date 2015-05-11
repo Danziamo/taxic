@@ -7,7 +7,6 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,7 +16,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,11 +30,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import taxi.city.citytaxiclient.Core.Order;
-import taxi.city.citytaxiclient.Service.ApiService;
+import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.service.ApiService;
 
 
 public class SignUpActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {

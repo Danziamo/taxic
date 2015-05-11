@@ -1,4 +1,4 @@
-package taxi.city.citytaxiclient.Core;
+package taxi.city.citytaxiclient.core;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -9,18 +9,10 @@
             android:src="@drawable/background"
             android:scaleType="centerCrop"/>
 
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="48dip"
-            android:background="#a0999999"/>
-
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tabs"
             tools:context=".AccountActivity"/>
 
     </RelativeLayout>

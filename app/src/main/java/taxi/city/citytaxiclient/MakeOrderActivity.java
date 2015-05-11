@@ -14,10 +14,10 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import taxi.city.citytaxiclient.Core.Order;
-import taxi.city.citytaxiclient.Core.User;
-import taxi.city.citytaxiclient.Enums.OStatus;
-import taxi.city.citytaxiclient.Service.ApiService;
+import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.core.User;
+import taxi.city.citytaxiclient.enums.OStatus;
+import taxi.city.citytaxiclient.service.ApiService;
 
 
 public class MakeOrderActivity extends ActionBarActivity implements View.OnClickListener {

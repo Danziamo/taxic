@@ -7,10 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,8 +17,8 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import taxi.city.citytaxiclient.Core.Order;
-import taxi.city.citytaxiclient.Service.ApiService;
+import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.service.ApiService;
 
 
 public class ConfirmSignUpActivity extends Activity {

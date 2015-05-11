@@ -5,6 +5,19 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="ActionBarTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:logo">@mipmap/ic_launcher</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:textColor">@color/blacktext2</item>
+        <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
+    </style>
+
+    <style name="MyActionBarTabs">
+        <!-- tab indicator -->
+        <item name="android:backgroundStacked">#a0999999</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="GoogleMapsTheme" parent="Theme.AppCompat.Light">
         <item name="android:logo">@mipmap/ic_launcher</item>
     </style>
