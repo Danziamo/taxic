@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.ConfirmSignUpActivity;
+import taxi.city.citytaxiclient.MapsActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.service.ApiService;
@@ -92,6 +93,13 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         etPhoneExtra = (EditText) rootView.findViewById(R.id.textViewExtra);
         tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         etDoB = (EditText) rootView.findViewById(R.id.editTextDoB);
+
+        if (isNew) {
+            etLastName.setVisibility(View.GONE);
+            etFirstName.setVisibility(View.GONE);
+            etEmail.setVisibility(View.GONE);
+            etDoB.setVisibility(View.GONE);
+        }
 
         ImageButton btnShowPassword = (ImageButton)rootView.findViewById(R.id.imageButtonShowPassword);
 
@@ -169,22 +177,25 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         String password = etPassword.getText().toString();
         String email = etEmail.getText().toString();
 
-        if (firstName == null || firstName.length() < 2) {
-            etFirstName.setError("Имя неправильно задано");
-            etFirstName.requestFocus();
-            return;
-        }
+        if (!isNew) {
 
-        if (lastName == null || lastName.length() < 2) {
-            etLastName.setError("Фамилия неправильно задано");
-            etLastName.requestFocus();
-            return;
-        }
+            if (firstName == null || firstName.length() < 2) {
+                etFirstName.setError("Имя неправильно задано");
+                etFirstName.requestFocus();
+                return;
+            }
 
-        if (email != null && !Helper.isValidEmailAddress(email)) {
-            etEmail.setError("Email неправильно задано");
-            etEmail.requestFocus();
-            return;
+            if (lastName == null || lastName.length() < 2) {
+                etLastName.setError("Фамилия неправильно задано");
+                etLastName.requestFocus();
+                return;
+            }
+
+            if (email != null && !Helper.isValidEmailAddress(email)) {
+                etEmail.setError("Email неправильно задано");
+                etEmail.requestFocus();
+                return;
+            }
         }
 
         if (phone.length() != 13) {
@@ -199,16 +210,19 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
+
         JSONObject json = new JSONObject();
         try {
-            json.put("first_name", firstName);
-            json.put("last_name", lastName);
-            json.put("email", email);
+            json.put("phone", phone);
+            json.put("activation_code", "11111");
+            //json.put("role", "user");
+            json.put("first_name", !isNew ? firstName : "Имя");
+            json.put("last_name", !isNew ? lastName : "Фамиля");
             json.put("password", password);
-            if (isNew) {
-                //json.put("role", "user");
-                json.put("phone", phone);
-                json.put("activation_code", "11111");
+
+            if (!isNew) {
+                json.put("email", email);
+                json.put("date_of_birth", null);
             }
         } catch (JSONException e)  {
             e.printStackTrace();
@@ -275,12 +289,17 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             try {
                 user.setUser(object);
                 if (object.has("token")) ApiService.getInstance().setToken(object.getString("token"));
+                goToMapsActivity();
             } catch (JSONException ignored) {}
-            Intent intent = new Intent(getActivity(), ConfirmSignUpActivity.class);
-            intent.putExtra("DATA", object.toString());
-            startActivity(intent);
-            getActivity().finish();
         }
+    }
+
+    private void goToMapsActivity() {
+        Intent intent = new Intent(getActivity(), MapsActivity.class);
+        intent.putExtra("finish", true);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+        startActivity(intent);
+        getActivity().finish();
     }
 
     public void showProgress(final boolean show) {

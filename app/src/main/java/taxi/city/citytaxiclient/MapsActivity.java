@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -59,6 +60,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     private static final int MAKE_ORDER_ID = 1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    SweetAlertDialog pDialog;
 
     private Order order;
     private ApiService api;
@@ -408,6 +410,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             declineTask = null;
         }
 
+        showProgress(true);
         declineTask = new DeclineOrderTask(reason);
         declineTask.execute((Void) null);
     }
@@ -428,6 +431,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             llOrderStatus.setVisibility(View.VISIBLE);
             btnOk.setText("Отмена");
             btnOk.setBackgroundResource(R.drawable.red_button_background);
+            ivIcon.setVisibility(View.GONE);
         } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY){
             llMain.setVisibility(View.VISIBLE);
             llOrderTotalSum.setVisibility(View.VISIBLE);
@@ -437,11 +441,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             llOrderWaitTime.setVisibility(View.VISIBLE);
             llOrderStatus.setVisibility(View.VISIBLE);
             btnOk.setVisibility(View.GONE);
+            ivIcon.setVisibility(View.GONE);
         } else {
             llMain.setVisibility(View.GONE);
             llOrderTotalSum.setVisibility(View.GONE);
-            btnOk.setText("Заказать");
-            btnOk.setBackgroundResource(R.drawable.button_shape_azure);
+            btnOk.setText("Вызвать");
+            btnOk.setBackgroundResource(R.drawable.button_shape_dark_blue);
+            ivIcon.setVisibility(View.VISIBLE);
         }
     }
 
@@ -644,6 +650,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         @Override
         protected void onPostExecute(final JSONObject result) {
+            showProgress(false);
             declineTask = null;
             int statusCode;
             if (result != null) {
@@ -665,6 +672,19 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         @Override
         protected void onCancelled() {
             declineTask = null;
+        }
+    }
+
+    public void showProgress(final boolean show) {
+        if (show) {
+            pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper()
+                    .setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Обновление");
+            pDialog.setCancelable(true);
+            pDialog.show();
+        } else {
+            if (pDialog != null) pDialog.dismissWithAnimation();
         }
     }
 }

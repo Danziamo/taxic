@@ -89,20 +89,20 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         switch (v.getId()) {
             case R.id.buttonByFixed:
                 if (!isFixed) {
-                    btnFixed.setBackgroundResource(R.drawable.button_shape_yellow);
-                    btnCounter.setBackgroundResource(R.drawable.button_shape_dark_blue);
-                    btnFixed.setTextColor(Color.BLACK);
-                    btnCounter.setTextColor(Color.WHITE);
+                    btnFixed.setBackgroundResource(R.drawable.button_shape_dark_blue);
+                    btnCounter.setBackgroundResource(R.drawable.button_shape_yellow);
+                    btnFixed.setTextColor(Color.WHITE);
+                    btnCounter.setTextColor(Color.BLACK);
                     llFixedPrice.setVisibility(View.VISIBLE);
                 }
                 isFixed = true;
                 break;
             case R.id.buttonByCounter:
                 if (isFixed) {
-                    btnFixed.setBackgroundResource(R.drawable.button_shape_dark_blue);
-                    btnCounter.setBackgroundResource(R.drawable.button_shape_yellow);
-                    btnFixed.setTextColor(Color.WHITE);
-                    btnCounter.setTextColor(Color.BLACK);
+                    btnFixed.setBackgroundResource(R.drawable.button_shape_yellow);
+                    btnCounter.setBackgroundResource(R.drawable.button_shape_dark_blue);
+                    btnFixed.setTextColor(Color.BLACK);
+                    btnCounter.setTextColor(Color.WHITE);
                     llFixedPrice.setVisibility(View.GONE);
                 }
                 isFixed = false;
@@ -135,6 +135,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         order.fixedPrice = 0;
         order.addressStopName = null;
 
+        showProgress(true);
         mTask = new MakeOrderTask();
         mTask.execute((Void) null);
     }
@@ -157,15 +158,37 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         @Override
         protected void onPostExecute(JSONObject result) {
             mTask = null;
+            showProgress(false);
             try {
                 order.id = result.getInt("id");
                 mTask = null;
                 if (Helper.isSuccess(result)) {
-                    getActivity().finish();
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Ваш заказ создан")
+                            .setContentText("Ожидайте водителя")
+                            .setConfirmText("Ок")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    getActivity().finish();
+                                    sweetAlertDialog.dismissWithAnimation();
+                                }
+                            })
+                            .show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "Не удалось отправить данные на сервер", Toast.LENGTH_LONG).show();
+                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Ошибка")
+                        .setContentText("Не удалось отправить данные на сервер")
+                        .setConfirmText("Ок")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                sweetAlertDialog.dismissWithAnimation();
+                            }
+                        })
+                        .show();
             }
         }
 

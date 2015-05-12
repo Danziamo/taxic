@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewAddress"
                 android:background="#80ffffff"
+                android:visibility="gone"
                 android:padding="5dp"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
@@ -250,6 +251,7 @@
                 android:padding="5dp"
                 android:layout_marginTop="20dp"
                 android:weightSum="10"
+                android:visibility="gone"
                 android:layout_above="@+id/linearLayoutButtonGroupOrder"
                 android:orientation="horizontal">
 
@@ -294,7 +296,7 @@
                 android:id="@+id/linearLayoutButtonGroupOrder">
 
                 <Button
-                    style="@style/mediumButton.Green"
+                    style="@style/mediumButton.Black"
                     android:text="Вызвать"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/buttonOk" />

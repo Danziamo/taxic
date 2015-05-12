@@ -1,5 +1,6 @@
 package taxi.city.citytaxiclient;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -9,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
-
 
 public class AccountActivity extends ActionBarActivity implements AccountDetailsActivityFragment.OnFragmentInteractionListener, ActionBar.TabListener {
 
@@ -72,14 +73,35 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
                 finish();
                 return true;
             case R.id.action_quit:
-                quitFromProgram();
+                signOut();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void quitFromProgram() {
-        
+    private void signOut() {
+        SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
+        pDialog .setTitleText("Вы хотите выйти?")
+                .setConfirmText("Выйти")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                        intent.putExtra("finish", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+                        startActivity(intent);
+                        finish();
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .setCancelText("Отмена")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
     }
 
     @Override

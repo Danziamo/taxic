@@ -61,7 +61,7 @@
                 android:layout_marginRight="20dp">
 
                 <Button
-                    style="@style/mediumButton.Green"
+                    style="@style/mediumButton.Black"
                     android:id="@+id/buttonByCounter"
                     android:text="По счётчку"
                     android:layout_marginRight="20dp" />
