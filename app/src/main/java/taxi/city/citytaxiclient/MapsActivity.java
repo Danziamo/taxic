@@ -43,6 +43,7 @@ import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
@@ -85,6 +86,12 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     TextView tvAddress;
     TextView tvOrderStatus;
+    TextView tvOrderWaitTime;
+    TextView tvOrderWaitSum;
+    TextView tvOrderDistance;
+    TextView tvOrderTravelSum;
+    TextView tvOrderTotalSum;
+
     ImageView ivIcon;
 
     @Override
@@ -119,6 +126,11 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         tvAddress = (TextView) findViewById(R.id.textViewAddress);
         tvOrderStatus = (TextView) findViewById(R.id.textViewOrderStatus);
+        tvOrderDistance = (TextView) findViewById(R.id.textViewOrderDistance);
+        tvOrderTotalSum = (TextView) findViewById(R.id.textViewOrderTotalSum);
+        tvOrderTravelSum = (TextView) findViewById(R.id.textViewOrderTravelSum);
+        tvOrderWaitTime = (TextView)findViewById(R.id.textViewOrderWaitTime);
+        tvOrderWaitSum = (TextView) findViewById(R.id.textViewOrderWaitSum);
         ivIcon = (ImageView) findViewById(R.id.imageViewSearchIcon);
         ivIcon.setVisibility(View.GONE);
 
@@ -421,6 +433,14 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     }
 
     private void updateViews() {
+
+        tvOrderDistance.setText(String.valueOf(order.distance));
+        tvOrderWaitSum.setText(String.valueOf(order.getWaitSum()));
+        tvOrderWaitTime.setText(order.waitTime);
+        tvOrderStatus.setText(order.status.toString());
+        tvOrderTravelSum.setText(String.valueOf(order.getTravelSum()));
+        tvOrderTotalSum.setText(String.valueOf(order.getTotalSum()));
+
         if (order.status == OStatus.NEW || order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING) {
             llMain.setVisibility(View.VISIBLE);
             llOrderTotalSum.setVisibility(View.GONE);

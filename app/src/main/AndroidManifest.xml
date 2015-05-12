@@ -31,7 +31,7 @@
         android:theme="@style/MainTheme"
         android:windowSoftInputMode="stateUnchanged"
         tools:replace="android:icon,android:theme" >
-        <activity android:name=".SplashScreen">
+        <activity android:name=".SplashScreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +40,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".MapsActivity"
@@ -93,12 +93,12 @@
         <activity
             android:name=".AccountActivity"
             android:label="@string/title_activity_account"
-            android:theme="@style/ActionBarTheme"
             android:parentActivityName=".MapsActivity"
-            android:uiOptions="splitActionBarWhenNarrow">
-            <meta-data android:name="android.support.UI_OPTIONS"
+            android:theme="@style/ActionBarTheme"
+            android:uiOptions="splitActionBarWhenNarrow" >
+            <meta-data
+                android:name="android.support.UI_OPTIONS"
                 android:value="splitActionBarWhenNarrow" />
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="taxi.city.citytaxiclient.MapsActivity" />
@@ -106,6 +106,14 @@
         <activity
             android:name=".HistoryOrder"
             android:label="@string/title_activity_history_order" >
+        </activity>
+        <activity
+            android:name=".OrderDetailsActivity"
+            android:label="@string/title_activity_order_details"
+            android:parentActivityName=".AccountActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="taxi.city.citytaxiclient.AccountActivity" />
         </activity>
     </application>
 

@@ -1,5 +1,6 @@
 package taxi.city.citytaxiclient.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import taxi.city.citytaxiclient.OrderDetailsActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.adapters.OrderDetailsAdapter;
 import taxi.city.citytaxiclient.core.Order;
@@ -68,8 +70,6 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
         user = User.getInstance();
         limit = 10;
 
-        lvMain = (ListView) rootView.findViewById(R.id.orderList);
-
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
@@ -77,32 +77,14 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                try {
-                    String text = ((TextView) view.findViewById(R.id.orderId)).getText().toString();
-                    int orderId = Integer.valueOf(text);
-
-                    for (int i = list.size() - 1; i >= 0; i -= 1) {
-                        if (orderId == list.get(i).id) {
-                            orderDetail = list.get(i);
-                            break;
-                        }
-                    }
-                    goOrderDetails(orderDetail);
-                }
-                catch (Exception e) {
-                }
-            }
-        });
+        lvMain = (ListView) rootView.findViewById(R.id.orderList);
         fetchData();
         return rootView;
     }
 
     private void goOrderDetails(OrderDetail detail) {
-
+        Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
+        intent.putExtra("DATA", detail);
     }
 
     private void InitListView(JSONArray array) {
@@ -118,6 +100,25 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
             }
             OrderDetailsAdapter adapter = new OrderDetailsAdapter(getActivity(), list);
             lvMain.setAdapter(adapter);
+            lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    try {
+                        String text = ((TextView) view.findViewById(R.id.orderId)).getText().toString();
+                        int orderId = Integer.valueOf(text);
+
+                        for (int i = list.size() - 1; i >= 0; i -= 1) {
+                            if (orderId == list.get(i).id) {
+                                orderDetail = list.get(i);
+                                break;
+                            }
+                        }
+                        goOrderDetails(orderDetail);
+                    } catch (Exception e) {
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -153,7 +154,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
         }, 1000);
     }
 
-    public class FetchOrderTask extends AsyncTask<Void, Void, JSONArray> {
+    private class FetchOrderTask extends AsyncTask<Void, Void, JSONArray> {
 
         FetchOrderTask() {}
 
@@ -197,36 +198,3 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
     }
 
 }
-
-
-/*
-
-public class MainActivity extends Activity implements OnRefreshListener {
-
-    SwipeRefreshLayout swipeLayout;
-    ListView orderList;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        orderList = (ListView) findViewById(R.id.orderList);
-
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-    }
-
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 5000);
-    }
-}*/

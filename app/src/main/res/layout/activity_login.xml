@@ -105,6 +105,7 @@
             android:id="@+id/btnSignUp"
             android:background="@drawable/button_shape_yellow"
             android:textColor="#ff1e0a8e"
+            android:textStyle="bold"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="0dp" />

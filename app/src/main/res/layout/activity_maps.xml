@@ -92,7 +92,7 @@
                         android:textColor="@color/blacktext2"
                         android:textSize="@dimen/text_size_medium"
                         android:layout_weight="3.5"
-                        android:id="@+id/textViewWaitTime"
+                        android:id="@+id/textViewOrderWaitTime"
                         android:layout_marginLeft="20dp" />
 
                     <TextView
