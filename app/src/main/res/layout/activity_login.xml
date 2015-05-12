@@ -20,27 +20,49 @@
             android:layout_height="270dp"
             android:id="@+id/imageViewLogo"
             android:src="@drawable/logo"
-            android:layout_above="@+id/login_phone"
+            android:layout_above="@+id/linearLayoutPhone"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
             android:minHeight="100dp"
             android:minWidth="100dp" />
 
-        <EditText
-            android:id="@+id/login_phone"
+        <LinearLayout
+            android:orientation="horizontal"
             android:gravity="center"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:hint="@string/prompt_phone_number"
-            android:textColorHint="@color/blacktext1"
-            android:background="@drawable/textbox_background"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:inputType="phone"
-            android:singleLine="true"
-            android:textColor="@color/blacktext2"
+            android:id="@+id/linearLayoutPhone"
             android:layout_above="@+id/login_password"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignLeft="@+id/btnSignIn"
+            android:layout_alignStart="@+id/btnSignIn"
+            android:layout_alignRight="@+id/btnSignIn"
+            android:layout_alignEnd="@+id/btnSignIn"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+
+                style="@style/ShortEditText"
+                android:id="@+id/textViewPhoneExtra"
+                android:layout_width="79dp"
+                android:layout_height="match_parent"
+                android:text="+996"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:layout_marginRight="1dp"
+                android:background="@drawable/textbox_background" />
+
+            <EditText
+                android:id="@+id/login_phone"
+                android:gravity="center"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:hint="@string/prompt_phone_number"
+                android:textColorHint="@color/blacktext1"
+                android:background="@drawable/textbox_background"
+                android:inputType="phone"
+                android:singleLine="true"
+                android:textColor="@color/blacktext2" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/login_password"
@@ -53,8 +75,10 @@
             android:background="@drawable/textbox_background"
             android:textColor="@color/blacktext2"
             android:layout_above="@+id/btnSignIn"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_alignLeft="@+id/btnSignIn"
+            android:layout_alignStart="@+id/btnSignIn"
+            android:layout_alignRight="@+id/btnSignIn"
+            android:layout_alignEnd="@+id/btnSignIn"
             android:layout_marginBottom="15dp"
             android:layout_centerHorizontal="true"/>
 
@@ -69,20 +93,9 @@
             android:textStyle="bold"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="22dp"
-            android:layout_above="@+id/textViewForgetPassword"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Забыли пароль?"
-            android:textColor="@color/white"
-            android:id="@+id/textViewForgetPassword"
+            android:layout_marginBottom="52dp"
             android:layout_above="@+id/btnSignUp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="22dp"
-            android:textSize="25sp" />
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:orientation="vertical"
@@ -95,6 +108,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="0dp" />
+
 
     </RelativeLayout>
 

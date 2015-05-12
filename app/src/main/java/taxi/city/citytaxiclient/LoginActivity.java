@@ -43,6 +43,7 @@ public class LoginActivity extends Activity{
 
     // UI references.
     private EditText mPhoneView;
+    private TextView mPhoneExtraView;
     private EditText mPasswordView;
     private User user = User.getInstance();
     private ApiService api = ApiService.getInstance();
@@ -58,7 +59,8 @@ public class LoginActivity extends Activity{
 
         // Set up the login form.
         mPhoneView = (EditText) findViewById(R.id.login_phone);
-
+        mPhoneExtraView = (TextView) findViewById(R.id.textViewPhoneExtra);
+        //MaskedWatcher maskedWatcher = new MaskedWatcher("+996 (###) ###-###", mPhoneView);
         mPasswordView = (EditText) findViewById(R.id.login_password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -93,7 +95,8 @@ public class LoginActivity extends Activity{
     private void setPreferences() {
         settings = getSharedPreferences(PREFS_NAME, 0);
         if (settings.contains("phoneKey")) {
-            mPhoneView.setText(settings.getString("phoneKey", ""));
+            String phone = settings.getString("phoneKey", "");
+            mPhoneView.setText(phone.substring(4, phone.length()));
             if (settings.contains("passwordKey")) {
                 mPasswordView.setText(settings.getString("passwordKey", ""));
             }
@@ -105,7 +108,7 @@ public class LoginActivity extends Activity{
 
     private void savePreferences(User user) {
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("phoneKey", mPhoneView.getText().toString());
+        editor.putString("phoneKey", mPhoneExtraView.getText().toString() + mPhoneView.getText().toString());
         editor.putString("passwordKey", mPasswordView.getText().toString());
         editor.putString("tokenKey", user.getToken());
         api.setToken(user.getToken());
@@ -129,7 +132,7 @@ public class LoginActivity extends Activity{
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String phone = mPhoneView.getText().toString();
+        String phone = mPhoneExtraView.getText().toString() + mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
