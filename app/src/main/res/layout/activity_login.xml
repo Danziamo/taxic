@@ -46,14 +46,14 @@
                 android:layout_width="79dp"
                 android:layout_height="match_parent"
                 android:text="+996"
-                android:textSize="13sp"
                 android:gravity="center"
                 android:layout_marginRight="1dp"
                 android:background="@drawable/textbox_background" />
 
             <EditText
                 android:id="@+id/login_phone"
-                android:gravity="center"
+                android:gravity="center|left"
+                android:paddingLeft="5dp"
                 android:layout_width="220dp"
                 android:layout_height="40dp"
                 android:hint="@string/prompt_phone_number"

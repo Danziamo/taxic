@@ -450,7 +450,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             llOrderWaitTime.setVisibility(View.GONE);
             llOrderStatus.setVisibility(View.VISIBLE);
             btnOk.setText("Отмена");
-            btnOk.setBackgroundResource(R.drawable.red_button_background);
+            btnOk.setBackgroundResource(R.drawable.button_shape_red);
             ivIcon.setVisibility(View.GONE);
         } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY){
             llMain.setVisibility(View.VISIBLE);
