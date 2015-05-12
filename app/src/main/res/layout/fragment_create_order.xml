@@ -15,13 +15,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/linearLayoutOkCancelGroup">
+        android:layout_above="@+id/linearLayoutOkCancelGroup"
+        android:layout_marginBottom="20dp">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_tiny">
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
 
             <TextView
                 style="@style/TextTitle"
@@ -78,7 +80,6 @@
                 android:id="@+id/linearLayoutFixedPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
                 android:visibility="gone">
 
                 <EditText
@@ -107,8 +108,7 @@
         android:layout_centerInParent="true"
         android:weightSum="10"
         android:orientation="horizontal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:layout_marginBottom="10dp">
 
         <Button
             style="@style/mediumButton.Green"
