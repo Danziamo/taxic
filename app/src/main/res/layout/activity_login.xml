@@ -28,25 +28,20 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_width="300dp"
             android:layout_height="40dp"
             android:id="@+id/linearLayoutPhone"
-            android:layout_above="@+id/login_password"
-            android:layout_alignLeft="@+id/btnSignIn"
-            android:layout_alignStart="@+id/btnSignIn"
-            android:layout_alignRight="@+id/btnSignIn"
-            android:layout_alignEnd="@+id/btnSignIn"
-            android:layout_centerHorizontal="true">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_above="@+id/login_password">
 
             <TextView
-                style="@style/ShortEditText"
                 android:id="@+id/textViewPhoneExtra"
-                android:layout_width="79dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:text="+996"
-                android:gravity="center_horizontal|center_vertical"
-                android:layout_gravity="center"
+                android:gravity="center"
                 android:background="@drawable/textbox_background" />
 
             <View
@@ -58,15 +53,14 @@
             <EditText
                 android:id="@+id/login_phone"
                 android:gravity="center"
-                android:paddingLeft="5dp"
-                android:layout_width="220dp"
+                android:padding="5dp"
+                android:layout_width="240dp"
                 android:layout_height="40dp"
                 android:hint="@string/prompt_phone_number"
                 android:textColorHint="@color/blacktext1"
                 android:background="@drawable/textbox_background"
                 android:inputType="phone"
                 android:singleLine="true"
-                android:layout_gravity="right"
                 android:textColor="@color/blacktext2" />
         </LinearLayout>
 
@@ -74,6 +68,8 @@
             android:id="@+id/login_password"
             android:layout_width="300dp"
             android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:hint="@string/prompt_password"
             android:textColorHint="@color/blacktext1"
             android:gravity="center"
@@ -81,16 +77,11 @@
             android:background="@drawable/textbox_background"
             android:textColor="@color/blacktext2"
             android:layout_above="@+id/btnSignIn"
-            android:layout_alignLeft="@+id/btnSignIn"
-            android:layout_alignStart="@+id/btnSignIn"
-            android:layout_alignRight="@+id/btnSignIn"
-            android:layout_alignEnd="@+id/btnSignIn"
             android:layout_marginBottom="15dp"
             android:layout_centerHorizontal="true"/>
 
         <Button
             android:id="@+id/btnSignIn"
-            style="?android:textAppearanceSmall"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:text="@string/action_sign_in"
