@@ -27,6 +27,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.service.ApiService;
+import taxi.city.citytaxiclient.utils.Helper;
 
 
 /**
@@ -224,12 +225,33 @@ public class LoginActivity extends Activity{
                 json.put("phone", mPhone);
                 json.put("password", mPassword);
                 JSONObject object = api.loginRequest(json, "login/");
-                if (object != null) {
-                    statusCode = object.getInt("status_code");
-                    if (statusCode == HttpStatus.SC_OK) {
-                        user.setUser(object);
-                        res = true;
+                if (Helper.isSuccess(object)) {
+                    user.setUser(object);
+                    statusCode = 200;
+                    res = true;
+                    JSONObject orderResult = api.getArrayRequest("orders/?status=new&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
                     }
+                    orderResult = api.getArrayRequest("orders/?status=accepted&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                    }
+                    orderResult = api.getArrayRequest("orders/?status=waiting&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                    }
+                    orderResult = api.getArrayRequest("orders/?status=ontheway&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                    }
+                    orderResult = api.getArrayRequest("orders/?status=pending&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                    }
+                } else if (Helper.isBadRequest(object)) {
+                    res = true;
+                    statusCode = 403;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

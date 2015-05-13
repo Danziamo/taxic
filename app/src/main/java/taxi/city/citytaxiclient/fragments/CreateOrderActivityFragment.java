@@ -121,9 +121,32 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         if (mTask != null) return;
 
         String phone = etPhone.getText().toString();
+        String description = etDescription.getText().toString();
+        String addressEnd = etStopAddress.getText().toString();
+        String addressStart = etStartAddress.getText().toString();
+        String fixedPrice = etFixedPrice.getText().toString();
+
+        if (addressStart.length() < 3) {
+            etStartAddress.setError("Минимум 3 символа");
+            etStartAddress.requestFocus();
+            return;
+        }
+
         if (phone.length() != 13) {
             etPhone.setError("Телефон состоит из 13 символов");
             etPhone.requestFocus();
+            return;
+        }
+
+        if (isFixed && Double.valueOf(fixedPrice) < 50) {
+            etFixedPrice.setError("Фиксированная сумма не меньше 50 сомов");
+            etFixedPrice.requestFocus();
+            return;
+        }
+
+        if (isFixed && addressEnd.length() < 3) {
+            etStopAddress.setError("Минимум 3 символа");
+            etStopAddress.requestFocus();
             return;
         }
 

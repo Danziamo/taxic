@@ -3,6 +3,7 @@ package taxi.city.citytaxiclient.utils;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.http.HttpStatus;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,6 +131,23 @@ public class Helper {
         if (object == null) return false;
         if (!object.has("status_code")) return false;
         if (!isSuccess(object.getInt("status_code"))) return false;
+        return true;
+    }
+
+    public static boolean isBadRequest(int status) {
+        if (status == HttpStatus.SC_FORBIDDEN) return true;
+        if (status == HttpStatus.SC_NOT_FOUND) return true;
+        if (status == HttpStatus.SC_NOT_ACCEPTABLE) return true;
+        if (status == HttpStatus.SC_METHOD_NOT_ALLOWED) return true;
+        if (status == HttpStatus.SC_UNAUTHORIZED) return true;
+        if (status == HttpStatus.SC_BAD_REQUEST) return true;
+        return false;
+    }
+
+    public static boolean isBadRequest(JSONObject object) throws  JSONException {
+        if (object == null) return false;
+        if (!object.has("status_code")) return false;
+        if (!isBadRequest(object.getInt("status_code"))) return false;
         return true;
     }
 
