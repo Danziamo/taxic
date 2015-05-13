@@ -28,13 +28,12 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_centerHorizontal="true"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:id="@+id/linearLayoutPhone"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_above="@+id/login_password">
+            android:layout_above="@+id/login_password"
+            android:layout_alignLeft="@+id/login_password"
+            android:layout_alignStart="@+id/login_password">
 
             <TextView
                 android:id="@+id/textViewPhoneExtra"
@@ -42,10 +41,10 @@
                 android:layout_height="match_parent"
                 android:text="+996"
                 android:gravity="center"
-                android:background="@drawable/textbox_background" />
+                android:background="@drawable/textbox_shape_white" />
 
             <View
-                android:layout_width="1dp"
+                android:layout_width="1px"
                 android:layout_height="match_parent">
 
             </View>
@@ -58,7 +57,7 @@
                 android:layout_height="40dp"
                 android:hint="@string/prompt_phone_number"
                 android:textColorHint="@color/blacktext1"
-                android:background="@drawable/textbox_background"
+                android:background="@drawable/textbox_shape_white"
                 android:inputType="phone"
                 android:singleLine="true"
                 android:textColor="@color/blacktext2" />
