@@ -176,6 +176,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         String phone = etPhoneExtra.getText().toString() + etPhone.getText().toString();
         String password = etPassword.getText().toString();
         String email = etEmail.getText().toString();
+        String dob = etDoB.getText().toString();
 
         if (!isNew) {
 
@@ -194,6 +195,12 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             if (email != null && !Helper.isValidEmailAddress(email)) {
                 etEmail.setError("Email неправильно задано");
                 etEmail.requestFocus();
+                return;
+            }
+
+            if (dob.length() != 10) {
+                etDoB.setError("Формат: гггг-мм-дд");
+                etDoB.requestFocus();
                 return;
             }
         }
@@ -222,7 +229,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
             if (!isNew) {
                 json.put("email", email);
-                json.put("date_of_birth", null);
+                json.put("date_of_birth", dob);
             }
         } catch (JSONException e)  {
             e.printStackTrace();

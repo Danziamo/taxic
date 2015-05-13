@@ -125,4 +125,27 @@ public class Order {
         if (this.fixedPrice >= 50) return fixedPrice;
         return this.sum;
     }
+
+    public String getStatusName() {
+        if (this.status == null)
+            return null;
+        switch (this.status) {
+            case NEW:
+                return "В ожидании";
+            case ACCEPTED:
+                return "Заказ принят";
+            case WAITING:
+                return "Водитель на месте";
+            case ONTHEWAY:
+                return "Водитель в пути";
+            case PENDING:
+                return "Водитель ждёт";
+            case FINISHED:
+                return "Позедка окончена";
+            case CANCELED:
+                return "Позедка отменена";
+            default:
+                return null;
+        }
+    }
 }

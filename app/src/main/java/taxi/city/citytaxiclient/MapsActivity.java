@@ -382,9 +382,11 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-
+        wlp.dimAmount = 0.7f;
         wlp.gravity = Gravity.BOTTOM;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
         wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         window.setAttributes(wlp);
 
         final EditText reason = (EditText) dialog.findViewById(R.id.editTextDeclineReason);
@@ -437,7 +439,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderDistance.setText(String.valueOf(order.distance));
         tvOrderWaitSum.setText(String.valueOf(order.getWaitSum()));
         tvOrderWaitTime.setText(order.waitTime);
-        tvOrderStatus.setText(order.status.toString());
+        tvOrderStatus.setText(order.getStatusName());
         tvOrderTravelSum.setText(String.valueOf(order.getTravelSum()));
         tvOrderTotalSum.setText(String.valueOf(order.getTotalSum()));
 
@@ -655,12 +657,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         @Override
         protected JSONObject doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            // Simulate network access.
             JSONObject object = new JSONObject();
             try {
                 object.put("status", OStatus.CANCELED.toString());
-                object.put("driver", order.driver);
+                object.put("driver", order.driver == null ? JSONObject.NULL : order.driver.id);
                 object.put("description", mReason);
             } catch (JSONException e) {
                 e.printStackTrace();
