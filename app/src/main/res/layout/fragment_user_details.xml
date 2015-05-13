@@ -122,7 +122,9 @@
             style="@style/mediumButton.Yellow"
             android:text="Назад"
             android:layout_marginRight="45dp"
-            android:id="@+id/buttonBack" />
+            android:visibility="gone"
+            android:id="@+id/buttonBack"
+            />
 
         <Button
             style="@style/mediumButton.Yellow"

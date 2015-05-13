@@ -94,7 +94,11 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         etDoB = (EditText) rootView.findViewById(R.id.editTextDoB);
 
+        btnSave = (Button)rootView.findViewById(R.id.buttonSave);
+        btnBack = (Button)rootView.findViewById(R.id.buttonBack);
+
         if (isNew) {
+            btnBack.setVisibility(View.VISIBLE);
             etLastName.setVisibility(View.GONE);
             etFirstName.setVisibility(View.GONE);
             etEmail.setVisibility(View.GONE);
@@ -131,9 +135,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             etPhone.setText(phone);
             etPhoneExtra.setText(extra);
         }
-
-        btnSave = (Button)rootView.findViewById(R.id.buttonSave);
-        btnBack = (Button)rootView.findViewById(R.id.buttonBack);
 
         btnSave.setOnClickListener(this);
         btnBack.setOnClickListener(this);
