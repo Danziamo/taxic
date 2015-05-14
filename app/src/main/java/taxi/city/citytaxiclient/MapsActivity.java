@@ -457,11 +457,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             llOrderWaitSum.setVisibility(View.VISIBLE);
             llOrderWaitTime.setVisibility(View.VISIBLE);
             llOrderStatus.setVisibility(View.VISIBLE);
-            btnOk.setVisibility(View.GONE);
+            btnOk.setVisibility(View.INVISIBLE);
             ivIcon.setVisibility(View.GONE);
         } else {
+            mMap.clear();
             llMain.setVisibility(View.GONE);
             llOrderTotalSum.setVisibility(View.GONE);
+            btnOk.setVisibility(View.VISIBLE);
             btnOk.setText("Вызвать");
             btnOk.setBackgroundResource(R.drawable.button_shape_dark_blue);
             ivIcon.setVisibility(View.VISIBLE);

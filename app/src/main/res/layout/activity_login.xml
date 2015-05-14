@@ -32,8 +32,8 @@
             android:layout_height="40dp"
             android:id="@+id/linearLayoutPhone"
             android:layout_above="@+id/login_password"
-            android:layout_alignLeft="@+id/login_password"
-            android:layout_alignStart="@+id/login_password">
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
 
             <TextView
                 android:id="@+id/textViewPhoneExtra"

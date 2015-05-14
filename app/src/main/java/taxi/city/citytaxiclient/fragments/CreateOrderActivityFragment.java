@@ -72,7 +72,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         etPhone = (EditText) rootView.findViewById(R.id.editTextClientPhone);
         etPhone.setText(user.phone);
 
-        etStopAddress = (EditText) rootView.findViewById(R.id.editTextStopAddress);
+        etStopAddress = (EditText) rootView.findViewById(R.id.editTextEndAddress);
         etFixedPrice = (EditText) rootView.findViewById(R.id.editTextFixedPrice);
         etDescription = (EditText) rootView.findViewById(R.id.editTextDescription);
 
@@ -152,11 +152,12 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
 
         order.clear();
         order.status = OStatus.NEW;
-        order.clientPhone = etPhone.getText().toString();
-        order.description = etDescription.getText().toString();
+        order.clientPhone = phone;
+        order.description = description;
+        order.addressStartName = addressStart;
         order.clientId = user.id;
-        order.fixedPrice = 0;
-        order.addressStopName = null;
+        order.fixedPrice = isFixed ? Double.valueOf(fixedPrice) : 0;
+        order.addressStopName = isFixed ? addressEnd : "";
 
         showProgress(true);
         mTask = new MakeOrderTask();
