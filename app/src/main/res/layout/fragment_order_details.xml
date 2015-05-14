@@ -20,7 +20,7 @@
 
             <TextView
                 style="@style/TextTitle"
-                android:text="Адрес клиента:"
+                android:text="Адрес откуда забрали:"
                 android:id="@+id/textViewStartAddress" />
 
             <EditText
@@ -28,6 +28,21 @@
                 android:id="@+id/editTextStartAddress"
                 android:gravity="center"
                 android:layout_below="@+id/textViewStartAddress"/>
+
+
+            <TextView
+                style="@style/TextTitle"
+                android:text="Адрес куда доставили:"
+                android:id="@+id/textViewFinishAddress"
+                android:layout_below="@+id/editTextStartAddress"
+                android:layout_alignLeft="@+id/textViewStartAddress"
+                android:layout_alignStart="@+id/textViewStartAddress" />
+
+            <EditText
+                style="@style/mediumEditText"
+                android:gravity="center"
+                android:layout_below="@+id/textViewFinishAddress"
+                android:id="@+id/editText" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,11 +52,11 @@
                 android:textColor="@color/translucent_lime"
                 android:textSize="25sp"
                 android:id="@+id/textViewCharged"
-                android:layout_below="@+id/editTextStartAddress"
-                android:layout_alignLeft="@+id/textViewStartAddress"
-                android:layout_alignStart="@+id/textViewStartAddress"
-                android:layout_marginTop="15dp"
-                android:layout_marginLeft="23dp" />
+                android:layout_aligncenter="@+id/textViewStartAddress"
+
+                android:layout_below="@+id/editText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp" />
 
             <LinearLayout
 
@@ -53,7 +68,8 @@
                 android:layout_below="@+id/textViewCharged"
                 android:layout_marginLeft="10dp"
                 android:layout_centerHorizontal="true"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginTop="10dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -245,6 +261,32 @@
                     android:textColor="@color/white"/>
             </LinearLayout>
 
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/linearLayoutTotal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Имя водителя:"
+                    android:gravity="left"
+                    android:layout_weight="4.5"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Muhammad ibn Saeed ibn Abd al-Aziz al-Filasteeni"
+                    android:gravity="right"
+                    android:layout_weight="2.5"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:layout_marginLeft="80dp" />
+
+
+            </LinearLayout>
         </RelativeLayout>
 
     </ScrollView>
@@ -300,6 +342,10 @@
             android:id="@+id/buttonMap"
             android:layout_weight="1"
             android:layout_marginLeft="10dp" />
+
+
+
+
 
     </LinearLayout>
 
