@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +36,7 @@ import taxi.city.citytaxiclient.service.ApiService;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HistoryOrderFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HistoryOrderFragment extends ListFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -77,7 +79,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        lvMain = (ListView) rootView.findViewById(R.id.orderList);
+        lvMain = (ListView) rootView.findViewById(android.R.id.list);
         fetchData();
         return rootView;
     }
@@ -85,6 +87,7 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
     private void goOrderDetails(OrderDetail detail) {
         Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
         intent.putExtra("DATA", detail);
+        startActivity(intent);
     }
 
     private void InitListView(JSONArray array) {
@@ -103,7 +106,6 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
             lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     try {
                         String text = ((TextView) view.findViewById(R.id.orderId)).getText().toString();
                         int orderId = Integer.valueOf(text);
@@ -142,7 +144,6 @@ public class HistoryOrderFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
 
     }
-
     @Override
     public void onRefresh() {
         new Handler().postDelayed(new Runnable() {
