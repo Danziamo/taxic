@@ -1,11 +1,8 @@
 package taxi.city.citytaxiclient;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
@@ -43,7 +40,6 @@ import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
@@ -70,7 +66,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private Location currLocation = null;
     private CheckOrderStatusTask task = null;
     private DeclineOrderTask declineTask = null;
-    private static final String PREFS_NAME = "MyPrefsFile";
 
     LinearLayout llMain;
     LinearLayout llOrderStatus;
@@ -462,11 +457,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             llOrderWaitSum.setVisibility(View.VISIBLE);
             llOrderWaitTime.setVisibility(View.VISIBLE);
             llOrderStatus.setVisibility(View.VISIBLE);
-            btnOk.setVisibility(View.GONE);
+            btnOk.setVisibility(View.INVISIBLE);
             ivIcon.setVisibility(View.GONE);
         } else {
+            mMap.clear();
             llMain.setVisibility(View.GONE);
             llOrderTotalSum.setVisibility(View.GONE);
+            btnOk.setVisibility(View.VISIBLE);
             btnOk.setText("Вызвать");
             btnOk.setBackgroundResource(R.drawable.button_shape_dark_blue);
             ivIcon.setVisibility(View.VISIBLE);
@@ -482,7 +479,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
                 if (code == 1) {
                     updateViews();
-                    savePreferencesOrder(order);
                     ivIcon.setVisibility(View.GONE);
                     Toast.makeText(this, "Заказ успешно создан", Toast.LENGTH_SHORT).show();
                 } else {
@@ -490,13 +486,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 }
             }
         }
-    }
-
-    private void savePreferencesOrder(Order mOrder) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("orderIdKey", String.valueOf(mOrder.id));
-        editor.apply();
     }
 
     @Override
@@ -607,30 +596,27 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
-                    final AlertDialog.Builder builder =
-                            new AlertDialog.Builder(MapsActivity.this);
-                    //final String action = Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-                    final String message = "Вы уверены что хотите позвонить?";
-                    final String title = order.clientPhone;
-
-                    builder.setMessage(message)
-                            .setTitle(title)
-                            .setPositiveButton("Позвонить",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface d, int id) {
-                                            Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                            callIntent.setData(Uri.parse("tel:" + order.clientPhone));
-                                            startActivity(callIntent);
-                                            d.dismiss();
-                                        }
-                                    })
-                            .setNegativeButton("Отмена",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface d, int id) {
-                                            d.cancel();
-                                        }
-                                    });
-                    builder.create().show();
+                    SweetAlertDialog pDialog = new SweetAlertDialog(MapsActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    pDialog .setTitleText("Вы хотите позвонить?")
+                            .setContentText(order.clientPhone)
+                            .setConfirmText("Позвонить")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                    callIntent.setData(Uri.parse("tel:" + order.clientPhone));
+                                    startActivity(callIntent);
+                                    sDialog.dismissWithAnimation();
+                                }
+                            })
+                            .setCancelText("Отмена")
+                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismissWithAnimation();
+                                }
+                            })
+                            .show();
                 }
             });
         } else {

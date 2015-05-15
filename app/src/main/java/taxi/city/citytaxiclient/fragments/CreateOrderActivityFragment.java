@@ -72,7 +72,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         etPhone = (EditText) rootView.findViewById(R.id.editTextClientPhone);
         etPhone.setText(user.phone);
 
-        etStopAddress = (EditText) rootView.findViewById(R.id.editTextStopAddress);
+        etStopAddress = (EditText) rootView.findViewById(R.id.editTextEndAddress);
         etFixedPrice = (EditText) rootView.findViewById(R.id.editTextFixedPrice);
         etDescription = (EditText) rootView.findViewById(R.id.editTextDescription);
 
@@ -121,19 +121,43 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         if (mTask != null) return;
 
         String phone = etPhone.getText().toString();
+        String description = etDescription.getText().toString();
+        String addressEnd = etStopAddress.getText().toString();
+        String addressStart = etStartAddress.getText().toString();
+        String fixedPrice = etFixedPrice.getText().toString();
+
+        if (addressStart.length() < 3) {
+            etStartAddress.setError("Минимум 3 символа");
+            etStartAddress.requestFocus();
+            return;
+        }
+
         if (phone.length() != 13) {
             etPhone.setError("Телефон состоит из 13 символов");
             etPhone.requestFocus();
             return;
         }
 
+        if (isFixed && Double.valueOf(fixedPrice) < 50) {
+            etFixedPrice.setError("Фиксированная сумма не меньше 50 сомов");
+            etFixedPrice.requestFocus();
+            return;
+        }
+
+        if (isFixed && addressEnd.length() < 3) {
+            etStopAddress.setError("Минимум 3 символа");
+            etStopAddress.requestFocus();
+            return;
+        }
+
         order.clear();
         order.status = OStatus.NEW;
-        order.clientPhone = etPhone.getText().toString();
-        order.description = etDescription.getText().toString();
+        order.clientPhone = phone;
+        order.description = description;
+        order.addressStartName = addressStart;
         order.clientId = user.id;
-        order.fixedPrice = 0;
-        order.addressStopName = null;
+        order.fixedPrice = isFixed ? Double.valueOf(fixedPrice) : 0;
+        order.addressStopName = isFixed ? addressEnd : "";
 
         showProgress(true);
         mTask = new MakeOrderTask();

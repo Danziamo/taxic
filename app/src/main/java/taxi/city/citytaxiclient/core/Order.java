@@ -127,23 +127,24 @@ public class Order {
     }
 
     public String getStatusName() {
-        if (this.status == null)
+        if (this.status == null || this.id == 0)
             return null;
+        String result = "#" + String.valueOf(this.id) + " ";
         switch (this.status) {
             case NEW:
-                return "В ожидании";
+                return result + "В ожидании";
             case ACCEPTED:
-                return "Заказ принят";
+                return result + "Заказ принят";
             case WAITING:
-                return "Водитель на месте";
+                return result + "Водитель на месте";
             case ONTHEWAY:
-                return "Водитель в пути";
+                return result + "Водитель в пути";
             case PENDING:
-                return "Водитель ждёт";
+                return result + "Водитель ждёт";
             case FINISHED:
-                return "Позедка окончена";
+                return result + "Позедка окончена";
             case CANCELED:
-                return "Позедка отменена";
+                return result + "Позедка отменена";
             default:
                 return null;
         }
