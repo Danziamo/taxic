@@ -29,7 +29,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/MainTheme"
-        android:windowSoftInputMode="stateUnchanged"
+        android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
         tools:replace="android:icon,android:theme" >
 
         <activity android:name=".SplashScreen" >
@@ -75,6 +75,7 @@
         <activity
             android:name=".CreateOrderActivity"
             android:label="@string/title_activity_create_order"
+            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
             android:parentActivityName=".MapsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -96,6 +97,7 @@
             android:name=".AccountActivity"
             android:label="@string/title_activity_account"
             android:parentActivityName=".MapsActivity"
+            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
             android:theme="@style/ActionBarTheme"
             android:uiOptions="splitActionBarWhenNarrow" >
             <meta-data
@@ -112,6 +114,7 @@
         <activity
             android:name=".OrderDetailsActivity"
             android:label="@string/title_activity_order_details"
+            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
             android:parentActivityName=".AccountActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

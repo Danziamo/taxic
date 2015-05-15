@@ -22,6 +22,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/textViewElements"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp">
 
@@ -104,11 +105,13 @@
         android:id="@+id/linearLayoutOkCancelGroup"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:weightSum="10"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:layout_centerHorizontal="true">
 
         <Button
             style="@style/mediumButton.Green"
