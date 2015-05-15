@@ -6,11 +6,6 @@
 
     tools:context="taxi.city.citytaxidriver.UserDetailsActivity.UserDetailsFragment">
 
-    <TextView
-        style="@style/TextTitle"
-        android:text="Настройки клиента"
-        android:id="@+id/textViewTitle" />
-
     <LinearLayout
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -20,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/textViewTitle"
-        android:layout_marginTop="@dimen/spacing_tiny">
+        android:layout_marginTop="@dimen/spacing_huge">
 
         <EditText
             style="@style/mediumEditText"
@@ -66,10 +61,7 @@
                 style="@style/ShortEditText"
                 android:hint="Телефон"
                 android:id="@+id/textViewPhone"
-
-
-                android:inputType="number"
-                />
+                android:inputType="number" />
         </LinearLayout>
 
         <RelativeLayout
@@ -77,6 +69,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/spacing_small"
             android:id="@+id/relativeLayoutPassword"
+            android:layout_above="@+id/buttonSave"
             android:layout_height="wrap_content">
 
             <EditText
@@ -123,8 +116,7 @@
             android:text="Назад"
             android:layout_marginRight="45dp"
             android:visibility="gone"
-            android:id="@+id/buttonBack"
-            />
+            android:id="@+id/buttonBack" />
 
         <Button
             style="@style/mediumButton.Yellow"
