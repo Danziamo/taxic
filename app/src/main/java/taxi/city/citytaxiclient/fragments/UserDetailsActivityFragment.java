@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -49,7 +50,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private EditText etPhone;
     private EditText etPhoneExtra;
     private EditText etDoB;
-    private TextView tvTitle;
+    //private TextView tvTitle;
     private EditText etPassword;
     private EditText etEmail;
     private boolean isNew = false;
@@ -99,7 +100,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         etPhone = (EditText) rootView.findViewById(R.id.textViewPhone);
         etPassword = (EditText) rootView.findViewById(R.id.editTextPassword);
         etPhoneExtra = (EditText) rootView.findViewById(R.id.textViewExtra);
-        tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
+        //tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         etDoB = (EditText) rootView.findViewById(R.id.editTextDoB);
         etDoB.setInputType(InputType.TYPE_NULL);
 
@@ -158,7 +159,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         etDoB.setOnClickListener(this);
 
         Calendar newCalendar = Calendar.getInstance();
-        datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo ,new DatePickerDialog.OnDateSetListener() {
+        datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog ,new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 Calendar newDate = Calendar.getInstance();
@@ -166,6 +167,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
                 etDoB.setText(dateFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     }
 
     @Override
@@ -186,11 +188,11 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private void updateView() {
         if (isNew) {
             btnSave.setText("Подтвердить");
-            tvTitle.setText("Регистарция");
+            //tvTitle.setText("Регистарция");
             etPhone.setEnabled(true);
             etPhoneExtra.setEnabled(true);
         } else {
-            tvTitle.setVisibility(View.GONE);
+            //tvTitle.setVisibility(View.GONE);
             btnSave.setText("Сохранить");
             etPhone.setEnabled(false);
             etPhoneExtra.setEnabled(false);
