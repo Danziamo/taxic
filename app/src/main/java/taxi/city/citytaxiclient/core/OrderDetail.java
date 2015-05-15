@@ -34,7 +34,7 @@ public class OrderDetail implements Serializable {
         this.phone = row.getString("client_phone");
         this.startPoint = row.getString("address_start");
         this.endPoint = row.getString("address_stop");
-        this.driver = userId;
+        this.driver = row.getInt("driver");
         this.id = row.getInt("id");
         this.waitTime = row.getString("wait_time");
         this.tariff = row.getInt("tariff");
