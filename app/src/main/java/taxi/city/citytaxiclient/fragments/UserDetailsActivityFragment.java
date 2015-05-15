@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient.fragments;
 
 import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,8 +23,12 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+import android.support.v4.app.DialogFragment;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import taxi.city.citytaxiclient.ConfirmSignUpActivity;
 import taxi.city.citytaxiclient.MapsActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.User;
@@ -51,6 +57,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
     private SweetAlertDialog pDialog;
     private DatePickerDialog datePickerDialog;
+    private SimpleDateFormat dateFormatter;
 
     Button btnSave;
     Button btnBack;
@@ -82,6 +89,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user_details, container, false);
         isNew = getActivity().getIntent().getBooleanExtra("NEW", false);
+        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
         user = User.getInstance();
 
@@ -93,6 +101,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         etPhoneExtra = (EditText) rootView.findViewById(R.id.textViewExtra);
         tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         etDoB = (EditText) rootView.findViewById(R.id.editTextDoB);
+        etDoB.setInputType(InputType.TYPE_NULL);
 
         btnSave = (Button)rootView.findViewById(R.id.buttonSave);
         btnBack = (Button)rootView.findViewById(R.id.buttonBack);
@@ -132,6 +141,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             etEmail.setText(user.email);
             String extra = user.phone.substring(0, 4);
             String phone = user.phone.substring(4);
+            etDoB.setText(user.dateOfBirth);
             etPhone.setText(phone);
             etPhoneExtra.setText(extra);
         }
@@ -139,8 +149,23 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         btnSave.setOnClickListener(this);
         btnBack.setOnClickListener(this);
         updateView();
+        setDateTimePicker();
 
         return rootView;
+    }
+
+    private void setDateTimePicker() {
+        etDoB.setOnClickListener(this);
+
+        Calendar newCalendar = Calendar.getInstance();
+        datePickerDialog = new DatePickerDialog(getActivity(), android.R.style.Theme_Holo ,new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                etDoB.setText(dateFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     @Override
@@ -148,6 +173,9 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         switch (v.getId()) {
             case R.id.buttonSave:
                 updateTask();
+                break;
+            case R.id.editTextDoB:
+                datePickerDialog.show();
                 break;
             default:
                 getActivity().finish();
@@ -162,7 +190,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             etPhone.setEnabled(true);
             etPhoneExtra.setEnabled(true);
         } else {
-            tvTitle.setText("Настройки пользователя");
+            tvTitle.setVisibility(View.GONE);
             btnSave.setText("Сохранить");
             etPhone.setEnabled(false);
             etPhoneExtra.setEnabled(false);
@@ -196,12 +224,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             if (email != null && !Helper.isValidEmailAddress(email)) {
                 etEmail.setError("Email неправильно задано");
                 etEmail.requestFocus();
-                return;
-            }
-
-            if (dob.length() != 10) {
-                etDoB.setError("Формат: гггг-мм-дд");
-                etDoB.requestFocus();
                 return;
             }
         }
