@@ -1,13 +1,13 @@
 package taxi.city.citytaxiclient.fragments;
 
 import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -90,7 +90,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_user_details, container, false);
         isNew = getActivity().getIntent().getBooleanExtra("NEW", false);
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         user = User.getInstance();
 
@@ -142,7 +142,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             etEmail.setText(user.email);
             String extra = user.phone.substring(0, 4);
             String phone = user.phone.substring(4);
-            etDoB.setText(user.dateOfBirth);
+            etDoB.setText(user.dateOfBirth.equals("null") ? null : user.dateOfBirth);
             etPhone.setText(phone);
             etPhoneExtra.setText(extra);
         }
@@ -242,7 +242,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
-
         JSONObject json = new JSONObject();
         try {
             json.put("phone", phone);
@@ -250,12 +249,9 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             //json.put("role", "user");
             json.put("first_name", !isNew ? firstName : "Имя");
             json.put("last_name", !isNew ? lastName : "Фамиля");
+            json.put("email", !isNew ? email : null);
+            json.put("date_of_birth", !isNew ? dob : null);
             json.put("password", password);
-
-            if (!isNew) {
-                json.put("email", email);
-                json.put("date_of_birth", dob);
-            }
         } catch (JSONException e)  {
             e.printStackTrace();
         }
@@ -317,6 +313,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         user.lastName = etLastName.getText().toString();
         user.password = etPassword.getText().toString();
         user.email = etEmail.getText().toString();
+        user.dateOfBirth = etDoB.getText().toString();
         if (isNew) {
             try {
                 user.setUser(object);

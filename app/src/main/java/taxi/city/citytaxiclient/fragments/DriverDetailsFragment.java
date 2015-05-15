@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import taxi.city.citytaxiclient.R;
+import taxi.city.citytaxiclient.core.Order;
 
 
 /**
@@ -14,12 +18,41 @@ import taxi.city.citytaxiclient.R;
  */
 public class DriverDetailsFragment extends Fragment {
 
+    TextView tvLastName;
+    TextView tvFirstName;
+    TextView tvPhone;
+    TextView tvCarBrand;
+    TextView tvCarModel;
+    TextView tvCarColor;
+    TextView tvCarNumber;
+
     public DriverDetailsFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_driver_details, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_driver_details, container, false);
+        Order order = Order.getInstance();
+
+        tvFirstName = (TextView) rootView.findViewById(R.id.textViewFirstName);
+        tvLastName = (TextView) rootView.findViewById(R.id.textViewLastName);
+        tvPhone = (TextView) rootView.findViewById(R.id.textViewDriverPhone);
+        tvCarBrand = (TextView) rootView.findViewById(R.id.textViewCarBrand);
+        tvCarModel = (TextView) rootView.findViewById(R.id.textViewCarModel);
+        tvCarColor = (TextView) rootView.findViewById(R.id.textViewCarColor);
+        tvCarNumber = (TextView) rootView.findViewById(R.id.textViewCarNumber);
+
+        tvFirstName.setText(order.driver.firstName);
+        tvLastName.setText(order.driver.lastName);
+        tvPhone.setText(order.driver.phone);
+        tvCarBrand.setText(order.driver.carBrand);
+        tvCarModel.setText(order.driver.carModel);
+        tvCarNumber.setText(order.driver.carNumber);
+        tvCarColor.setText(order.driver.carColor);
+
+        return rootView;
     }
+
+
 }

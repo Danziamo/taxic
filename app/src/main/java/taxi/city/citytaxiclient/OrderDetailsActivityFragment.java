@@ -80,6 +80,7 @@ public class OrderDetailsActivityFragment extends Fragment {
         tvDriverName.setText(null);
 
         etAddressStart.setEnabled(false);
+        fetch();
 
         return rootView;
     }

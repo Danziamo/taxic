@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -506,21 +507,35 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             // Simulate network access.
             JSONObject result = api.getOrderRequest("orders/" + order.id + "/");
             try {
-                if (result != null && result.getInt("status_code") == HttpStatus.SC_OK && result.has("driver")) {
-                    JSONObject driver = api.getOrderRequest("users/" + result.getInt("driver") + "/");
-                    if (driver != null && driver.getInt("status_code") == HttpStatus.SC_OK && driver.has("phone")) {
-                        JSONObject driverCar = api.getArrayRequest("usercars/driver="+result.getString("driver"));
-                        result.put("driver_phone", driver.getString("phone"));
-                        result.put("driver_first_name", driver.getString("first_name"));
-                        result.put("driver_last_name", driver.getString("last_name"));
-                        if (driverCar != null && Helper.isSuccess(driverCar) && driverCar.has("result")) {
-                            JSONArray array = driverCar.getJSONArray("result");
-                            if (array.length() > 0) {
-                                JSONObject car = array.getJSONObject(0);
-                                result.put("driver_brand", car.getString("brand"));
-                                result.put("driver_model", car.getString("brand_model"));
-                                result.put("driver_number", car.getString("car_number"));
-                                result.put("driver_color", car.getString("color"));
+                if (Helper.isSuccess(result) && result.has("driver")) {
+                    if (order.driver == null) {
+                        JSONObject driver = api.getOrderRequest("users/" + result.getInt("driver") + "/");
+                        if (driver != null && driver.getInt("status_code") == HttpStatus.SC_OK && driver.has("phone")) {
+                            result.put("driver_phone", driver.getString("phone"));
+                            result.put("driver_first_name", driver.getString("first_name"));
+                            result.put("driver_last_name", driver.getString("last_name"));
+                            JSONObject driverCar = api.getArrayRequest("usercars/?driver=" + result.getString("driver"));
+                            if (Helper.isSuccess(driverCar) && driverCar.has("result")) {
+                                JSONArray array = driverCar.getJSONArray("result");
+                                if (array.length() > 0) {
+                                    JSONObject car = array.getJSONObject(0);
+                                    result.put("driver_number", car.getString("car_number"));
+                                    result.put("driver_color", car.getString("color"));
+                                    JSONObject brandObject = api.getArrayRequest("cars/carbrands/?id=" + car.getString("brand"));
+                                    if (Helper.isSuccess(brandObject) && brandObject.has("result")) {
+                                        JSONArray brandArray = brandObject.getJSONArray("result");
+                                        if (brandArray.length() > 0) {
+                                            result.put("driver_brand", brandArray.getJSONObject(0).getString("brand_name"));
+                                        }
+                                    }
+                                    JSONObject brandModelObject = api.getArrayRequest("cars/carbrandmodels/?id=" + car.getString("brand_model"));
+                                    if (Helper.isSuccess(brandModelObject) && brandModelObject.has("result")) {
+                                        JSONArray modelArray = brandModelObject.getJSONArray("result");
+                                        if (modelArray.length() > 0) {
+                                            result.put("driver_model", modelArray.getJSONObject(0).getString("brand_model_name"));
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -596,7 +611,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
-                    SweetAlertDialog pDialog = new SweetAlertDialog(MapsActivity.this, SweetAlertDialog.WARNING_TYPE);
+                    /*SweetAlertDialog pDialog = new SweetAlertDialog(MapsActivity.this, SweetAlertDialog.WARNING_TYPE);
                     pDialog .setTitleText("Вы хотите позвонить?")
                             .setContentText(order.clientPhone)
                             .setConfirmText("Позвонить")
@@ -616,7 +631,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                                     sDialog.dismissWithAnimation();
                                 }
                             })
-                            .show();
+                            .show();*/
+                    Intent intent = new Intent(MapsActivity.this, DriverDetails.class);
+                    startActivity(intent);
                 }
             });
         } else {
