@@ -29,10 +29,26 @@
                 android:hint="Имя"
                 android:id="@+id/textViewFirstName" />
 
-            <TextView
-                style="@style/mediumEditText"
-                android:hint="Телефон: (+996) XXX XXX-XXX"
-                android:id="@+id/textViewDriverPhone" />
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/mediumEditText"
+                    android:hint="Телефон: (+996) XXX XXX-XXX"
+                    android:id="@+id/textViewDriverPhone" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonCallDriver"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:gravity="right"
+                    android:background="@drawable/image_tube"
+                    android:layout_alignTop="@+id/textViewDriverPhone"
+                    android:layout_alignRight="@+id/textViewDriverPhone"
+                    android:layout_alignEnd="@+id/textViewDriverPhone" />
+
+            </RelativeLayout>
 
             <TextView
                 style="@style/mediumEditText"
