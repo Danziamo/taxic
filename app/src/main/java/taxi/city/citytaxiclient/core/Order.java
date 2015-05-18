@@ -132,19 +132,21 @@ public class Order {
         String result = "#" + String.valueOf(this.id) + " ";
         switch (this.status) {
             case NEW:
-                return result + "В ожидании";
+                return result + "Ищем водителя";
             case ACCEPTED:
-                return result + "Заказ принят";
+                return result + "Ваш заказ принят";
             case WAITING:
-                return result + "Водитель на месте";
+                return result + "Машина подъехала";
             case ONTHEWAY:
-                return result + "Водитель в пути";
+                return result + "Удачной поездки";
             case PENDING:
-                return result + "Водитель ждёт";
+                return result + "Ожидание";
             case FINISHED:
-                return result + "Позедка окончена";
+                return result + "Позедка завершена";
             case CANCELED:
-                return result + "Позедка отменена";
+                return result + "Заказ отменён вами";
+            case SOS:
+                return result + "Помощь";
             default:
                 return null;
         }
