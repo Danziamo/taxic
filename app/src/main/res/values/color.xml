@@ -2,6 +2,7 @@
 <resources>
     <color name="lime">#f4ea04</color>
     <color name="translucent_lime">#ffec19</color>
+    <color name="yellow">#FFEE33</color>
     <color name="lime2">#DDC522</color>
     <color name="green">#45b320</color>
     <color name="blacktext1">#878787</color>
