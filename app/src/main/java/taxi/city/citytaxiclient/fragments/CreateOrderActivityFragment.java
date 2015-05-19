@@ -129,6 +129,12 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
+        if (isFixed.isChecked() && Double.valueOf(fixedPrice) > 999) {
+            etFixedPrice.setError("Фиксированная сумма не больше 999 сомов");
+            etFixedPrice.requestFocus();
+            return;
+        }
+
         if (isFixed.isChecked() && addressEnd.length() < 3) {
             etStopAddress.setError("Минимум 3 символа");
             etStopAddress.requestFocus();

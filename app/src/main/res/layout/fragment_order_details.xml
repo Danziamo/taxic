@@ -9,13 +9,10 @@
         android:src="@drawable/background"
         android:scaleType="centerCrop"/>
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
-
-        android:layout_above="@+id/linearLayoutTopButtons"
         android:id="@+id/scrollViewOrderInfo">
 
         <RelativeLayout
@@ -263,6 +260,7 @@
 
 
             <LinearLayout
+                android:id="@+id/linearLayoutDriverName"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -274,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:text="Водитель:"
                     android:gravity="left"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/white"/>
                 <TextView
@@ -282,41 +280,24 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textViewDriverName"
                     android:gravity="center"
-                    android:layout_weight="6"
+                    android:layout_weight="5"
                     android:textSize="@dimen/text_size_medium"
                     android:textColor="@color/white"
                     android:layout_marginLeft="80dp" />
 
 
             </LinearLayout>
+
+            <Button
+                android:layout_below="@id/linearLayoutDriverName"
+                android:layout_centerHorizontal="true"
+                style="@style/mediumButton.Yellow"
+                android:layout_margin="10dp"
+                android:visibility="visible"
+                android:text="Далее"
+                android:id="@+id/buttonNext" />
         </RelativeLayout>
 
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/linearLayoutTopButtons"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:weightSum="2"
-        android:layout_margin="5dp"
-        android:visibility="gone">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@drawable/button_shape_azure"
-            android:text="Ожидание"
-            android:id="@+id/buttonWait"
-            android:layout_weight="1"
-            android:layout_marginRight="10dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:visibility="invisible"
-            android:layout_marginLeft="10dp"/>
-
-    </LinearLayout>
 
 </RelativeLayout>

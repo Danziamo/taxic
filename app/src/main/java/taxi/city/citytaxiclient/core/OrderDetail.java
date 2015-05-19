@@ -27,6 +27,7 @@ public class OrderDetail implements Serializable {
     public String waitSum;
     public String fixedPrice;
     public String totalSum;
+    public String driverName;
 
     public OrderDetail() {}
 
@@ -63,6 +64,9 @@ public class OrderDetail implements Serializable {
         this.waitTime = order.waitTime;
         this.sum = String.valueOf((int)order.getTravelSum());
         this.totalSum = String.valueOf((int)order.getTotalSum());
+        if (order.driver != null) {
+            this.driverName = order.driver.lastName + " " + order.driver.firstName;
+        }
     }
 
     public JSONObject getOrderDetailsAsJSON() throws JSONException {

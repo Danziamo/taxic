@@ -1,12 +1,15 @@
 package taxi.city.citytaxiclient;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,7 @@ public class OrderDetailsActivityFragment extends Fragment {
     private Order order;
     private SweetAlertDialog pDialog;
     private FetchOrderTask mFetchTask = null;
+    Button btnNext;
     ApiService api = ApiService.getInstance();
 
     TextView tvDriverName;
@@ -54,6 +58,7 @@ public class OrderDetailsActivityFragment extends Fragment {
         TextView tvSum = (TextView)rootView.findViewById(R.id.textViewSum);
         TextView tvTotalSum = (TextView)rootView.findViewById(R.id.textViewTotalSum);
         tvDriverName = (TextView)rootView.findViewById(R.id.textViewDriverName);
+        btnNext = (Button) rootView.findViewById(R.id.buttonNext);
 
         double totalSum = 0;
         double waitSum = 0;
@@ -77,10 +82,20 @@ public class OrderDetailsActivityFragment extends Fragment {
         tvDistance.setText(orderDetail.distance);
         tvSum.setText(String.valueOf((int)sum));
         tvTotalSum.setText(String.valueOf((int)totalSum));
-        tvDriverName.setText(null);
+        tvDriverName.setText(orderDetail.driverName);
 
         etAddressStart.setEnabled(false);
-        fetch();
+        if (orderDetail.driverName == null) fetch();
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment, RatingFragment.newInstance(null, null), "rating");
+// Start the animated transition.
+                ft.commit();
+            }
+        });
 
         return rootView;
     }

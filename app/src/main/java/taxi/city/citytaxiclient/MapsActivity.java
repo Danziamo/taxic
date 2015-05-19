@@ -45,6 +45,7 @@ import org.json.JSONObject;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
 import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.core.OrderDetail;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.enums.OStatus;
 import taxi.city.citytaxiclient.service.ApiService;
@@ -567,6 +568,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             order.driver = new Driver(result);
                         }
                         displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
+                        if (order.status == OStatus.FINISHED) {
+                            showOrderDetails();
+                        }
                         updateViews();
                     }
 
@@ -582,6 +586,12 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         protected void onCancelled() {
             task = null;
         }
+    }
+
+    private void showOrderDetails() {
+        Intent intent = new Intent(MapsActivity.this, OrderDetailsActivity.class);
+        intent.putExtra("DATA", new OrderDetail(order));
+        startActivity(intent);
     }
 
     private double getFormattedDouble(String s) {
