@@ -28,14 +28,14 @@
 
             <TextView
                 style="@style/TextTitle"
-                android:text="Укажите адрес:" />
+                android:text="Адрес:" />
 
             <EditText
                 style="@style/mediumEditText"
                 android:id="@+id/editTextStartAddress" />
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextSubTitle"
                 android:text="Укажите телефон:"/>
 
             <EditText
@@ -44,7 +44,7 @@
                 android:inputType="phone" />
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextSubTitle"
                 android:text="Доп. инфо:" />
 
             <EditText
@@ -52,7 +52,7 @@
                 android:id="@+id/editTextDescription"/>
 
             <TextView
-                style="@style/TextTitle"
+                style="@style/TextSubTitle"
                 android:text="Оплата"/>
 
             <LinearLayout
@@ -63,16 +63,17 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp">
 
-                <Button
-                    style="@style/mediumButton.Black"
-                    android:id="@+id/buttonByCounter"
-                    android:text="По счётчку"
-                    android:layout_marginRight="20dp" />
-                <Button
-                    style="@style/mediumButton.Yellow"
-                    android:id="@+id/buttonByFixed"
-                    android:text="Фиксированная"
-                    android:layout_marginLeft="20dp" />
+                <TextView
+                    style="@style/TextSubTitle"
+                    android:textColor="@color/yellow"
+                    android:text="Фиксированная плата:"/>
+                <CheckBox
+                    android:theme="@style/Base.Theme.AppCompat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBoxIsFixed"
+                    android:checked="false"
+                    android:clickable="true" />
 
             </LinearLayout>
 
@@ -83,12 +84,6 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone">
 
-                <EditText
-                    style="@style/mediumEditText"
-                    android:id="@+id/editTextFixedPrice"
-                    android:hint="Укажите фиксированную сумму"
-                    android:inputType="number" />
-
                 <TextView
                     style="@style/TextTitle"
                     android:text="Куда вас доставить:"/>
@@ -97,6 +92,27 @@
                     style="@style/mediumEditText"
                     android:id="@+id/editTextEndAddress"
                     android:hint="Адрес куда надо доставить"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp"
+                    android:weightSum="10">
+
+                    <TextView
+                        style="@style/TextSubTitle"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:text="Укажите сумму:"/>
+
+                    <EditText
+                        style="@style/mediumEditText"
+                        android:id="@+id/editTextFixedPrice"
+                        android:textColor="@color/red"
+                        android:inputType="number" />
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

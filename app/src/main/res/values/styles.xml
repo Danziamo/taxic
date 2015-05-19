@@ -18,6 +18,10 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="DarkTheme" parent="ThemeOverlay.AppCompat.Light">
+
+    </style>
+
     <style name="GoogleMapsTheme" parent="Theme.AppCompat.Light">
         <item name="android:logo">@mipmap/ic_launcher</item>
     </style>
@@ -160,6 +164,10 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textSize">@dimen/font_huge</item>
         <item name="android:layout_marginTop">@dimen/spacing_huge</item>
+    </style>
+
+    <style name="TextSubTitle" parent="@style/TextTitle">
+        <item name="android:textSize">@dimen/font_large</item>
     </style>
 
 </resources>

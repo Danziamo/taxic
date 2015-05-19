@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -28,13 +30,9 @@ import taxi.city.citytaxiclient.utils.Helper;
  * A placeholder fragment containing a simple view.
  */
 public class CreateOrderActivityFragment extends Fragment implements View.OnClickListener {
-
-    private boolean isFixed = false;
     SweetAlertDialog pDialog;
     Button btnMake;
     Button btnCancel;
-    Button btnFixed;
-    Button btnCounter;
     LinearLayout llFixedPrice;
 
     EditText etStopAddress;
@@ -42,6 +40,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
     EditText etDescription;
     EditText etStartAddress;
     EditText etPhone;
+    CheckBox isFixed;
 
     private MakeOrderTask mTask = null;
     Order order;
@@ -56,15 +55,13 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_create_order, container, false);
-        isFixed = false;
         order = Order.getInstance();
         user = User.getInstance();
         api = ApiService.getInstance();
-        btnFixed = (Button) rootView.findViewById(R.id.buttonByFixed);
-        btnCounter = (Button) rootView.findViewById(R.id.buttonByCounter);
         btnMake = (Button) rootView.findViewById(R.id.buttonOk);
         btnCancel = (Button) rootView.findViewById(R.id.buttonCancel);
         llFixedPrice = (LinearLayout) rootView.findViewById(R.id.linearLayoutFixedPrice);
+        isFixed = (CheckBox) rootView.findViewById(R.id.checkBoxIsFixed);
 
         etStartAddress = (EditText) rootView.findViewById(R.id.editTextStartAddress);
         etStartAddress.setText(order.addressStartName);
@@ -78,8 +75,16 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
 
         btnMake.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
-        btnCounter.setOnClickListener(this);
-        btnFixed.setOnClickListener(this);
+        isFixed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isFixed.isChecked()) {
+                    llFixedPrice.setVisibility(View.VISIBLE);
+                } else {
+                    llFixedPrice.setVisibility(View.GONE);
+                }
+            }
+        });
 
         return rootView;
     }
@@ -87,26 +92,6 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonByFixed:
-                if (!isFixed) {
-                    btnFixed.setBackgroundResource(R.drawable.button_shape_dark_blue);
-                    btnCounter.setBackgroundResource(R.drawable.button_shape_yellow);
-                    btnFixed.setTextColor(Color.WHITE);
-                    btnCounter.setTextColor(Color.BLACK);
-                    llFixedPrice.setVisibility(View.VISIBLE);
-                }
-                isFixed = true;
-                break;
-            case R.id.buttonByCounter:
-                if (isFixed) {
-                    btnFixed.setBackgroundResource(R.drawable.button_shape_yellow);
-                    btnCounter.setBackgroundResource(R.drawable.button_shape_dark_blue);
-                    btnFixed.setTextColor(Color.BLACK);
-                    btnCounter.setTextColor(Color.WHITE);
-                    llFixedPrice.setVisibility(View.GONE);
-                }
-                isFixed = false;
-                break;
             case R.id.buttonOk:
                 makeOrder();
                 break;
@@ -138,13 +123,13 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
-        if (isFixed && Double.valueOf(fixedPrice) < 50) {
+        if (isFixed.isChecked() && Double.valueOf(fixedPrice) < 50) {
             etFixedPrice.setError("Фиксированная сумма не меньше 50 сомов");
             etFixedPrice.requestFocus();
             return;
         }
 
-        if (isFixed && addressEnd.length() < 3) {
+        if (isFixed.isChecked() && addressEnd.length() < 3) {
             etStopAddress.setError("Минимум 3 символа");
             etStopAddress.requestFocus();
             return;
@@ -156,8 +141,8 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         order.description = description;
         order.addressStartName = addressStart;
         order.clientId = user.id;
-        order.fixedPrice = isFixed ? Double.valueOf(fixedPrice) : 0;
-        order.addressStopName = isFixed ? addressEnd : "";
+        order.fixedPrice = isFixed.isChecked() ? Double.valueOf(fixedPrice) : 0;
+        order.addressStopName = isFixed.isChecked() ? addressEnd : "";
 
         showProgress(true);
         mTask = new MakeOrderTask();

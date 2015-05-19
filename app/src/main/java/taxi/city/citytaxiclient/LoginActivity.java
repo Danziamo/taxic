@@ -167,7 +167,7 @@ public class LoginActivity extends Activity{
             mPhoneView.setError(getString(R.string.error_field_required));
             focusView = mPhoneView;
             cancel = true;
-        } else if (!isEmailValid(phone)) {
+        } else if (phone.length() != 13) {
             mPhoneView.setError(getString(R.string.error_invalid_phone));
             focusView = mPhoneView;
             cancel = true;
@@ -186,14 +186,7 @@ public class LoginActivity extends Activity{
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        //return email.contains("@");
-        return true;
-    }
-
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -230,8 +223,6 @@ public class LoginActivity extends Activity{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            // Simulate network access.
             boolean res = false;
             try {
                 JSONObject json = new JSONObject();
