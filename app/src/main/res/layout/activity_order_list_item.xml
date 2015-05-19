@@ -2,24 +2,26 @@
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="50dp"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:id="@+id/linearLayoutOrderRoot"
     android:layout_centerHorizontal="true">
 
     <TextView
         style="@style/SmallEditText"
         android:id="@+id/orderId"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:clickable="false"
+        android:visibility="gone"
         android:background="@drawable/textbox_background"/>
 
     <TextView
         style="@style/mediumEditText"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:clickable="false"
         android:id="@+id/orderAddress" />
 
 </LinearLayout>

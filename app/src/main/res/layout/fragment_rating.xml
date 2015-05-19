@@ -9,7 +9,7 @@
         android:scaleType="centerCrop"/>
 
     <TextView
-        style="@style/TextSubTitle"
+        style="@style/TextTitle"
         android:text="Оцените водителя:"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
@@ -24,6 +24,9 @@
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1"
+        android:rating="2.5"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 

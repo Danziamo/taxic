@@ -100,32 +100,13 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
                 if (!row.has("status") || row.getString("status").equals(OStatus.CANCELED.toString()))
                     continue;
                 OrderDetail details = new OrderDetail(row, user.id);
-                alist.add(details.addressStart);
+                alist.add("#" + String.valueOf(details.id) + " " +details.addressStart);
                 list.add(details);
 
             }
-            OrderDetailsAdapter adapter = new OrderDetailsAdapter(getActivity(), list);
-            //ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, alist);
+            //OrderDetailsAdapter adapter = new OrderDetailsAdapter(getActivity(), list);
+            ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.custom_simple_list_item, alist);
             setListAdapter(adapter);
-            //lvMain.setAdapter(adapter);
-            /*lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    try {
-                        String text = ((TextView) view.findViewById(R.id.orderId)).getText().toString();
-                        int orderId = Integer.valueOf(text);
-
-                        for (int i = list.size() - 1; i >= 0; i -= 1) {
-                            if (orderId == list.get(i).id) {
-                                orderDetail = list.get(i);
-                                break;
-                            }
-                        }
-                        goOrderDetails(orderDetail);
-                    } catch (Exception e) {
-                    }
-                }
-            });*/
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -149,9 +130,21 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         //Toast.makeText(getActivity(), "Tada", Toast.LENGTH_LONG).show();
-        String text = ((TextView) v.findViewById(R.id.orderId)).getText().toString();
+
+        /*String text = ((TextView) v.findViewById(R.id.orderId)).getText().toString();
         int orderId = Integer.valueOf(text);
 
+        for (int i = list.size() - 1; i >= 0; i -= 1) {
+            if (orderId == list.get(i).id) {
+                orderDetail = list.get(i);
+                break;
+            }
+        }
+        goOrderDetails(orderDetail);*/
+
+        String text = ((TextView) v).getText().toString();
+        String[] textArray = text.split(" ");
+        int orderId = Integer.valueOf(textArray[0].substring(1, textArray[0].length()));
         for (int i = list.size() - 1; i >= 0; i -= 1) {
             if (orderId == list.get(i).id) {
                 orderDetail = list.get(i);

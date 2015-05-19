@@ -1,36 +1,39 @@
 package taxi.city.citytaxiclient;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
-import android.net.Uri;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.Api;
+
+import org.apache.http.HttpStatus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import taxi.city.citytaxiclient.core.OrderDetail;
+import taxi.city.citytaxiclient.core.User;
+import taxi.city.citytaxiclient.service.ApiService;
 
 public class RatingFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    RatingBar ratingBar;
+    OrderDetail orderDetail;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RatingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    private UpdateRatingTask mTask = null;
+
     public static RatingFragment newInstance(String param1, String param2) {
         RatingFragment fragment = new RatingFragment();
         Bundle args = new Bundle();
@@ -59,12 +62,71 @@ public class RatingFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_rating, container, false);
 
-        RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
-        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        Intent intent = getActivity().getIntent();
+        orderDetail = (OrderDetail)intent.getExtras().getSerializable("DATA");
 
-        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+        ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (rating < 1.0f) {
+                    ratingBar.setRating(1.0f);
+                }
+            }
+        });
+
+        Button btnOk = (Button) rootView.findViewById(R.id.buttonOk);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateRating();
+            }
+        });
 
         return rootView;
+    }
+
+    private void updateRating() {
+        if (mTask != null) return;
+
+        mTask = new UpdateRatingTask();
+        mTask.execute((Void) null);
+    }
+
+    private class UpdateRatingTask extends AsyncTask<Void, Void, JSONObject> {
+
+        UpdateRatingTask() {}
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            JSONObject res = new JSONObject();
+            try {
+                JSONObject data = new JSONObject();
+                data.put("driver", orderDetail.driver);
+                data.put("client", User.getInstance().id);
+                data.put("order", orderDetail.id);
+                data.put("votes", ratingBar.getRating());
+                data.put("description", "");
+                res = ApiService.getInstance().createOrderRequest(data, "rating/addvotes/");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return res;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            mTask = null;
+            getActivity().finish();
+        }
+
+        @Override
+        protected void onCancelled() {
+            mTask = null;
+        }
     }
 
 }
