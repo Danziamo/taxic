@@ -1,7 +1,5 @@
 package taxi.city.citytaxiclient.service;
 
-import android.util.Log;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -126,8 +124,6 @@ public class ApiService {
             HttpResponse response = httpclient.execute(request);
             json = parseData(response);
 
-            Log.d(TAG, json.toString());
-
         } catch (IOException e) {
             json = null;
             // TODO Auto-generated catch block
@@ -157,8 +153,6 @@ public class ApiService {
             HttpResponse response = httpClient.execute(request);
             json = parseData(response);
 
-            Log.d(TAG, json.toString());
-
         } catch (IOException e) {
             json = null;
             // TODO Auto-generated catch block
@@ -186,8 +180,6 @@ public class ApiService {
             // Execute HTTP Post Request
             HttpResponse response = httpClient.execute(request);
             json = parseData(response);
-
-            Log.d(TAG, json.toString());
 
         } catch (IOException e) {
             json = null;
@@ -325,8 +317,6 @@ public class ApiService {
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
             }
-
-            Log.d("Response", sb.toString());
             result = new JSONArray(sb.toString());
         } catch (JSONException | IOException e) {
             e.printStackTrace();

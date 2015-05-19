@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ import taxi.city.citytaxiclient.service.ApiService;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HistoryOrderFragment extends ListFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -92,18 +93,22 @@ public class HistoryOrderFragment extends ListFragment implements View.OnClickLi
 
     private void InitListView(JSONArray array) {
         list.clear();
+        ArrayList<String> alist = new ArrayList<>();
         try {
             for (int i=0; i < array.length(); ++i) {
                 JSONObject row = array.getJSONObject(i);
                 if (!row.has("status") || row.getString("status").equals(OStatus.CANCELED.toString()))
                     continue;
                 OrderDetail details = new OrderDetail(row, user.id);
+                alist.add(details.addressStart);
                 list.add(details);
 
             }
             OrderDetailsAdapter adapter = new OrderDetailsAdapter(getActivity(), list);
-            lvMain.setAdapter(adapter);
-            lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            //ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, alist);
+            setListAdapter(adapter);
+            //lvMain.setAdapter(adapter);
+            /*lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     try {
@@ -120,7 +125,7 @@ public class HistoryOrderFragment extends ListFragment implements View.OnClickLi
                     } catch (Exception e) {
                     }
                 }
-            });
+            });*/
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -141,9 +146,21 @@ public class HistoryOrderFragment extends ListFragment implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View v) {
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        //Toast.makeText(getActivity(), "Tada", Toast.LENGTH_LONG).show();
+        String text = ((TextView) v.findViewById(R.id.orderId)).getText().toString();
+        int orderId = Integer.valueOf(text);
 
+        for (int i = list.size() - 1; i >= 0; i -= 1) {
+            if (orderId == list.get(i).id) {
+                orderDetail = list.get(i);
+                break;
+            }
+        }
+        goOrderDetails(orderDetail);
     }
+
     @Override
     public void onRefresh() {
         new Handler().postDelayed(new Runnable() {
