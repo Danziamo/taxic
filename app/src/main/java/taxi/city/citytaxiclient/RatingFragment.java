@@ -108,6 +108,7 @@ public class RatingFragment extends Fragment {
                 data.put("order", orderDetail.id);
                 data.put("votes", ratingBar.getRating());
                 data.put("description", "");
+                Log.d("Trololo", data.toString());
                 res = ApiService.getInstance().createOrderRequest(data, "rating/addvotes/");
             } catch (JSONException e) {
                 e.printStackTrace();

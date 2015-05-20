@@ -28,10 +28,12 @@ public class OrderDetail implements Serializable {
     public String fixedPrice;
     public String totalSum;
     public String driverName;
+    public boolean active;
 
     public OrderDetail() {}
 
     public OrderDetail(JSONObject row, int userId) throws JSONException {
+        this.active = false;
         this.phone = row.getString("client_phone");
         this.startPoint = row.getString("address_start");
         this.endPoint = row.getString("address_stop");
@@ -52,6 +54,7 @@ public class OrderDetail implements Serializable {
     }
 
     public OrderDetail(Order order) {
+        this.active = true;
         this.id = order.id;
         this.phone = order.clientPhone;
         this.addressStart = order.addressStartName;
@@ -65,6 +68,7 @@ public class OrderDetail implements Serializable {
         this.sum = String.valueOf((int)order.getTravelSum());
         this.totalSum = String.valueOf((int)order.getTotalSum());
         if (order.driver != null) {
+            this.driver = Integer.valueOf(order.driver.id);
             this.driverName = order.driver.lastName + " " + order.driver.firstName;
         }
     }

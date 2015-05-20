@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -32,6 +33,7 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
     TextView tvCarModel;
     TextView tvCarColor;
     TextView tvCarNumber;
+    RatingBar ratingBar;
     ImageButton imgBtnCallDriver;
     Order order = Order.getInstance();
 
@@ -52,6 +54,7 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         tvCarColor = (TextView) rootView.findViewById(R.id.textViewCarColor);
         tvCarNumber = (TextView) rootView.findViewById(R.id.textViewCarNumber);
         imgBtnCallDriver = (ImageButton) rootView.findViewById(imageButtonCallDriver);
+        ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBarDriver);
 
         tvFirstName.setText(order.driver.firstName);
         tvLastName.setText(order.driver.lastName);
@@ -61,6 +64,7 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         tvCarNumber.setText(order.driver.carNumber);
         tvCarColor.setText(order.driver.carColor);
         imgBtnCallDriver.setOnClickListener(this);
+        ratingBar.setRating(order.driver.rating);
 
         return rootView;
     }

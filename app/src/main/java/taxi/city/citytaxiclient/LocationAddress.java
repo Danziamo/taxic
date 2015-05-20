@@ -29,7 +29,6 @@ public class LocationAddress {
                             latitude, longitude, 1);
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
-                        Log.d(TAG, address.toString());
                         result = address.getThoroughfare();
                     }
                 } catch (IOException e) {

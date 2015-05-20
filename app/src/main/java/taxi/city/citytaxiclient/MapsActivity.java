@@ -515,6 +515,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             result.put("driver_phone", driver.getString("phone"));
                             result.put("driver_first_name", driver.getString("first_name"));
                             result.put("driver_last_name", driver.getString("last_name"));
+                            String ratingSumString = driver.getJSONObject("rating").getString("votes__sum");
+                            double ratingSum = ratingSumString == null || ratingSumString == "null" ? 0 : Double.valueOf(ratingSumString);
+                            int ratingCount = driver.getJSONObject("rating").getInt("votes__count");
+                            result.put("driver_rating", ratingCount == 0 ? 0 : (int)Math.round(ratingSum/ratingCount));
                             JSONObject driverCar = api.getArrayRequest("usercars/?driver=" + result.getString("driver"));
                             if (Helper.isSuccess(driverCar) && driverCar.has("result")) {
                                 JSONArray array = driverCar.getJSONArray("result");
@@ -570,6 +574,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                         displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
                         if (order.status == OStatus.FINISHED) {
                             showOrderDetails();
+                            order.clear();
                         }
                         updateViews();
                     }

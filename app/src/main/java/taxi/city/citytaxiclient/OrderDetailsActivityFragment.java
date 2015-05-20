@@ -60,6 +60,8 @@ public class OrderDetailsActivityFragment extends Fragment {
         tvDriverName = (TextView)rootView.findViewById(R.id.textViewDriverName);
         btnNext = (Button) rootView.findViewById(R.id.buttonNext);
 
+        btnNext.setVisibility(orderDetail.active ? View.VISIBLE : View.GONE);
+
         double totalSum = 0;
         double waitSum = 0;
         double sum = 0;

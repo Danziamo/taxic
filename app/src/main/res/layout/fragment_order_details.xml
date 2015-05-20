@@ -263,7 +263,7 @@
                 android:id="@+id/linearLayoutDriverName"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_centerHorizontal="true"
                 android:weightSum="10"
                 android:layout_below="@+id/linearLayoutTotal">
@@ -294,7 +294,7 @@
                 style="@style/mediumButton.Yellow"
                 android:layout_margin="10dp"
                 android:visibility="visible"
-                android:text="Далее"
+                android:text="Выставить рейтинг"
                 android:id="@+id/buttonNext" />
         </RelativeLayout>
 

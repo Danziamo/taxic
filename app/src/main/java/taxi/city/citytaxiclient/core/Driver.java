@@ -15,6 +15,7 @@ public class Driver {
     public String carColor;
     public String phone;
     public String carNumber;
+    public float rating;
 
     public Driver (String id, String phone, String firstName, String lastName, String carBrand, String carModel, String carColor, String carNumber) {
         this.id = id;
@@ -36,5 +37,6 @@ public class Driver {
         this.carModel = object.has("driver_model") ? object.getString("driver_model") : null;
         this.carColor = object.has("driver_color") ? object.getString("driver_color") : null;
         this.carNumber = object.has("driver_number") ? object.getString("driver_number") : null;
+        this.rating = object.has("driver_rating") ? (float)object.getDouble("driver_rating") : null;
     }
 }
