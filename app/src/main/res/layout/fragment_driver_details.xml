@@ -75,6 +75,7 @@
                 android:text="Рейтинг водителя"/>
 
             <RatingBar
+                android:progressDrawable="@drawable/ratingbar_yellow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="true"

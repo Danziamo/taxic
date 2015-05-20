@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -621,7 +622,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING || order.status == OStatus.ONTHEWAY) {
             mMap.clear();
             String markerTitle = order.driverPhone == null ? "Ваш водитель" : order.driverPhone;
-            mMap.addMarker(new MarkerOptions().position(position).title(markerTitle));
+            mMap.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(markerTitle)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override

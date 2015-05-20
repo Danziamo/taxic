@@ -19,8 +19,9 @@
                 style="@style/mediumEditText"
                 android:background="@drawable/search_address_style"
                 android:gravity="center_vertical"
+                android:layout_marginTop="13dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="50dp"
                 android:drawableRight="@drawable/ic_action_search_map"
                 android:hint="Адрес выбранной точки"
                 android:id="@+id/textViewAddress"/>
@@ -223,7 +224,6 @@
 
             </LinearLayout>
 
-
             <View
                 android:layout_width="1dp"
                 android:layout_height="1dp"
@@ -232,16 +232,15 @@
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
                 android:visibility="invisible">
-
             </View>
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="65dp"
-                android:layout_toRightOf="@id/viewCenter"
-                android:layout_alignBottom="@id/viewCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/viewCenter"
+                android:layout_centerHorizontal="true"
                 android:id="@+id/imageViewSearchIcon"
-                android:background="@drawable/flag"/>
+                android:src="@drawable/flag"/>
 
             <LinearLayout
                 android:id="@+id/linearLayoutTotalSum"
