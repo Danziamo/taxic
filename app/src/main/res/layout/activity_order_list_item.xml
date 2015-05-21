@@ -2,6 +2,7 @@
     android:orientation="horizontal"
     android:layout_width="wrap_content"
     android:layout_height="50dp"
+    android:layout_margin="10dp"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
     android:focusableInTouchMode="false"
