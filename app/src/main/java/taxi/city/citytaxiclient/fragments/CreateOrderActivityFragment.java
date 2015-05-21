@@ -123,13 +123,13 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
-        if (isFixed.isChecked() && Double.valueOf(fixedPrice) < 50) {
+        if (isFixed.isChecked() &&  (fixedPrice.length() == 0 || Double.valueOf(fixedPrice) < 50)) {
             etFixedPrice.setError("Фиксированная сумма не меньше 50 сомов");
             etFixedPrice.requestFocus();
             return;
         }
 
-        if (isFixed.isChecked() && Double.valueOf(fixedPrice) > 999) {
+        if (isFixed.isChecked() && (fixedPrice.length() == 0 || Double.valueOf(fixedPrice) > 999)) {
             etFixedPrice.setError("Фиксированная сумма не больше 999 сомов");
             etFixedPrice.requestFocus();
             return;
