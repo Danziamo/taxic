@@ -65,6 +65,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private Order order;
     private ApiService api;
     private User user;
+    private boolean isFirstFetch = true;
 
     private Location currLocation = null;
     private CheckOrderStatusTask task = null;
@@ -505,8 +506,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         @Override
         protected JSONObject doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-            // Simulate network access.
             JSONObject result = api.getOrderRequest("orders/" + order.id + "/");
             try {
                 if (Helper.isSuccess(result) && result.has("driver")) {
@@ -520,28 +519,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             double ratingSum = ratingSumString == null || ratingSumString == "null" ? 0 : Double.valueOf(ratingSumString);
                             int ratingCount = driver.getJSONObject("rating").getInt("votes__count");
                             result.put("driver_rating", ratingCount == 0 ? 0 : (int)Math.round(ratingSum/ratingCount));
-                            JSONObject driverCar = api.getArrayRequest("usercars/?driver=" + result.getString("driver"));
-                            if (Helper.isSuccess(driverCar) && driverCar.has("result")) {
-                                JSONArray array = driverCar.getJSONArray("result");
-                                if (array.length() > 0) {
-                                    JSONObject car = array.getJSONObject(0);
-                                    result.put("driver_number", car.getString("car_number"));
-                                    result.put("driver_color", car.getString("color"));
-                                    JSONObject brandObject = api.getArrayRequest("cars/carbrands/?id=" + car.getString("brand"));
-                                    if (Helper.isSuccess(brandObject) && brandObject.has("result")) {
-                                        JSONArray brandArray = brandObject.getJSONArray("result");
-                                        if (brandArray.length() > 0) {
-                                            result.put("driver_brand", brandArray.getJSONObject(0).getString("brand_name"));
-                                        }
-                                    }
-                                    JSONObject brandModelObject = api.getArrayRequest("cars/carbrandmodels/?id=" + car.getString("brand_model"));
-                                    if (Helper.isSuccess(brandModelObject) && brandModelObject.has("result")) {
-                                        JSONArray modelArray = brandModelObject.getJSONArray("result");
-                                        if (modelArray.length() > 0) {
-                                            result.put("driver_model", modelArray.getJSONObject(0).getString("brand_model_name"));
-                                        }
-                                    }
-                                }
+                            JSONArray driverCar = driver.getJSONArray("cars");
+                            if (driverCar.length() > 0) {
+                                JSONObject car = driverCar.getJSONObject(0);
+                                result.put("driver_brand", car.getJSONObject("brand").getJSONObject("brand_name"));
+                                result.put("driver_model", car.getJSONObject("brand_model").getJSONObject("brand_model_name"));
+                                result.put("driver_number", car.getString("car_number"));
+                                result.put("driver_color", car.getString("color"));
                             }
                         }
                     }
@@ -573,10 +557,11 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             order.driver = new Driver(result);
                         }
                         displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
-                        if (order.status == OStatus.FINISHED) {
+                        if (order.status == OStatus.FINISHED && !isFirstFetch) {
                             showOrderDetails();
                             order.clear();
                         }
+                        isFirstFetch = false;
                         updateViews();
                     }
 
