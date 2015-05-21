@@ -522,8 +522,8 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             JSONArray driverCar = driver.getJSONArray("cars");
                             if (driverCar.length() > 0) {
                                 JSONObject car = driverCar.getJSONObject(0);
-                                result.put("driver_brand", car.getJSONObject("brand").getJSONObject("brand_name"));
-                                result.put("driver_model", car.getJSONObject("brand_model").getJSONObject("brand_model_name"));
+                                result.put("driver_brand", car.getJSONObject("brand").getString("brand_name"));
+                                result.put("driver_model", car.getJSONObject("brand_model").getString("brand_model_name"));
                                 result.put("driver_number", car.getString("car_number"));
                                 result.put("driver_color", car.getString("color"));
                             }
