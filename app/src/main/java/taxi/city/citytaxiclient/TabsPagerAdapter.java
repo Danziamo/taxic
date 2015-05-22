@@ -2,10 +2,7 @@ package taxi.city.citytaxiclient;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
 import taxi.city.citytaxiclient.fragments.HistoryOrderFragment;

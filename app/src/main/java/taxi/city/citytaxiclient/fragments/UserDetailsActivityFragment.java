@@ -245,7 +245,6 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         JSONObject json = new JSONObject();
         try {
             json.put("phone", phone);
-            json.put("activation_code", "11111");
             //json.put("role", "user");
             json.put("first_name", !isNew ? firstName : "Имя");
             json.put("last_name", !isNew ? lastName : "Фамиля");

@@ -442,6 +442,12 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderTravelSum.setText(String.valueOf(order.getTravelSum()));
         tvOrderTotalSum.setText(String.valueOf(order.getTotalSum()));
 
+        if(order.status == OStatus.WAITING) {
+            tvOrderStatus.setTextColor(getResources().getColor(R.color.red));
+        } else {
+            tvOrderStatus.setTextColor(getResources().getColor(R.color.blue_btn_bg_color));
+        }
+
         if (order.status == OStatus.NEW || order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING) {
             llMain.setVisibility(View.VISIBLE);
             llOrderTotalSum.setVisibility(View.GONE);
