@@ -682,27 +682,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
-                    /*SweetAlertDialog pDialog = new SweetAlertDialog(MapsActivity.this, SweetAlertDialog.WARNING_TYPE);
-                    pDialog .setTitleText("Вы хотите позвонить?")
-                            .setContentText(order.clientPhone)
-                            .setConfirmText("Позвонить")
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                    callIntent.setData(Uri.parse("tel:" + order.clientPhone));
-                                    startActivity(callIntent);
-                                    sDialog.dismissWithAnimation();
-                                }
-                            })
-                            .setCancelText("Отмена")
-                            .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    sDialog.dismissWithAnimation();
-                                }
-                            })
-                            .show();*/
                     Intent intent = new Intent(MapsActivity.this, DriverDetails.class);
                     startActivity(intent);
                 }
