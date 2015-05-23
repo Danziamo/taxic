@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -21,11 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -42,6 +43,8 @@ import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
@@ -61,6 +64,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private static final int MAKE_ORDER_ID = 1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     SweetAlertDialog pDialog;
+
+    String SENDER_ID = "400358386973";
+    String mRegId;
+    GoogleCloudMessaging gcm;
 
     private Order order;
     private ApiService api;
@@ -90,6 +97,8 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     TextView tvOrderDistance;
     TextView tvOrderTravelSum;
     TextView tvOrderTotalSum;
+    ProgressBar progressBar;
+    TextView tvSearchDriver;
 
     ImageView ivIcon;
 
@@ -113,6 +122,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         CheckEnableGPS();
 
         setGooglePlayServices();
+        if (checkPlayServices()) {
+            gcm = GoogleCloudMessaging.getInstance(this);
+            registerInBackground();
+        }
         setUpMapIfNeeded();
 
         llMain = (LinearLayout) findViewById(R.id.mainLayout);
@@ -132,6 +145,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderWaitSum = (TextView) findViewById(R.id.textViewOrderWaitSum);
         ivIcon = (ImageView) findViewById(R.id.imageViewSearchIcon);
         ivIcon.setVisibility(View.GONE);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(0xFF406DC7, android.graphics.PorterDuff.Mode.MULTIPLY);
+        tvSearchDriver = (TextView) findViewById(R.id.textViewSearchDriver);
 
         btnOk = (Button) findViewById(R.id.buttonOk);
         btnOk.setOnClickListener(this);
@@ -210,6 +226,44 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        CONNECTION_FAILURE_RESOLUTION_REQUEST).show();
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void registerInBackground() {
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    mRegId = gcm.register(SENDER_ID);
+                    JSONObject data = new JSONObject();
+                    data.put("android_token", mRegId);
+                    JSONObject result = api.patchRequest(data, "users/" + user.id + "/");
+                } catch (IOException ex) {
+                    msg = "err";
+                } catch (JSONException ignored) {}
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {}
+        }.execute(null, null, null);
     }
 
     @Override
@@ -434,13 +488,20 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     }
 
     private void updateViews() {
-
         tvOrderDistance.setText(String.valueOf(order.distance));
         tvOrderWaitSum.setText(String.valueOf(order.getWaitSum()));
         tvOrderWaitTime.setText(order.waitTime);
         tvOrderStatus.setText(order.getStatusName());
         tvOrderTravelSum.setText(String.valueOf(order.getTravelSum()));
         tvOrderTotalSum.setText(String.valueOf(order.getTotalSum()));
+
+        if (order.status == OStatus.NEW) {
+            progressBar.setVisibility(View.VISIBLE);
+            tvSearchDriver.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            tvSearchDriver.setVisibility(View.GONE);
+        }
 
         if(order.status == OStatus.WAITING) {
             tvOrderStatus.setTextColor(getResources().getColor(R.color.red));
@@ -567,7 +628,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             showOrderDetails();
                             order.clear();
                         }
-                        isFirstFetch = false;
                         updateViews();
                     }
 
@@ -577,6 +637,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             } else {
                 Toast.makeText(getApplicationContext(), "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
             }
+            isFirstFetch = false;
         }
 
         @Override

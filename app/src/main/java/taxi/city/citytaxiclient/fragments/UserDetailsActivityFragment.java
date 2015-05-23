@@ -30,6 +30,7 @@ import java.util.Locale;
 import android.support.v4.app.DialogFragment;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import taxi.city.citytaxiclient.ConfirmSignUpActivity;
 import taxi.city.citytaxiclient.MapsActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.User;
@@ -317,15 +318,13 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             try {
                 user.setUser(object);
                 if (object.has("token")) ApiService.getInstance().setToken(object.getString("token"));
-                goToMapsActivity();
+                goToActivation();
             } catch (JSONException ignored) {}
         }
     }
 
-    private void goToMapsActivity() {
-        Intent intent = new Intent(getActivity(), MapsActivity.class);
-        intent.putExtra("finish", true);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+    private void goToActivation() {
+        Intent intent = new Intent(getActivity(), ConfirmSignUpActivity.class);
         startActivity(intent);
         getActivity().finish();
     }

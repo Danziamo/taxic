@@ -7,6 +7,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +26,8 @@ import taxi.city.citytaxiclient.requestMethods.HttpPatch;
  */
 public class ApiService {
     private static final String url = "http://81.88.192.37/api/v1/";
-    private static final String TAG = "ApiService";
+    private static final int CONNECTION_TIMEOUT = 5000;
+    private static final int SOCKET_TIMEOUT = 10000;
     private String token;
 
     private static ApiService mInstance = null;
@@ -38,13 +42,20 @@ public class ApiService {
         return mInstance;
     }
 
+    private HttpClient getHttpClient() {
+        HttpParams httpParameters = new BasicHttpParams();
+        HttpConnectionParams.setConnectionTimeout(httpParameters, CONNECTION_TIMEOUT);
+        HttpConnectionParams.setSoTimeout(httpParameters, SOCKET_TIMEOUT);
+        return new DefaultHttpClient(httpParameters);
+    }
+
     public void setToken(String token) {
         this.token = token;
     }
 
     public JSONObject loginRequest(JSONObject data, String apiUrl) {
 
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject res;
 
         try {
@@ -56,7 +67,7 @@ public class ApiService {
             request.setEntity(params);
 
             // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
 
             res = parseData(response ,statusCode);
@@ -76,7 +87,7 @@ public class ApiService {
     }
 
     public JSONObject logoutRequest(JSONObject data, String apiUrl) {
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject res;
 
         try {
@@ -89,7 +100,7 @@ public class ApiService {
             request.setEntity(params);
 
             // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
 
             res = parseData(response ,statusCode);
@@ -109,7 +120,7 @@ public class ApiService {
     }
 
     public JSONObject signUpRequest(JSONObject data, String apiUrl) {
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject json = new JSONObject();
 
         try {
@@ -121,7 +132,7 @@ public class ApiService {
             request.setEntity(params);
 
             // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             json = parseData(response);
 
         } catch (IOException e) {
@@ -136,17 +147,15 @@ public class ApiService {
     }
 
     public JSONObject activateRequest(JSONObject data, String apiUrl) {
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject json = new JSONObject();
 
         try {
-            HttpPatch request = new HttpPatch(url + apiUrl);
-            // Add your data
+            HttpPost request = new HttpPost(url + apiUrl);
+
             request.addHeader("content-type", "application/json");
 
-            JSONObject object = new JSONObject();
-            object.put("activation_code", data.getString("activation_code"));
-            StringEntity params = new StringEntity(object.toString(), HTTP.UTF_8);
+            StringEntity params = new StringEntity(data.toString(), HTTP.UTF_8);
             request.setEntity(params);
 
             // Execute HTTP Post Request
@@ -165,7 +174,7 @@ public class ApiService {
     }
 
     public JSONObject patchRequest(JSONObject data, String apiUrl) {
-        HttpClient httpClient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject json = new JSONObject();
 
         try {
@@ -194,7 +203,7 @@ public class ApiService {
 
 
     public JSONObject getOrderRequest(String apiUrl) {
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject res;
 
         try {
@@ -204,7 +213,7 @@ public class ApiService {
             request.setHeader("Authorization", "Token " + this.token);
 
             // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             res = parseData(response, statusCode);
         } catch (ClientProtocolException e) {
@@ -224,15 +233,15 @@ public class ApiService {
 
     public JSONObject getArrayRequest(String apiUrl) {
         JSONObject result = new JSONObject();
+        HttpClient httpClient = getHttpClient();
         try {
-            HttpClient httpclient = new DefaultHttpClient();
             HttpGet request = new HttpGet(url + apiUrl);
             // Add your data
             //request.addHeader("content-type", "application/json");
             request.setHeader("Authorization", "Token " + this.token);
 
             // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             int statusCode = response.getStatusLine().getStatusCode();
             result.put("status_code", statusCode);
 
@@ -252,7 +261,7 @@ public class ApiService {
     }
 
     public JSONObject createOrderRequest(JSONObject data, String apiUrl) {
-        HttpClient httpclient = new DefaultHttpClient();
+        HttpClient httpClient = getHttpClient();
         JSONObject res;
 
         try {
@@ -265,7 +274,7 @@ public class ApiService {
             request.setEntity(entity);
 
             // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(request);
+            HttpResponse response = httpClient.execute(request);
             res = parseData(response);
         } catch (ClientProtocolException e) {
             res = null;

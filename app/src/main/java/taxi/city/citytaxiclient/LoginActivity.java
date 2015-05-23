@@ -52,6 +52,7 @@ public class LoginActivity extends Activity{
     private User user = User.getInstance();
     private ApiService api = ApiService.getInstance();
     private int statusCode;
+    private String detail;
     private SweetAlertDialog pDialog;
 
     private SharedPreferences settings;
@@ -259,6 +260,7 @@ public class LoginActivity extends Activity{
                         Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
                     }
                 } else if (Helper.isBadRequest(object)) {
+                    if (object.has("detail")) detail = object.getString("detail");
                     res = true;
                     statusCode = 403;
                 }
@@ -285,7 +287,11 @@ public class LoginActivity extends Activity{
                 startActivity(intent);
                 finish();
             } else  if (statusCode == 403) {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                if (detail != null && detail.contains("Account")) {
+                    goToActivation();
+                } else {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                }
                 mPasswordView.requestFocus();
             }
             else {
@@ -298,6 +304,11 @@ public class LoginActivity extends Activity{
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+    private void goToActivation() {
+        Intent intent = new Intent(LoginActivity.this, ConfirmSignUpActivity.class);
+        startActivity(intent);
     }
 
     private void signUp() {
