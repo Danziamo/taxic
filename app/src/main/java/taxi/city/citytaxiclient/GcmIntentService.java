@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -63,10 +64,12 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MapsActivity.class), 0);
+                new Intent(this, MapsActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setAutoCancel(true)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Easy Taxi")
                         .setStyle(new NotificationCompat.BigTextStyle()

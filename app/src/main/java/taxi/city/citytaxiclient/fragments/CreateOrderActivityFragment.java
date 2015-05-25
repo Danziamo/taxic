@@ -175,9 +175,9 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             mTask = null;
             showProgress(false);
             try {
-                order.id = result.getInt("id");
                 mTask = null;
                 if (Helper.isSuccess(result)) {
+                    order.id = result.getInt("id");
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Ваш заказ создан")
                             .setContentText("Ожидайте водителя")
@@ -190,8 +190,22 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                                 }
                             })
                             .show();
+                } else {
+                    order.clear();
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Ошибка")
+                            .setContentText("Не удалось отправить данные на сервер")
+                            .setConfirmText("Ок")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismissWithAnimation();
+                                }
+                            })
+                            .show();
                 }
             } catch (JSONException e) {
+                order.clear();
                 e.printStackTrace();
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Ошибка")

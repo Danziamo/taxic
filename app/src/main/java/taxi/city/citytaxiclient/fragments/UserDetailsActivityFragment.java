@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private EditText etPassword;
     private EditText etEmail;
     private boolean isNew = false;
+    private LinearLayout llPhone;
     //private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
 
     private SweetAlertDialog pDialog;
@@ -104,6 +106,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         //tvTitle = (TextView) rootView.findViewById(R.id.textViewTitle);
         etDoB = (EditText) rootView.findViewById(R.id.editTextDoB);
         etDoB.setInputType(InputType.TYPE_NULL);
+        llPhone = (LinearLayout) rootView.findViewById(R.id.linearLayoutPhone);
 
         btnSave = (Button)rootView.findViewById(R.id.buttonSave);
         btnBack = (Button)rootView.findViewById(R.id.buttonBack);
@@ -141,11 +144,12 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             etFirstName.setText(user.firstName);
             etPassword.setText(user.password);
             etEmail.setText(user.email);
-            String extra = user.phone.substring(0, 4);
-            String phone = user.phone.substring(4);
+            /*String extra = user.phone.substring(0, 4);
+            String phone = user.phone.substring(4);*/
             etDoB.setText(user.dateOfBirth.equals("null") ? null : user.dateOfBirth);
-            etPhone.setText(phone);
-            etPhoneExtra.setText(extra);
+            /*etPhone.setText(phone);
+            etPhoneExtra.setText(extra);*/
+            llPhone.setVisibility(View.GONE);
         }
 
         btnSave.setOnClickListener(this);

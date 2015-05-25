@@ -234,6 +234,7 @@ public class LoginActivity extends Activity{
                 JSONObject object = api.loginRequest(json, "login/");
                 if (Helper.isSuccess(object)) {
                     user.setUser(object);
+                    ApiService.getInstance().setToken(user.getToken());
                     statusCode = 200;
                     res = true;
                     JSONObject onlineStatus = new JSONObject();

@@ -237,7 +237,7 @@ public class ApiService {
         try {
             HttpGet request = new HttpGet(url + apiUrl);
             // Add your data
-            //request.addHeader("content-type", "application/json");
+            request.addHeader("content-type", "application/json");
             request.setHeader("Authorization", "Token " + this.token);
 
             // Execute HTTP Post Request

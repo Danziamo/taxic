@@ -65,7 +65,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     SweetAlertDialog pDialog;
 
-    String SENDER_ID = "400358386973";
+    String SENDER_ID = "226704465596";
     String mRegId;
     GoogleCloudMessaging gcm;
 
@@ -429,46 +429,26 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     private void cancelOrder() {
 
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.alertdialog_decline_order);
-
-        Window window = dialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        wlp.dimAmount = 0.7f;
-        wlp.gravity = Gravity.BOTTOM;
-        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        window.setAttributes(wlp);
-
-        final EditText reason = (EditText) dialog.findViewById(R.id.editTextDeclineReason);
-        Button btnOkDialog = (Button) dialog.findViewById(R.id.buttonOkDecline);
-        Button btnCancelDialog = (Button) dialog.findViewById(R.id.buttonCancelDecline);
-        // if button is clicked, close the custom dialog
-        btnOkDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                order.status = OStatus.NEW;
-                String reasonText = reason.getText().toString();
-                if (reasonText.length() < 6) {
-                    reason.setError("Нужно как минимум 6 символов");
-                    reason.requestFocus();
-                    return;
-                }
-                DeclineTask(reasonText);
-                updateViews();
-                dialog.dismiss();
-            }
-        });
-
-        btnCancelDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+        new SweetAlertDialog(MapsActivity.this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Вы уверены что хотите отменить?")
+                //.setContentText(order.clientPhone)
+                .setConfirmText("Отменить")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        DeclineTask("");
+                        updateViews();
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .setCancelText("Назад")
+                .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                .show();
 
     }
 

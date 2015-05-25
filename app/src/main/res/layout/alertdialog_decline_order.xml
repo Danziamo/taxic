@@ -8,7 +8,8 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:id="@+id/textViewDialogTitle"
-        android:text="Причина отказа:"
+        android:text="Вы уверены?"
+        android:textSize="25sp"
         android:textColor="@color/white">
     </TextView>
 
@@ -23,6 +24,7 @@
         android:layout_marginTop="0dp"
         android:padding="5dp"
         android:layout_below="@+id/textViewDialogTitle"
+        android:visibility="invisible"
         android:id="@+id/editTextDeclineReason"/>
 
     <LinearLayout
@@ -36,7 +38,7 @@
         <Button
             style="@style/mediumButton.Red"
             android:id="@+id/buttonOkDecline"
-            android:text="Отказ"
+            android:text="Да"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"/>
 
