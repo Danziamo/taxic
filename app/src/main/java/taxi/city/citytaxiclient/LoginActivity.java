@@ -48,6 +48,7 @@ public class LoginActivity extends Activity{
     // UI references.
     private EditText mPhoneView;
     private TextView mPhoneExtraView;
+    private TextView mForgetPassword;
     private EditText mPasswordView;
     private User user = User.getInstance();
     private ApiService api = ApiService.getInstance();
@@ -64,6 +65,7 @@ public class LoginActivity extends Activity{
 
         // Set up the login form.
         mPhoneView = (EditText) findViewById(R.id.login_phone);
+        mForgetPassword =(TextView)findViewById(R.id.textViewForgetPassword);
         mPhoneExtraView = (TextView) findViewById(R.id.textViewPhoneExtra);
         //MaskedWatcher maskedWatcher = new MaskedWatcher("+996 (###) ###-###", mPhoneView);
         mPasswordView = (EditText) findViewById(R.id.login_password);
@@ -82,6 +84,12 @@ public class LoginActivity extends Activity{
 
         Button mPhoneSignInButton = (Button) findViewById(R.id.btnSignIn);
         Button mSignUpButton = (Button) findViewById(R.id.btnSignUp);
+        mForgetPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         mPhoneSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
