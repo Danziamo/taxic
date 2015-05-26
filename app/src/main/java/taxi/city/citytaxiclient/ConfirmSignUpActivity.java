@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -33,16 +34,22 @@ public class ConfirmSignUpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_sign_up);
+        isSignUp = getIntent().getBooleanExtra("SIGNUP", true);
         Initialize();
     }
 
     private void Initialize() {
         mActivationCode = (EditText) findViewById(R.id.etActivationCode);
         mPasswordField = (EditText) findViewById(R.id.etActivationPassword);
+        TextView tvTitle = (TextView) findViewById(R.id.textViewTitle);
 
-        isSignUp = getIntent().getBooleanExtra("SIGNUP", true);
-        if (isSignUp) mPasswordField.setVisibility(View.INVISIBLE);
         Button btn = (Button) findViewById(R.id.btnActivate);
+        if (isSignUp) {
+            mPasswordField.setVisibility(View.INVISIBLE);
+        } else {
+            tvTitle.setText("Восстановление пароля");
+            btn.setText("Подтвердить");
+        }
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,16 +68,15 @@ public class ConfirmSignUpActivity extends Activity {
         View focusView = null;
         boolean cancel = false;
 
-        if (mCode.length() > 5) {
+        if (mCode == null || mCode.length() > 5) {
             mActivationCode.setError("Код не более 5 символов");
             focusView = mActivationCode;
             cancel = true;
         }
 
-        if (!isSignUp && mPassword.length() < 5) {
-            mPasswordField.setError("Пароль минимум 5 символа");
+        if (!isSignUp && mPassword.length() < 4) {
+            mPasswordField.setError("Минимум 4 символа");
             focusView = mPasswordField;
-            cancel = true;
         }
 
         if (cancel) {
