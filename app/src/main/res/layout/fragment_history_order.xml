@@ -6,12 +6,14 @@
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_container"
+        android:layout_marginTop="22dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ListView
+            android:layout_marginTop="10dp"
             android:id="@id/android:list"
             android:clickable="true"
             android:layout_width="match_parent"

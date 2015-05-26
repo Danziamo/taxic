@@ -14,8 +14,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textViewTitle"
-        android:layout_marginTop="@dimen/spacing_huge">
+        android:layout_below="@+id/textViewTitle">
 
         <EditText
             style="@style/mediumEditText"
