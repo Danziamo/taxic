@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,9 +12,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,11 +48,12 @@ public class LoginActivity extends Activity{
     private static final String url = "http://81.88.192.37/api/v1/";
     private static final String PREFS_NAME = "MyPrefsFile";
     private UserLoginTask mAuthTask = null;
+    private ForgotPasswordTask mForgotTask = null;
 
     // UI references.
     private EditText mPhoneView;
     private TextView mPhoneExtraView;
-    private TextView mForgetPassword;
+    private TextView mForgotPassword;
     private EditText mPasswordView;
     private User user = User.getInstance();
     private ApiService api = ApiService.getInstance();
@@ -65,7 +70,7 @@ public class LoginActivity extends Activity{
 
         // Set up the login form.
         mPhoneView = (EditText) findViewById(R.id.login_phone);
-        mForgetPassword =(TextView)findViewById(R.id.textViewForgetPassword);
+        mForgotPassword =(TextView)findViewById(R.id.textViewForgotPassword);
         mPhoneExtraView = (TextView) findViewById(R.id.textViewPhoneExtra);
         //MaskedWatcher maskedWatcher = new MaskedWatcher("+996 (###) ###-###", mPhoneView);
         mPasswordView = (EditText) findViewById(R.id.login_password);
@@ -84,12 +89,51 @@ public class LoginActivity extends Activity{
 
         Button mPhoneSignInButton = (Button) findViewById(R.id.btnSignIn);
         Button mSignUpButton = (Button) findViewById(R.id.btnSignUp);
-        mForgetPassword.setOnClickListener(new OnClickListener() {
+        mForgotPassword.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+            final Dialog dialog = new Dialog(LoginActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.forgot_password_alert);
 
+                Window window = dialog.getWindow();
+                WindowManager.LayoutParams wlp = window.getAttributes();
+
+                wlp.gravity = Gravity.BOTTOM;
+                wlp.dimAmount = 0.7f;
+                wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                window.setAttributes(wlp);
+
+                final TextView tvExtraPhone = (TextView)dialog.findViewById(R.id.textViewForgotPhoneExtra);
+                final EditText etPhone = (EditText)dialog.findViewById(R.id.etForgotPhone);
+
+                Button btnOkDialog = (Button)dialog.findViewById(R.id.buttonOkDecline);
+                Button btnCancelDialog = (Button)dialog.findViewById(R.id.buttonCancelDecline);
+
+                btnOkDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String forgotPhone = tvExtraPhone.getText().toString() + etPhone.getText().toString();
+                        if (forgotPhone.length() != 13) {
+                            etPhone.requestFocus();
+                            etPhone.setError("Неправильный формат");
+                        }
+                        forgotPassword(forgotPhone);
+                        dialog.dismiss();
+                    }
+                });
+
+                btnCancelDialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
+
+
         mPhoneSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,6 +147,14 @@ public class LoginActivity extends Activity{
                 signUp();
             }
         });
+    }
+
+    private void forgotPassword(String phone) {
+        if (mForgotTask != null) return;
+
+        showProgress(true);
+        mForgotTask = new ForgotPasswordTask(phone);
+        mForgotTask.execute((Void) null);
     }
 
     private void setPreferences() {
@@ -333,6 +385,36 @@ public class LoginActivity extends Activity{
         if (requestCode == 1) {
             if (data != null && data.getExtras() != null)
                 Toast.makeText(getApplicationContext(), data.getExtras().getString("MESSAGE"), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public class ForgotPasswordTask extends AsyncTask<Void, Void, JSONObject> {
+
+        private final String mPhone;
+
+        ForgotPasswordTask(String phone) {
+            mPhone = phone;
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            return api.resetPasswordRequest("reset_password/?phone=" + mPhone.replace("+", "%2b"));
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject object) {
+            mForgotTask = null;
+            showProgress(false);
+            Intent intent = new Intent(LoginActivity.this, ConfirmSignUpActivity.class);
+            intent.putExtra("SIGNUP", false);
+            user.phone = mPhone;
+            startActivity(intent);
+        }
+
+        @Override
+        protected void onCancelled() {
+            mForgotTask = null;
+            showProgress(false);
         }
     }
 }

@@ -5,6 +5,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -173,6 +174,34 @@ public class ApiService {
         return json;
     }
 
+    public JSONObject putRequest(JSONObject data, String apiUrl) {
+        HttpClient httpClient = getHttpClient();
+        JSONObject json;
+
+        try {
+            HttpPut request = new HttpPut(url + apiUrl);
+            // Add your data
+            request.addHeader("content-type", "application/json");
+            //request.addHeader("Authorization", "Token " + this.token);
+
+            StringEntity params = new StringEntity(data.toString(), HTTP.UTF_8);
+            request.setEntity(params);
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpClient.execute(request);
+            json = parseData(response);
+
+        } catch (IOException e) {
+            json = null;
+            // TODO Auto-generated catch block
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+            json = null;
+        }
+        return json;
+    }
+
     public JSONObject patchRequest(JSONObject data, String apiUrl) {
         HttpClient httpClient = getHttpClient();
         JSONObject json = new JSONObject();
@@ -199,6 +228,25 @@ public class ApiService {
             json = null;
         }
         return json;
+    }
+
+    public JSONObject resetPasswordRequest(String apiUrl) {
+        HttpClient httpClient = getHttpClient();
+        JSONObject result = new JSONObject();
+        try {
+            HttpGet request = new HttpGet(url + apiUrl);
+            // Add your data
+            //request.addHeader("content-type", "application/json");
+            //request.setHeader("Authorization", "Token " + this.token);
+
+            HttpResponse response = httpClient.execute(request);
+            result = parseData(response);
+        } catch (ClientProtocolException e) {
+            result = null;
+        } catch (IOException e) {
+            result = null;
+        }
+        return result;
     }
 
 

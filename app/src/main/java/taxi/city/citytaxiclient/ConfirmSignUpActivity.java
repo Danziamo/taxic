@@ -1,7 +1,5 @@
 package taxi.city.citytaxiclient;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,12 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.utils.Helper;
@@ -28,8 +24,10 @@ import taxi.city.citytaxiclient.utils.Helper;
 public class ConfirmSignUpActivity extends Activity {
 
     private EditText mActivationCode;
+    private EditText mPasswordField;
     private ActivateTask task = null;
     SweetAlertDialog pDialog;
+    private boolean isSignUp = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +38,10 @@ public class ConfirmSignUpActivity extends Activity {
 
     private void Initialize() {
         mActivationCode = (EditText) findViewById(R.id.etActivationCode);
+        mPasswordField = (EditText) findViewById(R.id.etActivationPassword);
 
+        isSignUp = getIntent().getBooleanExtra("SIGNUP", true);
+        if (isSignUp) mPasswordField.setVisibility(View.INVISIBLE);
         Button btn = (Button) findViewById(R.id.btnActivate);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,12 +57,19 @@ public class ConfirmSignUpActivity extends Activity {
         }
 
         String mCode = mActivationCode.getText().toString();
+        String mPassword = mPasswordField.getText().toString();
         View focusView = null;
         boolean cancel = false;
 
-        if (mCode == null || mCode.length() != 5) {
-            mActivationCode.setError("Код должен состоять из 5 символов");
+        if (mCode.length() > 5) {
+            mActivationCode.setError("Код не более 5 символов");
             focusView = mActivationCode;
+            cancel = true;
+        }
+
+        if (!isSignUp && mPassword.length() < 5) {
+            mPasswordField.setError("Пароль минимум 5 символа");
+            focusView = mPasswordField;
             cancel = true;
         }
 
@@ -69,7 +77,7 @@ public class ConfirmSignUpActivity extends Activity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            task = new ActivateTask(mCode);
+            task = new ActivateTask(mCode, mPassword);
             task.execute((Void) null);
         }
     }
@@ -91,14 +99,16 @@ public class ConfirmSignUpActivity extends Activity {
     private class ActivateTask extends AsyncTask<Void, Void, JSONObject> {
 
         private final String mCode;
+        private final String mPassword;
         private JSONObject json = new JSONObject();
 
-        ActivateTask(String code) {
+        ActivateTask(String code, String password) {
             mCode = code;
+            mPassword = password;
 
             try {
                 json.put("phone", User.getInstance().phone);
-                json.put("password", User.getInstance().password);
+                json.put("password", isSignUp ? User.getInstance().password : mPassword);
                 json.put("activation_code", mCode);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -107,7 +117,11 @@ public class ConfirmSignUpActivity extends Activity {
 
         @Override
         protected JSONObject doInBackground(Void... params) {
-            return ApiService.getInstance().activateRequest(json, "activate/");
+            if (isSignUp) {
+                return ApiService.getInstance().activateRequest(json, "activate/");
+            } else {
+                return ApiService.getInstance().putRequest(json, "reset_password/");
+            }
         }
 
         @Override
@@ -134,10 +148,23 @@ public class ConfirmSignUpActivity extends Activity {
     }
 
     private void Finish() {
-        Intent intent = new Intent(this, MapsActivity.class);
-        intent.putExtra("finish", true);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
-        startActivity(intent);
-        finish();
+        /*if (isSignUp) {
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra("finish", true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+            startActivity(intent);
+        }*/
+        new SweetAlertDialog(ConfirmSignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                .setTitleText("Успешно")
+                .setContentText(null)
+                .setConfirmText("Ок")
+                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        sweetAlertDialog.dismissWithAnimation();
+                        finish();
+                    }
+                })
+                .show();
     }
 }

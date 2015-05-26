@@ -22,7 +22,7 @@
                 android:layout_centerVertical="true"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:background="#80000000"
+                android:background="@drawable/progressbar_window"
                 android:id="@+id/linearLayoutSearchingForDriver">
 
                 <ProgressBar
@@ -34,10 +34,11 @@
 
                 <TextView
                     android:id="@+id/textViewSearchDriver"
+                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text = "Мы ищем ближайшего \n свободного водителя"
+                    android:textSize="18sp"
+                    android:text = "Мы ищем ближайшего\nсвободного водителя"
                     android:textColor="@color/white"/>
 
             </LinearLayout>
