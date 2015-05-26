@@ -247,6 +247,7 @@ public class LoginActivity extends Activity{
                     res = true;
                     JSONObject onlineStatus = new JSONObject();
                     onlineStatus.put("online_status", "online");
+                    onlineStatus.put("ios_token", JSONObject.NULL);
                     onlineStatus = api.patchRequest(onlineStatus, "users/" + String.valueOf(user.id)+ "/");
                     JSONObject orderResult = api.getArrayRequest("orders/?status=new&ordering=-id&limit=1&client=" + String.valueOf(user.id));
                     if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
