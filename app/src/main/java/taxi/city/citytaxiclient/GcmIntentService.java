@@ -49,7 +49,7 @@ public class GcmIntentService extends IntentService {
                     }
                 }
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification(extras.getString("message", null));
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.

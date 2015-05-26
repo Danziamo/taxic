@@ -51,10 +51,10 @@
 
         <service android:name=".GcmIntentService" />
 
-        <activity android:name=".SplashScreen" >
+        <activity android:name=".SplashScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -99,14 +99,6 @@
                 android:value="taxi.city.citytaxiclient.MapsActivity" />
         </activity>
         <activity
-            android:name=".GarajActivity"
-            android:label="@string/title_activity_garaj"
-            android:parentActivityName=".MapsActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.MapsActivity" />
-        </activity>
-        <activity
             android:name=".AccountActivity"
             android:label="@string/title_activity_account"
             android:parentActivityName=".MapsActivity"
@@ -127,11 +119,7 @@
         <activity
             android:name=".OrderDetailsActivity"
             android:label="@string/title_activity_order_details"
-            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
-            android:parentActivityName=".AccountActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.AccountActivity" />
+            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan">
         </activity>
     </application>
 

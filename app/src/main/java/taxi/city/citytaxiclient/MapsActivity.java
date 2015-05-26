@@ -1,6 +1,5 @@
 package taxi.city.citytaxiclient;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
@@ -11,12 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -97,8 +92,8 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     TextView tvOrderDistance;
     TextView tvOrderTravelSum;
     TextView tvOrderTotalSum;
+    LinearLayout llSearchDriver;
     ProgressBar progressBar;
-    TextView tvSearchDriver;
 
     ImageView ivIcon;
 
@@ -147,7 +142,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         ivIcon.setVisibility(View.GONE);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(0xFF406DC7, android.graphics.PorterDuff.Mode.MULTIPLY);
-        tvSearchDriver = (TextView) findViewById(R.id.textViewSearchDriver);
+        llSearchDriver = (LinearLayout) findViewById(R.id.linearLayoutSearchingForDriver);
 
         btnOk = (Button) findViewById(R.id.buttonOk);
         btnOk.setOnClickListener(this);
@@ -476,11 +471,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderTotalSum.setText(String.valueOf(order.getTotalSum()));
 
         if (order.status == OStatus.NEW) {
-            progressBar.setVisibility(View.VISIBLE);
-            tvSearchDriver.setVisibility(View.VISIBLE);
+            llSearchDriver.setVisibility(View.VISIBLE);
         } else {
-            progressBar.setVisibility(View.GONE);
-            tvSearchDriver.setVisibility(View.GONE);
+            llSearchDriver.setVisibility(View.GONE);
         }
 
         if(order.status == OStatus.WAITING) {
