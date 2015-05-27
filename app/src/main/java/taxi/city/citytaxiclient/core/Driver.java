@@ -29,14 +29,20 @@ public class Driver {
     }
 
     public Driver (JSONObject object) throws JSONException {
-        this.id = object.has("driver") ? object.getString("driver") : null;
-        this.phone = object.has("driver_phone") ? object.getString("driver_phone") : null;
-        this.firstName = object.has("driver_first_name") ? object.getString("driver_first_name") : null;
-        this.lastName = object.has("driver_last_name") ? object.getString("driver_last_name") : null;
-        this.carBrand = object.has("driver_brand") ? object.getString("driver_brand") : null;
-        this.carModel = object.has("driver_model") ? object.getString("driver_model") : null;
-        this.carColor = object.has("driver_color") ? object.getString("driver_color") : null;
-        this.carNumber = object.has("driver_number") ? object.getString("driver_number") : null;
-        this.rating = object.has("driver_rating") ? (float)object.getDouble("driver_rating") : null;
+        this.id = object.has("id") ? object.getString("id") : null;
+        this.phone = object.has("phone") ? object.getString("phone") : null;
+        this.firstName = object.has("first_name") ? object.getString("first_name") : null;
+        this.lastName = object.has("last_name") ? object.getString("last_name") : null;
+        String ratingSumString = object.getJSONObject("rating").getString("votes__sum");
+        double ratingSum = ratingSumString == null || ratingSumString == "null" ? 0 : Double.valueOf(ratingSumString);
+        int ratingCount = object.getJSONObject("rating").getInt("votes__count");
+        this.rating = ratingCount == 0 ? 0 : (int)Math.round(ratingSum/ratingCount);
+        if (object.has("cars") && object.getJSONArray("cars").length() > 0) {
+            JSONObject carJSON = object.getJSONArray("cars").getJSONObject(0);
+            this.carBrand = carJSON.has("brand") ? carJSON.getJSONObject("brand").getString("brand_name") : null;
+            this.carModel = carJSON.has("brand_model") ? carJSON.getString("brand_model_name") : null;
+            this.carColor = object.has("color") ? carJSON.getString("color") : null;
+            this.carNumber = object.has("car_number") ? object.getString("car_number") : null;
+        }
     }
 }

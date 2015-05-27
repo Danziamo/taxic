@@ -546,41 +546,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         @Override
         protected JSONObject doInBackground(Void... params) {
-            JSONObject result = api.getOrderRequest("orders/" + order.id + "/");
-            try {
-                if (Helper.isSuccess(result) && result.has("driver")) {
-                    if (order.driver == null) {
-                        JSONObject driver = api.getOrderRequest("users/" + result.getInt("driver") + "/");
-                        if (driver != null && driver.getInt("status_code") == HttpStatus.SC_OK && driver.has("phone")) {
-                            result.put("driver_phone", driver.getString("phone"));
-                            result.put("driver_first_name", driver.getString("first_name"));
-                            result.put("driver_last_name", driver.getString("last_name"));
-                            String ratingSumString = driver.getJSONObject("rating").getString("votes__sum");
-                            double ratingSum = ratingSumString == null || ratingSumString == "null" ? 0 : Double.valueOf(ratingSumString);
-                            int ratingCount = driver.getJSONObject("rating").getInt("votes__count");
-                            result.put("driver_rating", ratingCount == 0 ? 0 : (int)Math.round(ratingSum/ratingCount));
-                            JSONArray driverCar = driver.getJSONArray("cars");
-                            if (driverCar.length() > 0) {
-                                JSONObject car = driverCar.getJSONObject(0);
-                                result.put("driver_brand", car.getJSONObject("brand").getString("brand_name"));
-                                result.put("driver_model", car.getJSONObject("brand_model").getString("brand_model_name"));
-                                result.put("driver_number", car.getString("car_number"));
-                                result.put("driver_color", car.getString("color"));
-                            }
-                        }
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return result;
+            return api.getOrderRequest("info_orders/" + order.id + "/");
         }
 
         @Override
         protected void onPostExecute(final JSONObject result) {
             task = null;
             int statusCode;
-            String status;
             if (result != null) {
                 try {
                     statusCode = result.getInt("status_code");
@@ -592,24 +564,27 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                         order.waitTime = result.getString("wait_time");
                         order.time = result.getString("order_travel_time");
                         order.waitSum = getFormattedDouble(result.getString("wait_time_price"));
-                        if (result.has("driver_phone")) {
-                            order.driverPhone = result.getString("driver_phone");
-                            order.driver = new Driver(result);
+                        if (result.has("driver")) {
+                            JSONObject driverJson = result.getJSONObject("driver");
+                            order.driver = new Driver(driverJson);
                         }
-                        displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
+                        if (order.status == OStatus.NEW) {
+                            order.driver = null;
+                        } else {
+                            displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
+                        }
                         if (order.status == OStatus.FINISHED && !isFirstFetch) {
                             showOrderDetails();
                             order.clear();
                         }
-                        updateViews();
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(getApplicationContext(), "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
+                Toast.makeText(MapsActivity.this, "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
             }
+            updateViews();
             isFirstFetch = false;
         }
 
@@ -698,21 +673,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         protected void onPostExecute(final JSONObject result) {
             showProgress(false);
             declineTask = null;
-            int statusCode;
-            if (result != null) {
-                try {
-                    statusCode = result.getInt("status_code");
-                    if (statusCode == HttpStatus.SC_OK) {
-                        order.clear();
-                        updateViews();
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            try {
+                if (!Helper.isSuccess(result)) {
+                    Toast.makeText(MapsActivity.this, "Не удалось отправить данные на сервер", Toast.LENGTH_LONG).show();
                 }
-            } else {
-                //Toast.makeText(this, "Ошибка при попытке подключения к серверу", Toast.LENGTH_LONG).show();
-            }
+            }catch (JSONException ignored) {}
+            order.clear();
+            updateViews();
         }
 
         @Override
