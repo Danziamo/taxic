@@ -611,7 +611,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     }
 
     private void displayDriverOnMap(LatLng position) {
-        if (order.status == OStatus.FINISHED) {
+        if (order.status == OStatus.FINISHED || order.status == OStatus.CANCELED) {
             mMap.clear();
             return;
         }
