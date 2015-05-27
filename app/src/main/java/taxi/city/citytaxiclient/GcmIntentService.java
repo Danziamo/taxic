@@ -70,6 +70,8 @@ public class GcmIntentService extends IntentService {
                 new NotificationCompat.Builder(this)
                         .setDefaults(Notification.DEFAULT_ALL)
                         .setAutoCancel(true)
+                        .setTicker(msg)
+                        .setContentTitle("Easy Taxi")
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("Easy Taxi")
                         .setStyle(new NotificationCompat.BigTextStyle()

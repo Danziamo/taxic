@@ -17,6 +17,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.enums.OStatus;
+import taxi.city.citytaxiclient.utils.Helper;
 
 import static taxi.city.citytaxiclient.R.id.imageButtonCallDriver;
 
@@ -33,6 +34,7 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
     TextView tvCarModel;
     TextView tvCarColor;
     TextView tvCarNumber;
+    TextView tvRating;
     RatingBar ratingBar;
     ImageButton imgBtnCallDriver;
     Order order = Order.getInstance();
@@ -55,6 +57,7 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         tvCarNumber = (TextView) rootView.findViewById(R.id.textViewCarNumber);
         imgBtnCallDriver = (ImageButton) rootView.findViewById(imageButtonCallDriver);
         ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBarDriver);
+        tvRating = (TextView) rootView.findViewById(R.id.textViewRating);
 
         tvFirstName.setText(order.driver.firstName);
         tvLastName.setText(order.driver.lastName);
@@ -65,6 +68,7 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         tvCarColor.setText(order.driver.carColor);
         imgBtnCallDriver.setOnClickListener(this);
         ratingBar.setRating(order.driver.rating);
+        tvRating.setText(Helper.getRatingText(order.driver.rating));
 
         return rootView;
     }

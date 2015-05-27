@@ -3,6 +3,9 @@ package taxi.city.citytaxiclient.core;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Created by Daniyar on 5/8/2015.
  */
@@ -36,7 +39,7 @@ public class Driver {
         String ratingSumString = object.getJSONObject("rating").getString("votes__sum");
         double ratingSum = ratingSumString == null || ratingSumString == "null" ? 0 : Double.valueOf(ratingSumString);
         int ratingCount = object.getJSONObject("rating").getInt("votes__count");
-        this.rating = ratingCount == 0 ? 0 : (int)Math.round(ratingSum/ratingCount);
+        this.rating = ratingCount == 0 ? 0 : (float)round(ratingSum/ratingCount, 1);
         if (object.has("cars") && object.getJSONArray("cars").length() > 0) {
             JSONObject carJSON = object.getJSONArray("cars").getJSONObject(0);
             this.carBrand = carJSON.has("brand") ? carJSON.getJSONObject("brand").getString("brand_name") : null;
@@ -44,5 +47,13 @@ public class Driver {
             this.carColor = object.has("color") ? carJSON.getString("color") : null;
             this.carNumber = object.has("car_number") ? object.getString("car_number") : null;
         }
+    }
+
+    private double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

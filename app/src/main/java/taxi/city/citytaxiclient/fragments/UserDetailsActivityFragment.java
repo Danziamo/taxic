@@ -216,13 +216,13 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         if (!isNew) {
 
-            if (firstName == null || firstName.length() < 2) {
+            if (firstName.length() < 2) {
                 etFirstName.setError("Имя неправильно задано");
                 etFirstName.requestFocus();
                 return;
             }
 
-            if (lastName == null || lastName.length() < 2) {
+            if (lastName.length() < 2) {
                 etLastName.setError("Фамилия неправильно задано");
                 etLastName.requestFocus();
                 return;
@@ -235,7 +235,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             }
         }
 
-        if (phone.length() != 13) {
+        if (isNew && phone.length() != 13) {
             etPhone.setError("Телефон должен состоять из 13 символов");
             etPhone.requestFocus();
             return;
@@ -249,7 +249,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
         JSONObject json = new JSONObject();
         try {
-            json.put("phone", phone);
+            if (isNew) json.put("phone", phone);
             //json.put("role", "user");
             json.put("first_name", !isNew ? firstName : "Имя");
             json.put("last_name", !isNew ? lastName : "Фамиля");

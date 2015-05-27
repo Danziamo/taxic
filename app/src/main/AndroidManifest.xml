@@ -65,6 +65,7 @@
         </activity>
         <activity
             android:name=".MapsActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_maps" >
         </activity>
 

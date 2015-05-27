@@ -38,14 +38,6 @@ public class AccountDetailsActivityFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param position Parameter 1.
-     * @return A new instance of fragment AccountFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AccountDetailsActivityFragment newInstance(int position) {
         AccountDetailsActivityFragment fragment = new AccountDetailsActivityFragment();
         Bundle args = new Bundle();

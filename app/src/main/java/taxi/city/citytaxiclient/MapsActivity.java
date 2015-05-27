@@ -552,11 +552,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         @Override
         protected void onPostExecute(final JSONObject result) {
             task = null;
-            int statusCode;
             if (result != null) {
                 try {
-                    statusCode = result.getInt("status_code");
-                    if (statusCode == HttpStatus.SC_OK) {
+                    if (Helper.isSuccess(result)) {
                         order.status = Helper.getStatus(result.getString("status"));
                         order.id = result.getInt("id");
                         order.sum = result.getDouble("order_sum");
@@ -619,7 +617,8 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             return;
         }
 
-        if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING || order.status == OStatus.ONTHEWAY) {
+        if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING
+                || order.status == OStatus.ONTHEWAY || order.status == OStatus.PENDING) {
             mMap.clear();
             String markerTitle = order.driverPhone == null ? "Ваш водитель" : order.driverPhone;
             mMap.addMarker(new MarkerOptions()
@@ -676,10 +675,11 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             try {
                 if (!Helper.isSuccess(result)) {
                     Toast.makeText(MapsActivity.this, "Не удалось отправить данные на сервер", Toast.LENGTH_LONG).show();
+                } else {
+                    order.clear();
+                    updateViews();
                 }
             }catch (JSONException ignored) {}
-            order.clear();
-            updateViews();
         }
 
         @Override

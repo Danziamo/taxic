@@ -51,7 +51,8 @@ public class OrderDetailsActivityFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         orderDetail = (OrderDetail)intent.getExtras().getSerializable("DATA");
 
-        EditText etAddressStart = (EditText)rootView.findViewById(R.id.editTextStartAddress);
+        TextView etAddressStart = (TextView)rootView.findViewById(R.id.editTextStartAddress);
+        TextView tvFinishAddress = (TextView) rootView.findViewById(R.id.textViewFinishAddress);
         TextView tvWaitTime = (TextView)rootView.findViewById(R.id.textViewWaitingTime);
         TextView tvWaitSum = (TextView)rootView.findViewById(R.id.textViewWaitingSum);
         TextView tvDistance = (TextView)rootView.findViewById(R.id.textViewDistance);
@@ -79,6 +80,7 @@ public class OrderDetailsActivityFragment extends Fragment {
         }
 
         etAddressStart.setText(orderDetail.addressStart);
+        tvFinishAddress.setText(!orderDetail.addressEnd.equals("null") ? orderDetail.addressEnd : null);
         tvWaitTime.setText(waitTime);
         tvWaitSum.setText(String.valueOf((int)waitSum));
         tvDistance.setText(orderDetail.distance);

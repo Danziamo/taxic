@@ -7,6 +7,8 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -193,5 +195,26 @@ public class Helper {
             return false;
         }
         return !(year < 1900 || year > Calendar.getInstance().get(Calendar.YEAR));
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    public static String getRatingText(double rating) {
+        if (rating <= 1) return "1 звезда";
+        if (rating <= 1.5) return  "1.5 звезды";
+        if (rating <= 2) return  "2 звезды";
+        if (rating <= 2.5) return "2.5 звезды";
+        if (rating <= 3) return  "3 звезды";
+        if (rating <= 3.5) return  "3.5 звезды";
+        if (rating <= 4) return "4 звезды";
+        if (rating <= 4.5) return "4.5 здвезды";
+        if (rating <= 5) return "5 звёзд";
+        return null;
     }
 }
