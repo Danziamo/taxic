@@ -43,7 +43,7 @@ public class Driver {
         if (object.has("cars") && object.getJSONArray("cars").length() > 0) {
             JSONObject carJSON = object.getJSONArray("cars").getJSONObject(0);
             this.carBrand = carJSON.has("brand") ? carJSON.getJSONObject("brand").getString("brand_name") : null;
-            this.carModel = carJSON.has("brand_model") ? carJSON.getString("brand_model_name") : null;
+            this.carModel = carJSON.has("brand_model") ? carJSON.getJSONObject("brand_model").getString("brand_model_name") : null;
             this.carColor = object.has("color") ? carJSON.getString("color") : null;
             this.carNumber = object.has("car_number") ? object.getString("car_number") : null;
         }
