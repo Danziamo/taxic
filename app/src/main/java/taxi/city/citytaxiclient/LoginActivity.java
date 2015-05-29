@@ -321,6 +321,10 @@ public class LoginActivity extends Activity{
                     if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
                         Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
                     }
+                    orderResult = api.getArrayRequest("orders/?status=sos&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                    }
                 } else if (Helper.isBadRequest(object)) {
                     if (object.has("detail")) detail = object.getString("detail");
                     res = true;

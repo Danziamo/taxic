@@ -466,9 +466,12 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderDistance.setText(String.valueOf(order.distance));
         tvOrderWaitSum.setText(String.valueOf(order.getWaitSum()));
         tvOrderWaitTime.setText(order.waitTime);
-        tvOrderStatus.setText(order.getStatusName());
         tvOrderTravelSum.setText(String.valueOf(order.getTravelSum()));
         tvOrderTotalSum.setText(String.valueOf(order.getTotalSum()));
+
+        if (order != null && order.status!= null && order.status != OStatus.SOS) {
+            tvOrderStatus.setText(order.getStatusName());
+        }
 
         if (order.status == OStatus.NEW) {
             llSearchDriver.setVisibility(View.VISIBLE);
@@ -493,7 +496,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             btnOk.setText("Отмена");
             btnOk.setBackgroundResource(R.drawable.button_shape_red);
             ivIcon.setVisibility(View.GONE);
-        } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY){
+        } else if (order.status == OStatus.PENDING || order.status == OStatus.ONTHEWAY || order.status == OStatus.SOS){
             llMain.setVisibility(View.VISIBLE);
             llOrderTotalSum.setVisibility(View.VISIBLE);
             llOrderSum.setVisibility(View.VISIBLE);

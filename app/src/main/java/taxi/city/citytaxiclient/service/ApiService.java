@@ -22,13 +22,10 @@ import java.io.InputStreamReader;
 
 import taxi.city.citytaxiclient.requestMethods.HttpPatch;
 
-/**
- * Created by Daniyar on 3/26/2015.
- */
 public class ApiService {
     private static final String url = "http://81.88.192.37/api/v1/";
-    private static final int CONNECTION_TIMEOUT = 5000;
-    private static final int SOCKET_TIMEOUT = 10000;
+    private static final int CONNECTION_TIMEOUT = 20000;
+    private static final int SOCKET_TIMEOUT = 20000;
     private String token;
 
     private static ApiService mInstance = null;

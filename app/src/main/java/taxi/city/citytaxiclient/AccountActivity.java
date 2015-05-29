@@ -12,8 +12,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.api.Api;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +19,6 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
 import taxi.city.citytaxiclient.service.ApiService;
-import taxi.city.citytaxiclient.utils.Helper;
 
 public class AccountActivity extends ActionBarActivity implements AccountDetailsActivityFragment.OnFragmentInteractionListener, ActionBar.TabListener {
 
