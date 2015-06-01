@@ -12,9 +12,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Daniyar on 4/1/2015.
- */
 public class LocationAddress {
     private static final String TAG = "LocationAddress";
     public static void getAddressFromLocation(final double latitude, final double longitude,

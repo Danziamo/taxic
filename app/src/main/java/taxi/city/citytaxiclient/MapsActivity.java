@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -278,6 +279,8 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 mMap.setMyLocationEnabled(true);
+                mMap.setPadding(0, 60, 0, 0);
+
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     public void onCameraChange(CameraPosition arg0) {
                         if (order.id == 0 || order.status == OStatus.FINISHED || order.status == OStatus.CANCELED) {
