@@ -36,7 +36,7 @@ public class User implements Serializable {
             this.token = json.getString("token");
             this.phone = json.getString("phone");
             this.dateOfBirth = json.getString("date_of_birth");
-            this.email = json.getString("email");
+            this.email = json.getString("email") == "null" ? null : json.getString("email");
             this.balance = json.getDouble("balance");
         } catch (JSONException e) {
             e.printStackTrace();

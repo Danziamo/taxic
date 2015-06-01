@@ -279,7 +279,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 mMap.setMyLocationEnabled(true);
-                mMap.setPadding(0, 60, 0, 0);
+                mMap.setPadding(0, 60, 0, 60);
 
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     public void onCameraChange(CameraPosition arg0) {
