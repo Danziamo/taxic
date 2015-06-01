@@ -2,6 +2,7 @@ package taxi.city.citytaxiclient;
 
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
@@ -270,6 +273,12 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         mGoogleApiClient.connect();
     }
 
+    private int getPixelFromDpi(float dp) {
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
+        return (int)px;
+    }
+
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -279,7 +288,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 mMap.setMyLocationEnabled(true);
-                mMap.setPadding(0, 60, 0, 60);
+                mMap.setPadding(0, getPixelFromDpi(48), 0, getPixelFromDpi(48));
 
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     public void onCameraChange(CameraPosition arg0) {
