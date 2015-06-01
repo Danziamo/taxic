@@ -228,7 +228,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
                 return;
             }
 
-            if (email != null && !Helper.isValidEmailAddress(email)) {
+            if (email.length() != 0 && !Helper.isValidEmailAddress(email)) {
                 etEmail.setError("Email неправильно задано");
                 etEmail.requestFocus();
                 return;
