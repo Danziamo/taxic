@@ -577,7 +577,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                         order.waitTime = result.getString("wait_time");
                         order.time = result.getString("order_travel_time");
                         order.waitSum = getFormattedDouble(result.getString("wait_time_price"));
-                        if (order.status != OStatus.NEW && order.driver != null && result.has("driver")) {
+                        if (order.status != OStatus.NEW && order.driver == null && result.has("driver")) {
                             JSONObject driverJson = result.getJSONObject("driver");
                             order.driver = new Driver(driverJson);
                         }

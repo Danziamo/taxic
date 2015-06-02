@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -19,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.OrderDetail;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.service.ApiService;
@@ -26,6 +28,7 @@ import taxi.city.citytaxiclient.service.ApiService;
 public class RatingFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private SweetAlertDialog pDialog;
 
     private String mParam1;
     private String mParam2;
@@ -90,6 +93,7 @@ public class RatingFragment extends Fragment {
     private void updateRating() {
         if (mTask != null) return;
 
+        showProgress(true);
         mTask = new UpdateRatingTask();
         mTask.execute((Void) null);
     }
@@ -108,7 +112,6 @@ public class RatingFragment extends Fragment {
                 data.put("order", orderDetail.id);
                 data.put("votes", ratingBar.getRating());
                 data.put("description", "");
-                Log.d("Trololo", data.toString());
                 res = ApiService.getInstance().createOrderRequest(data, "rating/addvotes/");
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -121,12 +124,27 @@ public class RatingFragment extends Fragment {
         @Override
         protected void onPostExecute(JSONObject result) {
             mTask = null;
+            showProgress(false);
             getActivity().finish();
         }
 
         @Override
         protected void onCancelled() {
             mTask = null;
+            showProgress(false);
+        }
+    }
+
+    public void showProgress(final boolean show) {
+        if (show) {
+            pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.PROGRESS_TYPE);
+            pDialog.getProgressHelper()
+                    .setBarColor(Color.parseColor("#A5DC86"));
+            pDialog.setTitleText("Обновление");
+            pDialog.setCancelable(true);
+            pDialog.show();
+        } else {
+            if (pDialog != null) pDialog.dismissWithAnimation();
         }
     }
 
