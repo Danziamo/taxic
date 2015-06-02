@@ -2,8 +2,8 @@ package taxi.city.citytaxiclient.fragments;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +12,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -161,13 +161,47 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         @Override
         protected JSONObject doInBackground(Void... params) {
 
+            JSONObject result = new JSONObject();
             JSONObject data = new JSONObject();
             try {
-                data = order.getOrderAsJson();
+                JSONObject orderResult = api.getArrayRequest("orders/?status=new&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                }
+                orderResult = api.getArrayRequest("orders/?status=accepted&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                }
+                orderResult = api.getArrayRequest("orders/?status=waiting&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                }
+                orderResult = api.getArrayRequest("orders/?status=ontheway&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                }
+                orderResult = api.getArrayRequest("orders/?status=pending&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                }
+                orderResult = api.getArrayRequest("orders/?status=sos&ordering=-id&limit=1&client=" + String.valueOf(user.id));
+                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
+                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                }
+
+                if (order.id == 0) {
+                    data = order.getOrderAsJson();
+                    result = api.createOrderRequest(data, "orders/");
+                } else {
+                    result.put("status_code", HttpStatus.SC_BAD_REQUEST);
+                }
             } catch (JSONException e) {
+                result = null;
                 e.printStackTrace();
+            } catch (Exception e) {
+                result = null;
             }
-            return api.createOrderRequest(data, "orders/");
+            return result;
         }
 
         @Override
@@ -181,6 +215,19 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Ваш заказ создан")
                             .setContentText("Ожидайте водителя")
+                            .setConfirmText("Ок")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    getActivity().finish();
+                                    sweetAlertDialog.dismissWithAnimation();
+                                }
+                            })
+                            .show();
+                } else if (Helper.isBadRequest(result)) {
+                    new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Ошибка")
+                            .setContentText("У вас уже есть активный заказ")
                             .setConfirmText("Ок")
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
@@ -204,21 +251,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                             })
                             .show();
                 }
-            } catch (JSONException e) {
-                order.clear();
-                e.printStackTrace();
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Ошибка")
-                        .setContentText("Не удалось отправить данные на сервер")
-                        .setConfirmText("Ок")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                sweetAlertDialog.dismissWithAnimation();
-                            }
-                        })
-                        .show();
-            }
+            } catch (JSONException ignored) {}
         }
 
         @Override
