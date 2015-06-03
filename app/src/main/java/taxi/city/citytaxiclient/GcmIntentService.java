@@ -63,6 +63,8 @@ public class GcmIntentService extends IntentService {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        if (msg == null) return;
+
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MapsActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
 

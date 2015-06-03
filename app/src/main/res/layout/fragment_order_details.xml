@@ -45,18 +45,16 @@
                 style="@style/mediumEditText"
                 android:gravity="center"
                 android:layout_below="@+id/textViewFinishAddress"
-                android:id="@+id/editText" />
+                android:id="@+id/editTextFinishAddress" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Начислено:"
-
                 android:textColor="@color/translucent_lime"
                 android:textSize="25sp"
                 android:id="@+id/textViewCharged"
-
-                android:layout_below="@+id/editText"
+                android:layout_below="@+id/editTextFinishAddress"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp" />
 
