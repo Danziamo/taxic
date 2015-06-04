@@ -140,9 +140,10 @@ public class ConfirmSignUpActivity extends Activity {
             try {
                 if (Helper.isSuccess(result)) {
                     if (isSignUp) {
-                        User.getInstance().setUser(result);
                         Finish();
+                        User.getInstance().setUser(result);
                     } else if (result.has("detail") && result.getString("detail").toLowerCase().equals("ok")) {
+                        User.getInstance().setUser(result);User.getInstance().setUser(result);
                         Finish();
                     } else {
                         Toast.makeText(ConfirmSignUpActivity.this, "Не удалось активировать пользователя", Toast.LENGTH_LONG).show();
@@ -163,12 +164,6 @@ public class ConfirmSignUpActivity extends Activity {
     }
 
     private void Finish() {
-        /*if (isSignUp) {
-            Intent intent = new Intent(this, MapsActivity.class);
-            intent.putExtra("finish", true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
-            startActivity(intent);
-        }*/
         new SweetAlertDialog(ConfirmSignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                 .setTitleText("Успешно")
                 .setContentText(null)
@@ -176,6 +171,10 @@ public class ConfirmSignUpActivity extends Activity {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
+                        Intent intent = new Intent(ConfirmSignUpActivity.this, MapsActivity.class);
+                        intent.putExtra("finish", true);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+                        startActivity(intent);
                         sweetAlertDialog.dismissWithAnimation();
                         finish();
                     }

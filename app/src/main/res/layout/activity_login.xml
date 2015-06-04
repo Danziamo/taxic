@@ -2,11 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/main_background"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" tools:context=".LoginActivity">
+
+    tools:context=".LoginActivity">
 
     <!-- Login progress -->
 
@@ -14,6 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/login_form">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/main_background"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"/>
 
         <ImageView
             android:layout_width="240dp"
@@ -61,6 +67,7 @@
                 android:textColorHint="@color/blacktext1"
                 android:background="@drawable/textbox_shape_white"
                 android:inputType="phone"
+                android:imeOptions="actionNext"
                 android:singleLine="true"
                 android:textColor="@color/blacktext2" />
         </LinearLayout>
@@ -75,6 +82,7 @@
             android:textColorHint="@color/blacktext1"
             android:gravity="center"
             android:inputType="textPassword"
+            android:imeOptions="actionDone"
             android:background="@drawable/textbox_background"
             android:textColor="@color/blacktext2"
             android:layout_above="@+id/btnSignIn"

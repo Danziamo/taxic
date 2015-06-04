@@ -32,6 +32,7 @@
 
             <EditText
                 style="@style/mediumEditText"
+                android:imeOptions="actionNext"
                 android:id="@+id/editTextStartAddress" />
 
             <TextView
@@ -41,6 +42,7 @@
             <EditText
                 style="@style/mediumEditText"
                 android:id="@+id/editTextClientPhone"
+                android:imeOptions="actionNext"
                 android:inputType="phone" />
 
             <TextView
@@ -49,6 +51,7 @@
 
             <EditText
                 style="@style/mediumEditText"
+                android:imeOptions="actionDone"
                 android:id="@+id/editTextDescription"/>
 
             <TextView
@@ -91,6 +94,7 @@
                 <EditText
                     style="@style/mediumEditText"
                     android:id="@+id/editTextEndAddress"
+                    android:imeOptions="actionNext"
                     android:hint="Адрес куда надо доставить"/>
 
                 <LinearLayout
@@ -110,6 +114,7 @@
                         style="@style/mediumEditText"
                         android:id="@+id/editTextFixedPrice"
                         android:textColor="@color/red"
+                        android:imeOptions="actionDone"
                         android:inputType="number" />
 
                 </LinearLayout>

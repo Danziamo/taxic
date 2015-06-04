@@ -20,23 +20,27 @@
             style="@style/mediumEditText"
             android:hint="Фамилия"
             android:id="@+id/editTextLastName"
+            android:imeOptions="actionNext"
             android:inputType="text" />
 
         <EditText
             style="@style/mediumEditText"
             android:hint="Имя"
             android:id="@+id/editTextFirstName"
+            android:imeOptions="actionNext"
             android:inputType="text" />
 
         <EditText
             style="@style/mediumEditText"
             android:hint="e-mail"
+            android:imeOptions="actionNext"
             android:id="@+id/editTextEmail"
             android:inputType="textEmailAddress" />
 
         <EditText
             style="@style/mediumEditText"
             android:hint="Дата рождения"
+            android:imeOptions="actionNext"
             android:id="@+id/editTextDoB"
             android:inputType="text"
             android:layout_gravity="center_horizontal" />
@@ -55,12 +59,14 @@
                 android:text="+996"
                 android:gravity="center"
                 android:id="@+id/textViewExtra"
+                android:imeOptions="actionNext"
                 android:inputType="phone" />
 
             <EditText
                 style="@style/ShortEditText"
                 android:hint="Телефон"
                 android:id="@+id/textViewPhone"
+                android:imeOptions="actionNext"
                 android:inputType="number" />
         </LinearLayout>
 
@@ -70,6 +76,7 @@
             android:layout_marginTop="@dimen/spacing_small"
             android:id="@+id/relativeLayoutPassword"
             android:layout_above="@+id/buttonSave"
+            android:imeOptions="actionDone"
             android:layout_height="wrap_content">
 
             <EditText

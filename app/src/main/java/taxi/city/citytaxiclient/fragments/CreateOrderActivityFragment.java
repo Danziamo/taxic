@@ -4,14 +4,17 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -72,6 +75,28 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
         etStopAddress = (EditText) rootView.findViewById(R.id.editTextEndAddress);
         etFixedPrice = (EditText) rootView.findViewById(R.id.editTextFixedPrice);
         etDescription = (EditText) rootView.findViewById(R.id.editTextDescription);
+
+        etStartAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    etPhone.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        etPhone.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    etDescription.requestFocus();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         btnMake.setOnClickListener(this);
         btnCancel.setOnClickListener(this);

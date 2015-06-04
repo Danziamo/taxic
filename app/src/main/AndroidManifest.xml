@@ -27,9 +27,10 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
+        android:screenOrientation="portrait"
         android:label="@string/app_name"
         android:theme="@style/MainTheme"
-        android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
+        android:windowSoftInputMode="stateUnchanged|stateHidden|adjustResize"
         tools:replace="android:icon,android:theme" >
 
         <meta-data
@@ -52,6 +53,7 @@
         <service android:name=".GcmIntentService" />
 
         <activity android:name=".SplashScreen"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,29 +63,36 @@
 
         <activity
             android:name=".LoginActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".MapsActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTop"
             android:label="@string/title_activity_maps" >
         </activity>
 
         <activity
             android:name=".MakeOrderActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_make_order" >
         </activity>
         <activity
             android:name=".ConfirmSignUpActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_confirm_sign_up" >
         </activity>
         <activity
             android:name=".UserDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_user_details" >
         </activity>
         <activity
             android:name=".CreateOrderActivity"
             android:label="@string/title_activity_create_order"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
             android:parentActivityName=".MapsActivity" >
             <meta-data
@@ -93,6 +102,7 @@
         <activity
             android:name=".DriverDetails"
             android:label="@string/title_activity_driver_details"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MapsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -101,6 +111,7 @@
         <activity
             android:name=".AccountActivity"
             android:label="@string/title_activity_account"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MapsActivity"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
             android:theme="@style/ActionBarTheme"
@@ -114,10 +125,12 @@
         </activity>
         <activity
             android:name=".HistoryOrder"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_history_order" >
         </activity>
         <activity
             android:name=".OrderDetailsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_order_details"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan">
         </activity>
