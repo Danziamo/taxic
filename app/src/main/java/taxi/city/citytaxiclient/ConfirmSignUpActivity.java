@@ -3,6 +3,7 @@ package taxi.city.citytaxiclient;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -24,6 +25,7 @@ import taxi.city.citytaxiclient.utils.Helper;
 
 public class ConfirmSignUpActivity extends Activity {
 
+    private static final String PREFS_NAME = "MyPrefsFile";
     private EditText mActivationCode;
     private EditText mPasswordField;
     private ActivateTask task = null;
@@ -42,7 +44,6 @@ public class ConfirmSignUpActivity extends Activity {
         mActivationCode = (EditText) findViewById(R.id.etActivationCode);
         mPasswordField = (EditText) findViewById(R.id.etActivationPassword);
         TextView tvTitle = (TextView) findViewById(R.id.textViewTitle);
-
         Button btn = (Button) findViewById(R.id.btnActivate);
         if (isSignUp) {
             mPasswordField.setVisibility(View.INVISIBLE);
@@ -111,7 +112,6 @@ public class ConfirmSignUpActivity extends Activity {
         ActivateTask(String code, String password) {
             mCode = code;
             mPassword = password;
-
             try {
                 json.put("phone", User.getInstance().phone);
                 json.put("password", isSignUp ? User.getInstance().password : mPassword);
@@ -142,8 +142,9 @@ public class ConfirmSignUpActivity extends Activity {
                     if (isSignUp) {
                         Finish();
                         User.getInstance().setUser(result);
+                        ApiService.getInstance().setToken(User.getInstance().getToken());
                     } else if (result.has("detail") && result.getString("detail").toLowerCase().equals("ok")) {
-                        User.getInstance().setUser(result);User.getInstance().setUser(result);
+                        //User.getInstance().setUser(result);User.getInstance().setUser(result);
                         Finish();
                     } else {
                         Toast.makeText(ConfirmSignUpActivity.this, "Не удалось активировать пользователя", Toast.LENGTH_LONG).show();
@@ -164,6 +165,14 @@ public class ConfirmSignUpActivity extends Activity {
     }
 
     private void Finish() {
+        if (isSignUp) {
+            savePreferences(User.getInstance());
+            Intent intent = new Intent(this, MapsActivity.class);
+            intent.putExtra("finish", true);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+            startActivity(intent);
+        }
+
         new SweetAlertDialog(ConfirmSignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                 .setTitleText("Успешно")
                 .setContentText(null)
@@ -171,14 +180,19 @@ public class ConfirmSignUpActivity extends Activity {
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
-                        Intent intent = new Intent(ConfirmSignUpActivity.this, MapsActivity.class);
-                        intent.putExtra("finish", true);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
-                        startActivity(intent);
                         sweetAlertDialog.dismissWithAnimation();
                         finish();
                     }
                 })
                 .show();
+    }
+
+    private void savePreferences(User user) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("phoneKey", user.phone);
+        editor.putString("passwordKey", user.password);
+        editor.putString("tokenKey", user.getToken());
+        editor.apply();
     }
 }

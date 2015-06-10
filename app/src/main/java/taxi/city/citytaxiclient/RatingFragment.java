@@ -110,7 +110,7 @@ public class RatingFragment extends Fragment {
                 data.put("driver", orderDetail.driver);
                 data.put("client", User.getInstance().id);
                 data.put("order", orderDetail.id);
-                data.put("votes", ratingBar.getRating());
+                data.put("votes", (int)ratingBar.getRating());
                 data.put("description", "");
                 res = ApiService.getInstance().createOrderRequest(data, "rating/addvotes/");
             } catch (JSONException e) {
