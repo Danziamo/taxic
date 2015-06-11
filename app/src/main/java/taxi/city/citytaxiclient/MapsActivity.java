@@ -582,9 +582,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             order.driver = new Driver(driverJson);
                         }
                         if (order.status == OStatus.NEW) {
+                            mMap.clear();
                             order.driver = null;
                         } else {
-                            mMap.clear();
                             displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
                         }
                         if (order.status == OStatus.FINISHED && !isFirstFetch) {
@@ -626,6 +626,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     private void displayDriverOnMap(LatLng position) {
         if (order.status == OStatus.FINISHED || order.status == OStatus.CANCELED) {
+            mMap.clear();
             return;
         }
         if (position == null)  {
@@ -634,6 +635,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         if (order.status == OStatus.ACCEPTED || order.status == OStatus.WAITING
                 || order.status == OStatus.ONTHEWAY || order.status == OStatus.PENDING) {
+            mMap.clear();
             String markerTitle = order.driverPhone == null ? "Ваш водитель" : order.driverPhone;
             mMap.addMarker(new MarkerOptions()
                     .position(position)
@@ -643,6 +645,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
+                    if (order.driver == null) return;
                     Intent intent = new Intent(MapsActivity.this, DriverDetails.class);
                     startActivity(intent);
                 }

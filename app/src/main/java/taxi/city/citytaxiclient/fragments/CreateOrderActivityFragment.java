@@ -249,7 +249,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                                 }
                             })
                             .show();
-                } else if (Helper.isBadRequest(result)) {
+                } else if (Helper.isBadRequest(result) && result.getInt("status_code") != HttpStatus.SC_BAD_REQUEST) {
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Ошибка")
                             .setContentText("У вас уже есть активный заказ")

@@ -206,15 +206,9 @@ public class Helper {
     }
 
     public static String getRatingText(double rating) {
-        if (rating <= 1) return "1 звезда";
-        if (rating <= 1.5) return  "1.5 звезды";
-        if (rating <= 2) return  "2 звезды";
-        if (rating <= 2.5) return "2.5 звезды";
-        if (rating <= 3) return  "3 звезды";
-        if (rating <= 3.5) return  "3.5 звезды";
-        if (rating <= 4) return "4 звезды";
-        if (rating <= 4.5) return "4.5 здвезды";
-        if (rating <= 5) return "5 звёзд";
-        return null;
+        if (rating < 1 ) return null;
+        if (rating == 1) return "1 звезда";
+        if (rating == 5) return "5 звезд";
+        return String.valueOf(rating) + " звезды";
     }
 }

@@ -69,7 +69,6 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         imgBtnCallDriver.setOnClickListener(this);
         ratingBar.setRating(order.driver.rating);
         tvRating.setText(Helper.getRatingText(order.driver.rating));
-
         return rootView;
     }
 
