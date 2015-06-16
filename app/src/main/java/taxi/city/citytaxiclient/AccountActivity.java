@@ -84,6 +84,11 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
             case R.id.action_quit:
                 signOut();
                 return true;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
+            case R.id.action_help:
+                startActivity(new Intent(this, HelpActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

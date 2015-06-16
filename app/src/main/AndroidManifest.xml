@@ -135,6 +135,27 @@
             android:label="@string/title_activity_order_details"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan">
         </activity>
+
+        <activity
+            android:name=".HelpActivity"
+            android:label="@string/title_activity_help"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarTheme"
+            android:parentActivityName=".AccountActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="taxi.city.citytaxiclient.AccountActivity" />
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait"
+            android:theme="@style/ActionBarTheme"
+            android:parentActivityName=".AccountActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="taxi.city.citytaxiclient.AccountActivity" />
+        </activity>
     </application>
 
 </manifest>
