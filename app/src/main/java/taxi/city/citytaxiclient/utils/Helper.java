@@ -1,5 +1,8 @@
 package taxi.city.citytaxiclient.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.http.HttpStatus;
@@ -17,7 +20,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import taxi.city.citytaxiclient.core.Order;
+import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.enums.OStatus;
+import taxi.city.citytaxiclient.service.ApiService;
 
 /**
  * Created by Daniyar on 4/16/2015.
@@ -210,5 +215,42 @@ public class Helper {
         if (rating == 1) return "1 звезда";
         if (rating == 5) return "5 звезд";
         return String.valueOf(rating) + " звезды";
+    }
+
+    public static void getPreferences(Context context) {
+        final String PREFS_NAME = "MyPrefsFile";
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        if (settings.contains("phoneKey")) {
+            User.getInstance().phone = settings.getString("phoneKey", "");
+        }
+        if (settings.contains("passwordKey")) {
+            User.getInstance().password = settings.getString("passwordKey", "");
+        }
+        if (settings.contains("idKey")) {
+            User.getInstance().id = settings.getInt("idKey", 0);
+        }
+        if (settings.contains("tokenKey")) {
+            User.getInstance().token = settings.getString("tokenKey", null);
+            ApiService.getInstance().setToken(User.getInstance().token);
+        }
+        if (settings.contains("orderIdKey")) {
+            Order.getInstance().id = settings.getInt("orderIdKey", 0);
+        }
+    }
+
+    public static void saveOrderPreferences(Context context, int id) {
+        final String PREFS_NAME = "MyPrefsFile";
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("orderIdKey", id);
+        editor.apply();
+    }
+
+    public static void removeOrderPreferences(Context context) {
+        final String PREFS_NAME = "MyPrefsFile";
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove("orderIdKey");
+        editor.apply();
     }
 }

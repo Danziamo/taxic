@@ -237,6 +237,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                 mTask = null;
                 if (Helper.isSuccess(result)) {
                     order.id = result.getInt("id");
+                    Helper.saveOrderPreferences(getActivity(), order.id);
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Ваш заказ создан")
                             .setContentText("Ожидайте водителя")
@@ -249,7 +250,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                                 }
                             })
                             .show();
-                } else if (Helper.isBadRequest(result) && result.getInt("status_code") != HttpStatus.SC_BAD_REQUEST) {
+                } else if (Helper.isBadRequest(result) && result.getInt("status_code") == HttpStatus.SC_BAD_REQUEST) {
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Ошибка")
                             .setContentText("У вас уже есть активный заказ")

@@ -146,7 +146,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             etEmail.setText(user.email);
             /*String extra = user.phone.substring(0, 4);
             String phone = user.phone.substring(4);*/
-            etDoB.setText(user.dateOfBirth.equals("null") ? null : user.dateOfBirth);
+            etDoB.setText(user.dateOfBirth == null || user.dateOfBirth.equals("null") ? null : user.dateOfBirth);
             /*etPhone.setText(phone);
             etPhoneExtra.setText(extra);*/
             llPhone.setVisibility(View.GONE);

@@ -173,12 +173,23 @@ public class LoginActivity extends Activity{
 
     private void savePreferences(User user) {
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("phoneKey", mPhoneExtraView.getText().toString() + mPhoneView.getText().toString());
-        editor.putString("passwordKey", mPasswordView.getText().toString());
+        editor.putString("phoneKey", user.phone);
+        editor.putString("passwordKey", user.password);
+        editor.putInt("idKey", user.id);
         editor.putString("tokenKey", user.getToken());
         api.setToken(user.getToken());
 
         editor.apply();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private boolean isNetworkAvailable() {

@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +20,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
 import taxi.city.citytaxiclient.service.ApiService;
+import taxi.city.citytaxiclient.utils.Helper;
 
 public class AccountActivity extends ActionBarActivity implements AccountDetailsActivityFragment.OnFragmentInteractionListener, ActionBar.TabListener {
 
@@ -30,6 +32,20 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        User user = User.getInstance();
+
+        if (user == null || user.id == 0)
+        {
+            Helper.getPreferences(this);
+            if (user == null || user.id == 0) {
+                Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
         setContentView(R.layout.activity_account);
 
         mPageAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -54,6 +70,16 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
         mViewPager.setAdapter(mPageAdapter);
 
         setUpTabs();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void setUpTabs() {

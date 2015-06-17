@@ -43,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -104,6 +105,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
 
         order = Order.getInstance();
@@ -112,10 +114,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         if (user == null || user.id == 0)
         {
-            Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            Helper.getPreferences(this);
+            if (user == null || user.id == 0) {
+                Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
 
         CheckEnableGPS();
@@ -317,6 +322,18 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 });
             }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        outState.putInt("orderId", order.id);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        order.id = savedInstanceState.getInt("orderId", 0);
     }
 
     private class GeocoderHandler extends Handler {
@@ -590,6 +607,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                         if (order.status == OStatus.FINISHED && !isFirstFetch) {
                             showOrderDetails();
                             order.clear();
+                            Helper.removeOrderPreferences(MapsActivity.this);
                         }
                     }
                 } catch (JSONException e) {
@@ -692,6 +710,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     Toast.makeText(MapsActivity.this, "Не удалось отправить данные на сервер", Toast.LENGTH_LONG).show();
                 } else {
                     order.clear();
+                    Helper.removeOrderPreferences(MapsActivity.this);
                     updateViews();
                 }
             }catch (JSONException ignored) {}
