@@ -166,9 +166,6 @@ public class LoginActivity extends Activity{
                 mPasswordView.setText(settings.getString("passwordKey", ""));
             }
         }
-        if (settings.contains("orderIdKey")) {
-            Order.getInstance().id = Integer.valueOf(settings.getString("orderIdKey", ""));
-        }
     }
 
     private void savePreferences(User user) {
