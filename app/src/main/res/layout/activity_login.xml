@@ -113,7 +113,7 @@
             android:textColor="#ff1e0a8e"
             android:textStyle="bold"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="0dp"
+            android:layout_marginBottom="25dp"
             android:layout_marginTop="0dp" />
 
         <TextView
@@ -123,6 +123,14 @@
             android:layout_above="@+id/btnSignUp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp" />
+        <TextView
+            android:id ="@+id/tvInfo"
+            android:text="Тех поддержка: +996702191111"
+            android:textColor="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:gravity="center"
+            android:layout_alignParentBottom="true" />
 
 
     </RelativeLayout>
