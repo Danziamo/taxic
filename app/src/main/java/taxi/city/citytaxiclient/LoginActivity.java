@@ -14,11 +14,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -147,6 +149,23 @@ public class LoginActivity extends Activity{
                 signUp();
             }
         });
+
+        findViewById(R.id.loginContainer).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                return false;
+            }
+        });
+    }
+
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     private void forgotPassword(String phone) {
@@ -256,7 +275,7 @@ public class LoginActivity extends Activity{
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() >= 4;
     }
 
     /**
@@ -383,6 +402,8 @@ public class LoginActivity extends Activity{
 
     private void goToActivation() {
         Intent intent = new Intent(LoginActivity.this, ConfirmSignUpActivity.class);
+        intent.putExtra("PHONE", mPhoneExtraView.getText().toString() + mPhoneView.getText().toString());
+        intent.putExtra("PASS", mPasswordView.getText().toString());
         startActivity(intent);
     }
 
@@ -422,6 +443,7 @@ public class LoginActivity extends Activity{
                 if (Helper.isSuccess(result)) {
                     Intent intent = new Intent(LoginActivity.this, ConfirmSignUpActivity.class);
                     intent.putExtra("SIGNUP", false);
+                    intent.putExtra("PHONE", mPhone);
                     user.phone = mPhone;
                     startActivity(intent);
                 } else if (Helper.isBadRequest(result)) {

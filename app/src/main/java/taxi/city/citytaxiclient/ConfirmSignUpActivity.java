@@ -2,13 +2,16 @@ package taxi.city.citytaxiclient;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,13 +34,34 @@ public class ConfirmSignUpActivity extends Activity {
     private ActivateTask task = null;
     SweetAlertDialog pDialog;
     private boolean isSignUp = true;
+    private String mPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_sign_up);
         isSignUp = getIntent().getBooleanExtra("SIGNUP", true);
+        mPhone = getIntent().getStringExtra("PHONE");
         Initialize();
+        if (getIntent().hasExtra("PASS"))
+            mPasswordField.setText(getIntent().getStringExtra("PASS"));
+
+        findViewById(R.id.llActivationCodeForm).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                return false;
+            }
+        });
+    }
+    
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     private void Initialize() {
@@ -69,7 +93,7 @@ public class ConfirmSignUpActivity extends Activity {
         View focusView = null;
         boolean cancel = false;
 
-        if (mCode == null || mCode.length() > 5) {
+        if (mCode.length() > 5) {
             mActivationCode.setError("Код не более 5 символов");
             focusView = mActivationCode;
             cancel = true;
@@ -113,8 +137,8 @@ public class ConfirmSignUpActivity extends Activity {
             mCode = code;
             mPassword = password;
             try {
-                json.put("phone", User.getInstance().phone);
-                json.put("password", isSignUp ? User.getInstance().password : mPassword);
+                json.put("phone", mPhone);
+                json.put("password", mPassword);
                 json.put("activation_code", mCode);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -126,8 +150,8 @@ public class ConfirmSignUpActivity extends Activity {
             if (isSignUp) {
                 return ApiService.getInstance().activateRequest(json, "activate/");
             } else {
-                String uri = "?phone=" + User.getInstance().phone
-                        + "&password=" + (mPassword)
+                String uri = "?phone=" + mPhone
+                        + "&password=" + mPassword
                         + "&activation_code=" + mCode;
                 return ApiService.getInstance().putRequest(null, "reset_password/" + uri.replace("+", "%2b"));
             }

@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -156,10 +158,25 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         btnBack.setOnClickListener(this);
         updateView();
         setDateTimePicker();
+        rootView.findViewById(R.id.userContainer).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                return false;
+            }
+        });
 
         return rootView;
     }
 
+    private void hideKeyboard() {
+        // Check if no view has focus:
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
     private void setDateTimePicker() {
         etDoB.setOnClickListener(this);
 
@@ -241,7 +258,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
-        if (password == null || password.length() < 3) {
+        if (password.length() < 4) {
             etPassword.setError("Пароль неправильно задан");
             etPassword.requestFocus();
             return;
@@ -329,6 +346,8 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
 
     private void goToActivation() {
         Intent intent = new Intent(getActivity(), ConfirmSignUpActivity.class);
+        intent.putExtra("PHONE", etPhoneExtra.getText().toString() + etPhone.getText().toString());
+        intent.putExtra("PASS", etPassword.getText().toString());
         startActivity(intent);
         getActivity().finish();
     }

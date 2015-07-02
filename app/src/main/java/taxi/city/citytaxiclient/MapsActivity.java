@@ -695,6 +695,12 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 object.put("status", OStatus.CANCELED.toString());
                 object.put("driver", order.driver == null ? JSONObject.NULL : order.driver.id);
                 object.put("description", mReason);
+                JSONObject checkObject = api.getOrderRequest("orders/" + order.id);
+                if (Helper.isSuccess(checkObject)) {
+                    String mDriver = checkObject.getString("driver");
+                    if (!mDriver.equals("null"))
+                        object.put("driver", mDriver);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
