@@ -43,6 +43,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -175,6 +177,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             task = new CheckOrderStatusTask();
             task.execute((Void) null);
         } else {
+            fetchDriversTask();
             btnOk.setEnabled(true);
             ivIcon.setVisibility(View.VISIBLE);
         }
@@ -572,9 +575,41 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         startActivity(startMain);
     }
 
-    private class CheckOrderStatusTask extends AsyncTask<Void, Void, JSONObject> {
+    private void fetchDriversTask() {
+        new AsyncTask<Void, Void, ArrayList<LatLng> >() {
+            @Override
+            protected ArrayList<LatLng> doInBackground(Void... params) {
+                ArrayList<LatLng> driverPositions = new ArrayList<>();
+                if (order.id == 0) {
+                    JSONObject arrayObject = api.getArrayRequest("users/?online_status=online&role=driver");
+                    try {
+                        if (Helper.isSuccess(arrayObject)) {
+                            JSONArray array = arrayObject.getJSONArray("result");
+                            for (int i = 0; i < array.length(); ++i) {
+                                JSONObject arrayItem = array.getJSONObject(i);
+                                LatLng position = Helper.getLatLng(arrayItem.getString("cur_position"));
+                                if (position != null)
+                                    driverPositions.add(position);
+                            }
+                        }
+                    } catch (JSONException e) {}
+                }
+                return driverPositions;
+            }
 
-        CheckOrderStatusTask() {}
+            @Override
+            protected void onPostExecute(ArrayList<LatLng> list) {
+                showDrivers(list);
+            }
+        }.execute(null, null, null);
+    }
+
+    private class CheckOrderStatusTask extends AsyncTask<Void, Void, JSONObject> {
+        ArrayList<LatLng> driverPositions = new ArrayList<>();
+
+        CheckOrderStatusTask() {
+            driverPositions.clear();
+        }
 
         @Override
         protected JSONObject doInBackground(Void... params) {
@@ -623,6 +658,16 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         @Override
         protected void onCancelled() {
             task = null;
+        }
+    }
+
+    protected void showDrivers(ArrayList<LatLng> list) {
+        if (list.size() == 0) return;
+        mMap.clear();
+        for (int i = 0; i < list.size(); ++i) {
+            mMap.addMarker(new MarkerOptions()
+                    .position(list.get(i))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
         }
     }
 
@@ -720,6 +765,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     updateViews();
                 }
             }catch (JSONException ignored) {}
+            fetchDriversTask();
         }
 
         @Override
