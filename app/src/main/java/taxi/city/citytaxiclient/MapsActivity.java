@@ -298,6 +298,13 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 mMap.setMyLocationEnabled(true);
                 mMap.setPadding(0, getPixelFromDpi(48), 0, getPixelFromDpi(48));
 
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        return true;
+                    }
+                });
+
                 mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                     public void onCameraChange(CameraPosition arg0) {
                         if (order.id == 0 || order.status == OStatus.FINISHED || order.status == OStatus.CANCELED) {
@@ -359,7 +366,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onStart() {
         super.onStart();
-        CheckPreviousSession();
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }

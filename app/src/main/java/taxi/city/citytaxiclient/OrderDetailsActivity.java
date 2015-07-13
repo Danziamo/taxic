@@ -30,6 +30,11 @@ public class OrderDetailsActivity extends ActionBarActivity {
         }
 
         setContentView(R.layout.activity_order_details);
+        if (savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .add(R.id.container, new OrderDetailsActivityFragment())
+                    .commit();
+        }
     }
 
     @Override
