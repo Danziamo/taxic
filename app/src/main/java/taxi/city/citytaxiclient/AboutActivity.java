@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.utils.Helper;
 
@@ -29,6 +31,12 @@ public class AboutActivity extends ActionBarActivity {
         }
 
         setContentView(R.layout.activity_about);
+
+        App.getDefaultTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("ui_views")
+                .setLabel("open_about")
+                .build());
+
         ActionBar ab = getSupportActionBar();
         ab.setDisplayShowTitleEnabled(true);
     }

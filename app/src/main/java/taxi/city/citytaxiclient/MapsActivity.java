@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -133,6 +135,11 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             registerInBackground();
         }
         setUpMapIfNeeded();
+        Tracker tracker = App.getDefaultTracker();
+        tracker.send(new HitBuilders.EventBuilder()
+                .setCategory("ui_views")
+                .setLabel("open_main")
+                .build());
 
         llMain = (LinearLayout) findViewById(R.id.mainLayout);
         llOrderStatus = (LinearLayout) findViewById(R.id.linearLayoutOrderStatus);

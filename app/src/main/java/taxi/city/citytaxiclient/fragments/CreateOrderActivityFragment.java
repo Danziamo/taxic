@@ -19,11 +19,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import taxi.city.citytaxiclient.App;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.User;
@@ -149,6 +152,12 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
 
     private void makeOrder() {
         if (mTask != null) return;
+
+        App.getDefaultTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("order")
+                .setLabel("create_order")
+                .setAction("create")
+                .build());
 
         String phone = etPhone.getText().toString();
         String description = etDescription.getText().toString();
