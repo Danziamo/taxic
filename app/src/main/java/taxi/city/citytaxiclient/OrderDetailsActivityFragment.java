@@ -80,7 +80,7 @@ public class OrderDetailsActivityFragment extends Fragment {
         }
 
         etAddressStart.setText(orderDetail.addressStart);
-        tvFinishAddress.setText(!orderDetail.addressEnd.equals("null") ? orderDetail.addressEnd : null);
+        tvFinishAddress.setText(orderDetail.addressEnd == null || orderDetail.addressEnd.equals("null") ? null : orderDetail.addressEnd);
         tvWaitTime.setText(waitTime);
         tvWaitSum.setText(String.valueOf((int)waitSum));
         tvDistance.setText(orderDetail.distance);

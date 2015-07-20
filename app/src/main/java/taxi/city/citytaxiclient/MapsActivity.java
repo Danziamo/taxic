@@ -181,6 +181,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 return;
             }
 
+            if (order.status == OStatus.NEW) {
+                fetchDriversTask();
+            }
             task = new CheckOrderStatusTask();
             task.execute((Void) null);
         } else {
@@ -308,7 +311,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        return true;
+                        return !(order.id != 0 && order.status != OStatus.NEW);
                     }
                 });
 

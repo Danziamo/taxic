@@ -1,8 +1,5 @@
 package taxi.city.citytaxiclient.enums;
 
-/**
- * Created by Daniyar on 3/30/2015.
- */
 public enum OStatus {
     NEW,
     ACCEPTED,
