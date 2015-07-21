@@ -223,6 +223,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                 .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(Integer.parseInt(MapsActivity.this.getString(R.string.map_default_zoom))));
                         sDialog.dismissWithAnimation();
                     }
                 })
