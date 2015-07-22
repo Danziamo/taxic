@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,6 +64,18 @@ public class OrderDetailsActivityFragment extends Fragment {
         btnNext = (Button) rootView.findViewById(R.id.buttonNext);
 
         btnNext.setVisibility(orderDetail.active ? View.VISIBLE : View.GONE);
+
+        if (orderDetail.active) {
+            App.getDefaultTracker().send(new HitBuilders.EventBuilder()
+                    .setCategory("order")
+                    .setLabel("details active")
+                    .build());
+        } else {
+            App.getDefaultTracker().send(new HitBuilders.EventBuilder()
+                    .setCategory("order")
+                    .setLabel("details history")
+                    .build());
+        }
 
         double totalSum = 0;
         double waitSum = 0;

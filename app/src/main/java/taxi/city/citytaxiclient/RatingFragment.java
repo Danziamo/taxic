@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.api.Api;
 
 import org.apache.http.HttpStatus;
@@ -57,6 +58,11 @@ public class RatingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        App.getDefaultTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("order")
+                .setLabel("rating")
+                .build());
     }
 
     @Override
