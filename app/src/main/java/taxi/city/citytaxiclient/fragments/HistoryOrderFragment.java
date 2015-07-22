@@ -49,7 +49,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
 
     private OrderDetail orderDetail;
     ListView lvMain;
-    private int limit = 10;
+    private int limit = 15;
 
     public static HistoryOrderFragment newInstance(int position) {
         HistoryOrderFragment fragment = new HistoryOrderFragment();
@@ -67,7 +67,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history_order, container, false);
         user = User.getInstance();
-        limit = 10;
+        limit = 15;
 
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
@@ -154,7 +154,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
     public void onRefresh() {
         new Handler().postDelayed(new Runnable() {
             @Override public void run() {
-                limit += 10;
+                limit += 5;
                 fetchData();
                 swipeLayout.setRefreshing(false);
             }
@@ -174,7 +174,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
                 JSONObject result = api.getArrayRequest("orders/?client=" + user.id + "&status=finished&ordering=-id&limit=" + limit);
                 if (result.getInt("status_code") == HttpStatus.SC_OK) {
                     JSONArray tempArray = result.getJSONArray("result");
-                    for (int i = 0; i < tempArray.length() && i < 10; ++i) {
+                    for (int i = 0; i < tempArray.length(); ++i) {
                         array.put(tempArray.getJSONObject(i));
                     }
                 }
