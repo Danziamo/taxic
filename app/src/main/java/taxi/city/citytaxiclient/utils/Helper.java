@@ -210,7 +210,7 @@ public class Helper {
         return bd.doubleValue();
     }
 
-    public static String getRatingText(double rating) {
+    public static String getRatingText(float rating) {
         if (rating < 1 ) return null;
         if (rating == 1) return "1 звезда";
         if (rating == 5) return "5 звезд";

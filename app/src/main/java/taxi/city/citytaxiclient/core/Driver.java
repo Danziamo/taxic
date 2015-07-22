@@ -39,7 +39,8 @@ public class Driver {
         String ratingSumString = object.getJSONObject("rating").getString("votes__sum");
         double ratingSum = ratingSumString == null || ratingSumString == "null" ? 0 : Double.valueOf(ratingSumString);
         int ratingCount = object.getJSONObject("rating").getInt("votes__count");
-        this.rating = ratingCount == 0 ? 0 : (float)Math.round((10*ratingSum)/ratingCount)/10;
+        this.rating = ratingCount == 0 ? 0 : (float)round(ratingSum/ratingCount, 1);
+
         if (object.has("cars") && object.getJSONArray("cars").length() > 0) {
             JSONObject carJSON = object.getJSONArray("cars").getJSONObject(0);
             this.carBrand = carJSON.has("brand") ? carJSON.getJSONObject("brand").getString("brand_name") : null;
