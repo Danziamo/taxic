@@ -95,7 +95,7 @@ public class OrderDetailsActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment, RatingFragment.newInstance(null, null), "rating");
+                ft.replace(R.id.container, RatingFragment.newInstance(null, null), "rating");
 // Start the animated transition.
                 ft.commit();
             }
