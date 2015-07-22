@@ -21,14 +21,14 @@
             android:hint="Фамилия"
             android:id="@+id/editTextLastName"
             android:imeOptions="actionNext"
-            android:inputType="text" />
+            android:inputType="textPersonName" />
 
         <EditText
             style="@style/mediumEditText"
             android:hint="Имя"
             android:id="@+id/editTextFirstName"
             android:imeOptions="actionNext"
-            android:inputType="text" />
+            android:inputType="textPersonName" />
 
         <EditText
             style="@style/mediumEditText"

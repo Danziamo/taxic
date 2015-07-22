@@ -269,7 +269,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             if (isNew) json.put("phone", phone);
             //json.put("role", "user");
             json.put("first_name", !isNew ? firstName : "Имя");
-            json.put("last_name", !isNew ? lastName : "Фамиля");
+            json.put("last_name", !isNew ? lastName : "Фамилия");
             json.put("email", !isNew ? email : null);
             json.put("date_of_birth", !isNew ? dob : null);
             json.put("password", password);
