@@ -61,7 +61,8 @@ public class RatingFragment extends Fragment {
 
         App.getDefaultTracker().send(new HitBuilders.EventBuilder()
                 .setCategory("order")
-                .setLabel("rating")
+                .setAction("rating")
+                .setLabel("Rating page opened")
                 .build());
     }
 
@@ -102,6 +103,12 @@ public class RatingFragment extends Fragment {
         showProgress(true);
         mTask = new UpdateRatingTask();
         mTask.execute((Void) null);
+
+        App.getDefaultTracker().send(new HitBuilders.EventBuilder()
+                .setCategory("order")
+                .setAction("rating")
+                .setLabel("Rated")
+                .build());
     }
 
     private class UpdateRatingTask extends AsyncTask<Void, Void, JSONObject> {

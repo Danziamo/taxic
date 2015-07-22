@@ -68,12 +68,14 @@ public class OrderDetailsActivityFragment extends Fragment {
         if (orderDetail.active) {
             App.getDefaultTracker().send(new HitBuilders.EventBuilder()
                     .setCategory("order")
-                    .setLabel("details active")
+                    .setAction("order details page")
+                    .setLabel("Active order details page")
                     .build());
         } else {
             App.getDefaultTracker().send(new HitBuilders.EventBuilder()
                     .setCategory("order")
-                    .setLabel("details history")
+                    .setAction("order details page")
+                    .setLabel("Order details page from history")
                     .build());
         }
 
