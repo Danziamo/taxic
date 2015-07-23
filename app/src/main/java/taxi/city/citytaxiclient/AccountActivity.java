@@ -1,10 +1,12 @@
 package taxi.city.citytaxiclient;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -21,6 +23,7 @@ import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.utils.Helper;
+import taxi.city.citytaxiclient.utils.SessionHelper;
 
 public class AccountActivity extends ActionBarActivity implements AccountDetailsActivityFragment.OnFragmentInteractionListener, ActionBar.TabListener {
 
@@ -194,12 +197,16 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
         @Override
         protected void onPostExecute(JSONObject result) {
             mLogoutTask = null;
+
+            SessionHelper sessionHelper = new SessionHelper();
+            sessionHelper.setPassword("");
+            sessionHelper.setToken("");
+
             showProgress(false);
             Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
-            intent.putExtra("finish", true);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
-            startActivity(intent);
-            finish();
+            ComponentName cn = intent.getComponent();
+            Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+            startActivity(mainIntent);
         }
 
         @Override

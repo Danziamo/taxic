@@ -34,6 +34,7 @@ import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.Helper;
+import taxi.city.citytaxiclient.utils.SessionHelper;
 
 
 /**
@@ -84,7 +85,7 @@ public class LoginActivity extends Activity{
             }
         });
 
-        setPreferences();
+        setSessionPreferences();
 
         Button mPhoneSignInButton = (Button) findViewById(R.id.btnSignIn);
         Button mSignUpButton = (Button) findViewById(R.id.btnSignUp);
@@ -173,26 +174,24 @@ public class LoginActivity extends Activity{
         mForgotTask.execute((Void) null);
     }
 
-    private void setPreferences() {
-        settings = getSharedPreferences(PREFS_NAME, 0);
-        if (settings.contains("phoneKey")) {
-            String phone = settings.getString("phoneKey", "");
+    private void setSessionPreferences() {
+        SessionHelper sessionHelper = new SessionHelper();
+
+        String phone = sessionHelper.getPhone();
+        if(!phone.isEmpty()){
             mPhoneView.setText(phone.substring(4, phone.length()));
-            if (settings.contains("passwordKey")) {
-                mPasswordView.setText(settings.getString("passwordKey", ""));
-            }
         }
+
+        mPasswordView.setText(sessionHelper.getPassword());
     }
 
-    private void savePreferences(User user) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putString("phoneKey", user.phone);
-        editor.putString("passwordKey", user.password);
-        editor.putInt("idKey", user.id);
-        editor.putString("tokenKey", user.getToken());
+    private void saveSassionPreferences(User user) {
+        SessionHelper sessionHelper = new SessionHelper();
+        sessionHelper.setPhone(user.phone);
+        sessionHelper.setPassword(user.password);
+        sessionHelper.setId(user.id);
+        sessionHelper.setToken(user.getToken());
         api.setToken(user.getToken());
-
-        editor.apply();
     }
 
     @Override
@@ -274,7 +273,7 @@ public class LoginActivity extends Activity{
                     showProgress(false);
 
                     if (statusCode == HttpStatus.SC_OK) {
-                        savePreferences(user);
+                        saveSassionPreferences(user);
                         Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                         startActivity(intent);
                         finish();
@@ -322,8 +321,8 @@ public class LoginActivity extends Activity{
 
     private void goToActivation() {
         Intent intent = new Intent(LoginActivity.this, ConfirmSignUpActivity.class);
-        intent.putExtra("PHONE", mPhoneExtraView.getText().toString() + mPhoneView.getText().toString());
-        intent.putExtra("PASS", mPasswordView.getText().toString());
+        intent.putExtra(ConfirmSignUpActivity.PHONE_KEY, mPhoneExtraView.getText().toString() + mPhoneView.getText().toString());
+        intent.putExtra(ConfirmSignUpActivity.PASSWORD_KEY, mPasswordView.getText().toString());
         startActivity(intent);
     }
 
@@ -362,8 +361,8 @@ public class LoginActivity extends Activity{
             try {
                 if (Helper.isSuccess(result)) {
                     Intent intent = new Intent(LoginActivity.this, ConfirmSignUpActivity.class);
-                    intent.putExtra("SIGNUP", false);
-                    intent.putExtra("PHONE", mPhone);
+                    intent.putExtra(ConfirmSignUpActivity.SIGNUP_KEY, false);
+                    intent.putExtra(ConfirmSignUpActivity.PHONE_KEY, mPhone);
                     user.phone = mPhone;
                     startActivity(intent);
                 } else if (Helper.isBadRequest(result)) {

@@ -20,7 +20,7 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Integer> {
     private final String mPhone;
     private final String mPassword;
 
-    public static int NOT_ACTIVATED_ACCOUNT_STATUS_CODE = 1000;
+    public static final int NOT_ACTIVATED_ACCOUNT_STATUS_CODE = 1000;
 
     public UserLoginTask(String phone, String password) {
         mPhone = phone;

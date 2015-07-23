@@ -29,6 +29,11 @@ import taxi.city.citytaxiclient.utils.Helper;
 public class ConfirmSignUpActivity extends Activity {
 
     private static final String PREFS_NAME = "MyPrefsFile";
+
+    public static final String PHONE_KEY = "PHONE";
+    public static final String PASSWORD_KEY = "PASS";
+    public static final String SIGNUP_KEY = "SIGNUP";
+
     private EditText mActivationCode;
     private EditText mPasswordField;
     private ActivateTask task = null;
@@ -40,11 +45,11 @@ public class ConfirmSignUpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_sign_up);
-        isSignUp = getIntent().getBooleanExtra("SIGNUP", true);
-        mPhone = getIntent().getStringExtra("PHONE");
+        isSignUp = getIntent().getBooleanExtra(SIGNUP_KEY, true);
+        mPhone = getIntent().getStringExtra(PHONE_KEY);
         Initialize();
-        if (getIntent().hasExtra("PASS"))
-            mPasswordField.setText(getIntent().getStringExtra("PASS"));
+        if (getIntent().hasExtra(PASSWORD_KEY))
+            mPasswordField.setText(getIntent().getStringExtra(PASSWORD_KEY));
 
         findViewById(R.id.llActivationCodeForm).setOnTouchListener(new View.OnTouchListener() {
             @Override
