@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -30,12 +29,10 @@ import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.service.ApiService;
+import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.Helper;
 
 
@@ -269,8 +266,36 @@ public class LoginActivity extends Activity{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(phone, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask = new UserLoginTask(phone, password) {
+                @Override
+                protected void onPostExecute(Integer statusCode) {
+                    super.onPostExecute(statusCode);
+                    mAuthTask = null;
+                    showProgress(false);
+
+                    if (statusCode == HttpStatus.SC_OK) {
+                        savePreferences(user);
+                        Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else if (statusCode == UserLoginTask.NOT_ACTIVATED_ACCOUNT_STATUS_CODE){
+                        goToActivation();
+                    } else if (statusCode == HttpStatus.SC_UNAUTHORIZED) {
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.requestFocus();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Сервис недоступен", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                protected void onCancelled(Integer integer) {
+                    super.onCancelled(integer);
+                    mAuthTask = null;
+                    showProgress(false);
+                }
+            };
+            mAuthTask.execute();
         }
     }
 
@@ -292,111 +317,6 @@ public class LoginActivity extends Activity{
             pDialog.show();
         } else {
             pDialog.dismissWithAnimation();
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mPhone;
-        private final String mPassword;
-
-        UserLoginTask(String phone, String password) {
-            mPhone = phone;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            boolean res = false;
-            try {
-                JSONObject json = new JSONObject();
-                user.phone = mPhone;
-                user.password = mPassword;
-                json.put("phone", mPhone);
-                json.put("password", mPassword);
-                JSONObject object = api.loginRequest(json, "login/");
-                if (Helper.isSuccess(object)) {
-                    user.setUser(object);
-                    ApiService.getInstance().setToken(user.getToken());
-                    statusCode = 200;
-                    res = true;
-                    JSONObject onlineStatus = new JSONObject();
-                    onlineStatus.put("online_status", "online");
-                    onlineStatus.put("ios_token", JSONObject.NULL);
-                    onlineStatus.put("role", "user");
-                    onlineStatus = api.patchRequest(onlineStatus, "users/" + String.valueOf(user.id)+ "/");
-                    JSONObject orderResult = api.getArrayRequest("orders/?status=new&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                    }
-                    orderResult = api.getArrayRequest("orders/?status=accepted&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                    }
-                    orderResult = api.getArrayRequest("orders/?status=waiting&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                    }
-                    orderResult = api.getArrayRequest("orders/?status=ontheway&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                    }
-                    orderResult = api.getArrayRequest("orders/?status=pending&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                    }
-                    orderResult = api.getArrayRequest("orders/?status=sos&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                    if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                        Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                    }
-                } else if (Helper.isBadRequest(object)) {
-                    if (object.has("detail")) detail = object.getString("detail");
-                    res = true;
-                    statusCode = 403;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("LoginActivity", Arrays.toString(e.getStackTrace()));
-                res = false;
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("LoginActivity", Arrays.toString(e.getStackTrace()));
-                res = false;
-            }
-            return res;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success && statusCode == HttpStatus.SC_OK) {
-                savePreferences(user);
-                Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
-                startActivity(intent);
-                finish();
-            } else  if (statusCode == 403) {
-                if (detail != null && detail.contains("Account")) {
-                    goToActivation();
-                } else {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                }
-                mPasswordView.requestFocus();
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Сервис недоступен", Toast.LENGTH_LONG).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
         }
     }
 
