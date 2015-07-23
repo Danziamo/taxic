@@ -196,11 +196,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     private void CheckEnableGPS(){
         String provider = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-        if(!provider.equals("")){
-            //GPS Enabled
-            Toast.makeText(this, "GPS Enabled: " + provider,
-                    Toast.LENGTH_LONG).show();
-        }else{
+        if(provider.equals("")){
             displayPromptForEnablingGPS();
         }
     }
