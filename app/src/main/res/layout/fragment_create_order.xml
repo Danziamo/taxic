@@ -33,6 +33,7 @@
             <EditText
                 style="@style/mediumEditText"
                 android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
                 android:id="@+id/editTextStartAddress" />
 
             <TextView
@@ -52,6 +53,7 @@
             <EditText
                 style="@style/mediumEditText"
                 android:imeOptions="actionDone"
+                android:inputType="textCapSentences"
                 android:id="@+id/editTextDescription"/>
 
             <TextView
