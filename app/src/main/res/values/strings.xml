@@ -26,7 +26,7 @@
     <string name="title_activity_help">Тех. поддержка</string>
     <string name="help">Телефон для справок:\n +996702191111\n</string>
     <string name="WhatsApp">Для WhatsApp сообщений:\n +996702191111\n</string>
-    <string name="info">Почта:\n taxi.support@mirsoft.kg</string>
+    <string name="info">Почта:\n taxi.support@mirsoft.kg\n</string>
     <string name="title_activity_about">О такси (тарифы)</string>
     <string name="tariff_line1">Cтоимость посадки = 40 сом\n</string>
     <string name="tariff_line2">1 километр = 12 сом.\n (округляется до метра)\n</string>
@@ -35,4 +35,5 @@
     <string name="tariff_line5">Доплата за животное (кошка, собака в специальной сумке) по договоренности с водителем.\n</string>
     <string name="tariff_line6">Если Вы выбрали фиксированную плату,\n то оплачиваете только данную сумму.</string>
     <string name="tariff_line7">Доплата за выезд за пределы города Бишкек,\n  + 40 сом к общей сумме</string>
+    <string name="info_version">EasyTaxi Пассажир  для Андроид\n Версия %1$s.</string>
 </resources>

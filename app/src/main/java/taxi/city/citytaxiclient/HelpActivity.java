@@ -1,10 +1,12 @@
 package taxi.city.citytaxiclient;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -39,6 +41,15 @@ public class HelpActivity extends ActionBarActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayShowTitleEnabled(true);
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            TextView info_version = (TextView) findViewById(R.id.info_version);
+            String info_version_text = getString(R.string.info_version, pInfo.versionName);
+            info_version.setText(info_version_text);
+        }catch(Exception e){
+            //silent
+        }
     }
 
     @Override
