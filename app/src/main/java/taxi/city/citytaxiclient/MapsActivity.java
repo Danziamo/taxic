@@ -745,7 +745,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                     .position(dp.position)
                     .icon(dp.status.equals("online")
                             ? BitmapDescriptorFactory.fromResource(R.drawable.car)
-                            : BitmapDescriptorFactory.fromResource(R.drawable.car)));
+                            : BitmapDescriptorFactory.fromResource(R.drawable.car_offline)));
         }
     }
 
