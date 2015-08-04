@@ -6,9 +6,6 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Created by Daniyar on 5/8/2015.
- */
 public class Driver {
     public String id;
     public String firstName;

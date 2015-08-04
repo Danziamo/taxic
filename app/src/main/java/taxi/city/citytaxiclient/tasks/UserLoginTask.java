@@ -3,6 +3,8 @@ package taxi.city.citytaxiclient.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,9 +41,9 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Integer> {
             user.password = mPassword;
             json.put("phone", mPhone);
             json.put("password", mPassword);
-            JSONObject object = api.loginRequest(json, "login/");
-            if (Helper.isSuccess(object)) {
-                user.setUser(object);
+            JSONObject loginResult = api.loginRequest(json, "login/");
+            if (Helper.isSuccess(loginResult)) {
+                user.setUser(loginResult);
                 ApiService.getInstance().setToken(user.getToken());
                 statusCode = 200;
 
@@ -50,48 +52,23 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Integer> {
                 onlineStatus.put("ios_token", JSONObject.NULL);
                 onlineStatus.put("role", "user");
                 onlineStatus = api.patchRequest(onlineStatus, "users/" + String.valueOf(user.id)+ "/");
-                JSONObject orderResult = api.getArrayRequest("orders/?status=new&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
+                if (loginResult.has("is_order_active") && loginResult.getJSONArray("is_order_active").length() > 0) {
+                    Order.getInstance().id = loginResult.getJSONArray("is_order_active").getJSONObject(0).getInt("id");
                 }
-                orderResult = api.getArrayRequest("orders/?status=accepted&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=waiting&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=ontheway&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=pending&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=sos&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-            } else if (Helper.isBadRequest(object)) {
+            } else if (Helper.isBadRequest(loginResult)) {
                 String detail = "";
-                if (object.has("detail")){
-                    detail = object.getString("detail");
+                if (loginResult.has("detail")){
+                    detail = loginResult.getString("detail");
                 }
 
                 if (detail.contains("Account")) {
                     statusCode = NOT_ACTIVATED_ACCOUNT_STATUS_CODE;
-                } else if(object.has("status_code")){
-                    statusCode = object.getInt("status_code");
+                } else if(loginResult.has("status_code")){
+                    statusCode = loginResult.getInt("status_code");
                 }
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("LoginActivity", Arrays.toString(e.getStackTrace()));
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("LoginActivity", Arrays.toString(e.getStackTrace()));
+            Crashlytics.logException(e);
         }
         return statusCode;
     }

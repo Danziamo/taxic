@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
@@ -55,6 +56,7 @@ import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
+import taxi.city.citytaxiclient.core.DriverPosition;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.OrderDetail;
 import taxi.city.citytaxiclient.core.User;
@@ -338,11 +340,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                                 Location cameraLocation = new Location("someprovider");
                                 cameraLocation.setLatitude(arg0.target.latitude);
                                 cameraLocation.setLongitude(arg0.target.longitude);
-                                if (currLocation.distanceTo(cameraLocation) > 30 * 1000) {
-                                    order.addressStart = new LatLng(currLocation.getLatitude(), currLocation.getLongitude());
-                                } else {
-                                    order.addressStart = cameraPosition;
-                                }
+                                order.addressStart = cameraPosition;
                             } else
                                 order.addressStart = cameraPosition;
                             tvAddress.setText(displayText);
@@ -648,29 +646,32 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     }
 
     private void fetchDriversTask() {
-        new AsyncTask<Void, Void, ArrayList<LatLng> >() {
+        new AsyncTask<Void, Void, ArrayList<DriverPosition> >() {
             @Override
-            protected ArrayList<LatLng> doInBackground(Void... params) {
-                ArrayList<LatLng> driverPositions = new ArrayList<>();
+            protected ArrayList<DriverPosition> doInBackground(Void... params) {
+                ArrayList<DriverPosition> driverPositions = new ArrayList<>();
                 if (order.id == 0 || order.status == OStatus.NEW) {
-                    JSONObject arrayObject = api.getArrayRequest("users/?online_status=online&role=driver");
+                    JSONObject arrayObject = api.getArrayRequest("users/?role=driver");
                     try {
                         if (Helper.isSuccess(arrayObject)) {
                             JSONArray array = arrayObject.getJSONArray("result");
                             for (int i = 0; i < array.length(); ++i) {
                                 JSONObject arrayItem = array.getJSONObject(i);
                                 LatLng position = Helper.getLatLng(arrayItem.getString("cur_position"));
+                                String onlineStatus = arrayItem.getString("online_status");
                                 if (position != null)
-                                    driverPositions.add(position);
+                                    driverPositions.add(new DriverPosition(onlineStatus, position));
                             }
                         }
-                    } catch (JSONException e) {}
+                    } catch (JSONException e) {
+                        Crashlytics.logException(e);
+                    }
                 }
                 return driverPositions;
             }
 
             @Override
-            protected void onPostExecute(ArrayList<LatLng> list) {
+            protected void onPostExecute(ArrayList<DriverPosition> list) {
                 showDrivers(list);
             }
         }.execute(null, null, null);
@@ -733,15 +734,18 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         }
     }
 
-    protected void showDrivers(ArrayList<LatLng> list) {
+    protected void showDrivers(ArrayList<DriverPosition> list) {
         if (list.size() == 0) return;
         if (mMap == null) setUpMapIfNeeded();
         if (mMap == null) return;
         mMap.clear();
         for (int i = 0; i < list.size(); ++i) {
+            DriverPosition dp = list.get(i);
             mMap.addMarker(new MarkerOptions()
-                    .position(list.get(i))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.car)));
+                    .position(dp.position)
+                    .icon(dp.status.equals("online")
+                            ? BitmapDescriptorFactory.fromResource(R.drawable.car)
+                            : BitmapDescriptorFactory.fromResource(R.drawable.car)));
         }
     }
 

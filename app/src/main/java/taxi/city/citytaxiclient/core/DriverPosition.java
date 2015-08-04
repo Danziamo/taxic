@@ -1,7 +1,13 @@
 package taxi.city.citytaxiclient.core;
 
-/**
- * Created by taxi on 04/08/15.
- */
+import com.google.android.gms.maps.model.LatLng;
+
 public class DriverPosition {
+    public String status;
+    public LatLng position;
+
+    public DriverPosition (String status, LatLng position) {
+        this.status = status;
+        this.position = position;
+    }
 }

@@ -218,31 +218,6 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             JSONObject result = new JSONObject();
             JSONObject data = new JSONObject();
             try {
-                JSONObject orderResult = api.getArrayRequest("orders/?status=new&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=accepted&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=waiting&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=ontheway&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=pending&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-                orderResult = api.getArrayRequest("orders/?status=sos&ordering=-id&limit=1&client=" + String.valueOf(user.id));
-                if (Helper.isSuccess(orderResult) && orderResult.getJSONArray("result").length() > 0) {
-                    Order.getInstance().id = orderResult.getJSONArray("result").getJSONObject(0).getInt("id");
-                }
-
                 if (order.id == 0) {
                     data = order.getOrderAsJson();
                     result = api.createOrderRequest(data, "orders/");
