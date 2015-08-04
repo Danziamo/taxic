@@ -12,38 +12,72 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         map:cameraTargetLat="@string/map_default_lat"
         map:cameraTargetLng="@string/map_default_lng"
-        tools:ignore="MissingPrefix">
+        tools:ignore="MissingPrefix"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+                <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:background="@drawable/progressbar_window"
                 android:id="@+id/linearLayoutSearchingForDriver">
 
-                <ProgressBar
-                    style="?android:attr/progressBarStyleLarge"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/progressBar"/>
-
-                <TextView
-                    android:id="@+id/textViewSearchDriver"
-                    android:gravity="center"
-                    android:layout_gravity="center"
+                <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:text = "Мы ищем ближайшего\nсвободного водителя"
-                    android:textColor="@color/white"/>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/image_taarget"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/target"/>
+
+                    <ProgressBar
+                            style="?android:attr/progressBarStyleLarge"
+                            android:layout_width="250dp"
+                            android:layout_height="250dp"
+                            android:layout_gravity="center"
+                            android:indeterminateDrawable="@drawable/progressbar_radar"
+                            android:id="@+id/progressBar"/>
+
+                    <!--<ProgressBar-->
+                        <!--style="?android:attr/progressBarStyleLarge"-->
+                        <!--android:layout_width="50dp"-->
+                        <!--android:layout_height="50dp"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_centerHorizontal="true"-->
+                        <!--android:indeterminateDrawable="@drawable/progressbar_rotate_image"-->
+                        <!--android:id="@+id/progressBar_small"/>-->
+
+                        <ImageView
+                            android:id="@+id/image_test"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:background="@drawable/progressbar_image"/>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/textViewSearchDriver"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text = "Мы ищем ближайшего\nсвободного водителя"
+                        android:textColor="@color/white"
+                        android:background="@drawable/progressbar_window"
+                        android:layout_marginTop="40dp"
+                        android:padding="5dp"/>
 
             </LinearLayout>
 
@@ -348,6 +382,6 @@
 
         </RelativeLayout>
 
-    </fragment>
+
 </RelativeLayout>
 

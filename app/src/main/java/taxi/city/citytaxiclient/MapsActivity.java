@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +50,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.core.Driver;
@@ -106,6 +109,17 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     ImageView ivIcon;
 
+    float MEDIUM_MAP_ZOOM_MIN = 15.0f;
+    float MEDIUM_MAP_ZOOM_MAX = 12.0f;
+    float zoom = 15.0f;
+    boolean increase = true;
+
+
+
+    final Handler handler = new Handler();
+    Timer timer = new Timer();
+    TimerTask doAsynchronousTask;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,8 +172,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         tvOrderWaitSum = (TextView) findViewById(R.id.textViewOrderWaitSum);
         ivIcon = (ImageView) findViewById(R.id.imageViewSearchIcon);
         ivIcon.setVisibility(View.GONE);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.getIndeterminateDrawable().setColorFilter(0xFF406DC7, android.graphics.PorterDuff.Mode.MULTIPLY);
+       // progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        //progressBar.getIndeterminateDrawable().setColorFilter(0xFF406DC7, android.graphics.PorterDuff.Mode.MULTIPLY);
+        //progressBar.setProgressDrawable(getResources().getDrawable(R.drawable.progressbar_radar));
+
         llSearchDriver = (LinearLayout) findViewById(R.id.linearLayoutSearchingForDriver);
 
         btnOk = (Button) findViewById(R.id.buttonOk);
@@ -381,6 +397,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onStop() {
         super.onStop();
+        Log.e("TEST","onStop");
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -389,6 +406,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onPause() {
         super.onPause();
+        Log.e("TEST", "onResume");
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
@@ -507,6 +525,26 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         startActivityForResult(intent, MAKE_ORDER_ID);
     }
 
+
+    Runnable thread = new Runnable(){
+        @Override
+        public void run() {
+            if(zoom >= MEDIUM_MAP_ZOOM_MIN | increase) {
+                zoom -= 0.003f;
+                increase = true;
+                if(zoom <= MEDIUM_MAP_ZOOM_MAX) increase = false;
+            }
+
+            if(zoom <= MEDIUM_MAP_ZOOM_MAX | !increase){
+                zoom += 0.003f;
+                increase = false;
+                if(zoom >= MEDIUM_MAP_ZOOM_MIN) increase = true;
+            }
+
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
+        }
+    };
+
     private void updateViews() {
         tvOrderDistance.setText(String.valueOf(order.distance));
         tvOrderWaitSum.setText(String.valueOf(order.getWaitSum()));
@@ -520,8 +558,29 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
         if (order.status == OStatus.NEW) {
             llSearchDriver.setVisibility(View.VISIBLE);
+             doAsynchronousTask = new TimerTask() {
+                 @Override
+                 public void run() {
+                     handler.post(thread);
+                 }
+             };
+            timer.schedule(doAsynchronousTask,100,100);
+
         } else {
             llSearchDriver.setVisibility(View.GONE);
+
+            handler.removeCallbacks(thread);
+            if(doAsynchronousTask != null) {
+                doAsynchronousTask.cancel();
+                doAsynchronousTask = null;
+            }
+            if (timer != null) {
+                timer.cancel();
+                timer = new Timer();
+            }
+
+            zoom = MEDIUM_MAP_ZOOM_MIN;
+
         }
 
         if(order.status == OStatus.WAITING) {
@@ -593,7 +652,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             @Override
             protected ArrayList<LatLng> doInBackground(Void... params) {
                 ArrayList<LatLng> driverPositions = new ArrayList<>();
-                if (order.id == 0) {
+                if (order.id == 0 || order.status == OStatus.NEW) {
                     JSONObject arrayObject = api.getArrayRequest("users/?online_status=online&role=driver");
                     try {
                         if (Helper.isSuccess(arrayObject)) {
@@ -647,7 +706,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                             order.driver = new Driver(driverJson);
                         }
                         if (order.status == OStatus.NEW) {
-                            mMap.clear();
+                         //   mMap.clear();
                             order.driver = null;
                         } else {
                             displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
@@ -676,6 +735,8 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     protected void showDrivers(ArrayList<LatLng> list) {
         if (list.size() == 0) return;
+        if (mMap == null) setUpMapIfNeeded();
+        if (mMap == null) return;
         mMap.clear();
         for (int i = 0; i < list.size(); ++i) {
             mMap.addMarker(new MarkerOptions()
@@ -799,4 +860,22 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             if (pDialog != null) pDialog.dismissWithAnimation();
         }
     }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
+        handler.removeCallbacks(thread);
+        if(doAsynchronousTask != null) {
+            doAsynchronousTask.cancel();
+            doAsynchronousTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+
+
 }

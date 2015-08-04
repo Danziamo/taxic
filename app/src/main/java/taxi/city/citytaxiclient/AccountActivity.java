@@ -1,11 +1,13 @@
 package taxi.city.citytaxiclient;
 
+import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -122,6 +124,8 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
         return super.onOptionsItemSelected(item);
     }
 
+
+
     private void signOut() {
         SweetAlertDialog pDialog = new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE);
         pDialog .setTitleText("Вы хотите выйти?")
@@ -141,6 +145,7 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
                     }
                 })
                 .show();
+
     }
 
     @Override
