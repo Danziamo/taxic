@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.support.v4.app.Fragment;
 
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.utils.Helper;
@@ -18,8 +19,7 @@ public class OrderDetailsActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         User user = User.getInstance();
-        if (user == null || user.id == 0)
-        {
+        if (user == null || user.id == 0) {
             Helper.getPreferences(this);
             if (user == null || user.id == 0) {
                 Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
@@ -31,7 +31,7 @@ public class OrderDetailsActivity extends ActionBarActivity {
 
         setContentView(R.layout.activity_order_details);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new OrderDetailsActivityFragment())
                     .commit();
         }

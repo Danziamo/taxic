@@ -3,7 +3,7 @@ package taxi.city.citytaxiclient;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.app.ActionBarActivity;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -49,6 +50,9 @@ public class OrderDetailsActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_order_details, container, false);
         order = Order.getInstance();
+
+     //   getActivity().getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getActivity().getIntent();
         orderDetail = (OrderDetail)intent.getExtras().getSerializable("DATA");
