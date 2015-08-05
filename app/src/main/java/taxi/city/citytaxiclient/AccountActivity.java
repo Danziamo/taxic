@@ -120,8 +120,23 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
                 return true;
             case R.id.action_help:
                 startActivity(new Intent(this, HelpActivity.class));
+                return true;
+            case R.id.action_share:
+                shareLink();return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void shareLink(){
+        String link = "http://onelink.to/r94mvp";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, link);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Я езжу с EasyTaxi!");
+
+        startActivity(Intent.createChooser(intent, "Поделиться"));
     }
 
 
