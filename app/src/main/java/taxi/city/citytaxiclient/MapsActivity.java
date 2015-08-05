@@ -741,6 +741,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         mMap.clear();
         for (int i = 0; i < list.size(); ++i) {
             DriverPosition dp = list.get(i);
+            if (dp.status.equals("exited")) continue;
             mMap.addMarker(new MarkerOptions()
                     .position(dp.position)
                     .icon(dp.status.equals("online")

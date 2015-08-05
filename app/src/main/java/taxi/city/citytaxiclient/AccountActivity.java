@@ -208,10 +208,10 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
         protected JSONObject doInBackground(Void... params) {
             try {
                 JSONObject onlineStatus = new JSONObject();
-                onlineStatus.put("online_status", "offline");
+                onlineStatus.put("online_status", "exited");
                 onlineStatus = ApiService.getInstance().patchRequest(onlineStatus, "users/" + String.valueOf(User.getInstance().id) +"/");
             } catch (JSONException ignored) {}
-            return ApiService.getInstance().logoutRequest(null, "logoout/");
+            return ApiService.getInstance().logoutRequest(null, "logout/");
         }
 
         @Override
