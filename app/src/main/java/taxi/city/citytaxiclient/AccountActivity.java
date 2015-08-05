@@ -129,7 +129,7 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
 
 
     private void shareLink(){
-        String text = "Я пользуюсь Easy Taxi. Это удобное приложение для мнгновенного вызова такси. \nhttp://onelink.to/r94mvp \nEasy Taxi\nНам с тобой по пути!";
+        String text = "Я пользуюсь Easy Taxi. Это удобное приложение для мгновенного вызова такси. \nhttp://onelink.to/r94mvp \nEasy Taxi\nНам с тобой по пути!";
         Intent intent = new Intent(Intent.ACTION_SEND);
 
         intent.setType("text/plain");

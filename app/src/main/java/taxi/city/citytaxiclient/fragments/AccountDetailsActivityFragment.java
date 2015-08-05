@@ -68,7 +68,7 @@ public class AccountDetailsActivityFragment extends Fragment {
         tvAccountBalance = (TextView) rootView.findViewById(R.id.textViewAccountBalance);
 
         tvAccountNumber.setText(User.getInstance().phone);
-        tvAccountBalance.setText(String.valueOf((int)User.getInstance().balance) + "  сом");
+        tvAccountBalance.setText(String.valueOf((int)User.getInstance().balance) + "  сом*"); //Do not remove * symbol
 
         /*Button buttonBack = (Button)rootView.findViewById(R.id.buttonBack);
         buttonBack.setOnClickListener(new View.OnClickListener() {
@@ -164,7 +164,7 @@ public class AccountDetailsActivityFragment extends Fragment {
     private void fillForms(JSONObject object) throws JSONException {
         String balance = object.getString("balance");
         double b = balance == null ? 0 : Double.valueOf(balance);
-        tvAccountBalance.setText(String.valueOf((int)b) + "  сом");
+        tvAccountBalance.setText(String.valueOf((int)b) + "  сом*");
         User.getInstance().balance = b;
     }
 }

@@ -36,5 +36,5 @@
     <string name="tariff_line6">Если Вы выбрали фиксированную плату,\n то оплачиваете только данную сумму.</string>
     <string name="tariff_line7">Доплата за выезд за пределы города Бишкек,\n  + 40 сом к общей сумме</string>
     <string name="info_version">EasyTaxi Пассажир  для Андроид\n Версия %1$s.</string>
-    <string name="balance_hint">(В скором времени будет доступна услуга „Сдача“)</string>
+    <string name="balance_hint">*В скором времени будет\n доступна услуга „Сдача“</string>
 </resources>
