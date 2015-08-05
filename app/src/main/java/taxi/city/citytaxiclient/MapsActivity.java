@@ -302,6 +302,10 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+        if (mMap != null && order.id != 0 && order.status == OStatus.NEW && order.addressStart != null) {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(order.addressStart.latitude
+                    , order.addressStart.longitude), 15));
+        }
         CheckPreviousSession();
         mGoogleApiClient.connect();
     }
@@ -395,7 +399,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onStop() {
         super.onStop();
-        Log.e("TEST","onStop");
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
@@ -404,7 +407,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("TEST", "onResume");
         if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
@@ -418,7 +420,9 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (location != null) {
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+            if (order.id == 0) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+            }
             handleNewLocation(location);
         }
     }

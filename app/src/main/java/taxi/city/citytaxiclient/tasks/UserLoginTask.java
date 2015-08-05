@@ -61,6 +61,7 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Integer> {
                         if (orderObject.getInt("client") != user.id) continue;
                         Order.getInstance().id = orderObject.getInt("id");
                         Order.getInstance().status = Helper.getStatus(orderObject.getString("status"));
+                        Order.getInstance().addressStart = Helper.getLatLng(orderObject.getString("address_start"));
                         break;
                     }
 
