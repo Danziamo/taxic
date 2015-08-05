@@ -54,6 +54,7 @@ public abstract class UserLoginTask extends AsyncTask<Void, Void, Integer> {
                 onlineStatus = api.patchRequest(onlineStatus, "users/" + String.valueOf(user.id)+ "/");
                 if (loginResult.has("is_order_active") && loginResult.getJSONArray("is_order_active").length() > 0) {
                     Order.getInstance().id = loginResult.getJSONArray("is_order_active").getJSONObject(0).getInt("id");
+                    Order.getInstance().status = Helper.getStatus(loginResult.getJSONArray("is_order_active").getJSONObject(0).getString("status"));
                 }
             } else if (Helper.isBadRequest(loginResult)) {
                 String detail = "";

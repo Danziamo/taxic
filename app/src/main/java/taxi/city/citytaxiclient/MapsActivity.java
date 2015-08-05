@@ -562,7 +562,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                      handler.post(thread);
                  }
              };
-            timer.schedule(doAsynchronousTask,100,100);
+            timer.schedule(doAsynchronousTask,4000,100);
 
         } else {
             llSearchDriver.setVisibility(View.GONE);
