@@ -241,6 +241,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                 mTask = null;
                 if (Helper.isSuccess(result)) {
                     order.id = result.getInt("id");
+                    order.status = Helper.getStatus(result.getString("status"));
                     Helper.saveOrderPreferences(getActivity(), order.id);
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("Ваш заказ создан")
@@ -271,7 +272,7 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
                     order.clear();
                     new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
                             .setTitleText("Ошибка")
-                            .setContentText("Не удалось отправить данные на сервер")
+                            .setContentText("Не удалось создать заказ")
                             .setConfirmText("Ок")
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                 @Override
