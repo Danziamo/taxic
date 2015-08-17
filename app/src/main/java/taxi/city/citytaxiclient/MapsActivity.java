@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -34,23 +33,18 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -246,7 +240,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
 
     private void setLocationRequest() {
         mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
                 .setSmallestDisplacement(10)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
                 .setFastestInterval(1000); // 1 second, in milliseconds
@@ -362,13 +356,17 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     public void onSaveInstanceState(Bundle outState){
         outState.putInt("orderId", order.id);
+        outState.putString("orderStatus", order.status.toString());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        order.id = savedInstanceState.getInt("orderId", 0);
+        if (savedInstanceState != null) {
+            order.id = savedInstanceState.getInt("orderId", 0);
+            order.status = Helper.getStatus(savedInstanceState.getString("orderStatus"));
+        }
     }
 
     private class GeocoderHandler extends Handler {
@@ -714,7 +712,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
                          //   mMap.clear();
                             order.driver = null;
                         } else {
-                            displayDriverOnMap(stringToLatLng(result.getString("address_stop")));
+                            displayDriverOnMap(Helper.getLatLng(result.getString("address_stop")));
                         }
                         if (order.status == OStatus.FINISHED && !isFirstFetch) {
                             showOrderDetails();
@@ -799,16 +797,6 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         }
     }
 
-    private LatLng stringToLatLng(String s) {
-        if (s == null || s.equals("null"))
-            return null;
-        String[] geo = s.replace("(", "").replace(")", "").split(" ");
-
-        double latitude = Double.valueOf(geo[1].trim());
-        double longitude = Double.valueOf(geo[2].trim());
-        return new LatLng(latitude, longitude);
-    }
-
     private class DeclineOrderTask extends AsyncTask<Void, Void, JSONObject> {
         private String mReason;
 
@@ -884,7 +872,5 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             timer = null;
         }
     }
-
-
 
 }
