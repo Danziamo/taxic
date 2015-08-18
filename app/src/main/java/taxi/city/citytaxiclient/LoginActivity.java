@@ -30,7 +30,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import taxi.city.citytaxiclient.core.User;
+import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.Session;
+import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.Helper;
@@ -265,7 +271,24 @@ public class LoginActivity extends Activity{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(phone, password) {
+            Session session = new Session();
+            session.setPhone(phone);
+            session.setPassword(password);
+            RestClient.getSessionService().login(session, new Callback<taxi.city.citytaxiclient.models.User>() {
+                @Override
+                public void success(taxi.city.citytaxiclient.models.User user, Response response) {
+                    GlobalSingleton.getInstance(LoginActivity.this).token = user.getToken();
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                }
+            });
+            /*mAuthTask = new UserLoginTask(phone, password) {
                 @Override
                 protected void onPostExecute(Integer statusCode) {
                     super.onPostExecute(statusCode);
@@ -294,7 +317,7 @@ public class LoginActivity extends Activity{
                     showProgress(false);
                 }
             };
-            mAuthTask.execute();
+            mAuthTask.execute();*/
         }
     }
 

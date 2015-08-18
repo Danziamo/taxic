@@ -53,6 +53,9 @@ public class User implements Serializable {
     @SerializedName("cur_position")
     private String curPosition;
 
+    @Expose
+    private String token;
+
     public String getPhone() {
         return phone;
     }
@@ -163,5 +166,13 @@ public class User implements Serializable {
 
     public void setCurPosition(String curPosition) {
         this.curPosition = curPosition;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
