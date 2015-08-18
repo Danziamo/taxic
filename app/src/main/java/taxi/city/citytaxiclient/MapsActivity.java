@@ -357,7 +357,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     @Override
     public void onSaveInstanceState(Bundle outState){
         outState.putInt("orderId", order.id);
-        outState.putString("orderStatus", order.status.toString());
+        //outState.putString("orderStatus", order.status.toString());
         super.onSaveInstanceState(outState);
     }
 
@@ -366,7 +366,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             order.id = savedInstanceState.getInt("orderId", 0);
-            order.status = Helper.getStatus(savedInstanceState.getString("orderStatus"));
+            //order.status = Helper.getStatus(savedInstanceState.getString("orderStatus"));
         }
     }
 

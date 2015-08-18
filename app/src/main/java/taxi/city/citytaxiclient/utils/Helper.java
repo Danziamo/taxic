@@ -24,9 +24,6 @@ import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.enums.OStatus;
 import taxi.city.citytaxiclient.service.ApiService;
 
-/**
- * Created by Daniyar on 4/16/2015.
- */
 public class Helper {
     private static String regexPattern = "\\d+\\.?\\d*";
     private static DecimalFormat df = new DecimalFormat("#.##");

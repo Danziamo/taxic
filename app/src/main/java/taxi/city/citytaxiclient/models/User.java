@@ -1,10 +1,14 @@
 package taxi.city.citytaxiclient.models;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class User implements Serializable {
 
@@ -36,6 +40,9 @@ public class User implements Serializable {
     private double balance;
 
     @Expose
+    private String email;
+
+    @Expose
     @SerializedName("android_token")
     private String androidToken;
 
@@ -52,6 +59,13 @@ public class User implements Serializable {
     @Expose
     @SerializedName("cur_position")
     private String curPosition;
+
+    private double latitude;
+    private double longitude;
+
+    @Expose
+    @SerializedName("is_order_active")
+    private ArrayList<Order> activeOrders;
 
     @Expose
     private String token;
@@ -105,6 +119,7 @@ public class User implements Serializable {
     }
 
     public String getDateOfBirth() {
+        if (dateOfBirth == null) return "";
         return dateOfBirth;
     }
 
@@ -166,6 +181,19 @@ public class User implements Serializable {
 
     public void setCurPosition(String curPosition) {
         this.curPosition = curPosition;
+        String s = this.curPosition;
+        String regexPattern = "\\d+\\.?\\d*";
+        if (s == null || s.isEmpty())
+            return;
+        List<String> geo = new ArrayList<>();
+        Matcher m = Pattern.compile(regexPattern).matcher(s);
+        while(m.find()) {
+            geo.add(m.group());
+        }
+        if (geo.size() != 2)
+            return;
+        this.latitude = Double.valueOf(geo.get(0).trim());
+        this.longitude = Double.valueOf(geo.get(1).trim());
     }
 
     public String getToken() {
@@ -174,5 +202,46 @@ public class User implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean hasActiveOrder() {
+        return this.activeOrders != null && this.activeOrders.size() > 0;
+    }
+
+    public Order getActiveOrder() {
+        if (hasActiveOrder()) {
+            for (int i = this.activeOrders.size() - 1; i >= 0; i -= 1) {
+                Order order = activeOrders.get(i);
+                if (order.getClient() == null) continue;
+                if (order.getClient().getId() != this.id) continue;
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public LatLng getLatLng() {
+        String s = this.curPosition;
+        String regexPattern = "\\d+\\.?\\d*";
+        if (s == null || s.equals("null"))
+            return null;
+        List<String> geo = new ArrayList<>();
+        Matcher m = Pattern.compile(regexPattern).matcher(s);
+        while(m.find()) {
+            geo.add(m.group());
+        }
+        if (geo.size() != 2)
+            return null;
+        double latitude = Double.valueOf(geo.get(0).trim());
+        double longitude = Double.valueOf(geo.get(1).trim());
+        return new LatLng(latitude, longitude);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

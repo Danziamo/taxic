@@ -21,29 +21,36 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import taxi.city.citytaxiclient.core.User;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
+import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.OnlineStatus;
+import taxi.city.citytaxiclient.models.User;
+import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.utils.Helper;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
-public class AccountActivity extends ActionBarActivity implements AccountDetailsActivityFragment.OnFragmentInteractionListener, ActionBar.TabListener {
+public class AccountActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     TabsPagerAdapter mPageAdapter;
     ViewPager mViewPager;
-    private LogoutTask mLogoutTask = null;
     private SweetAlertDialog pDialog;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        User user = User.getInstance();
+        //User user = User.getInstance();
+        user = GlobalSingleton.getInstance(AccountActivity.this).currentUser;
 
-        if (user == null || user.id == 0)
+        if (user == null || user.getId() == 0)
         {
             Helper.getPreferences(this);
-            if (user == null || user.id == 0) {
+            if (user == null || user.getId() == 0) {
                 Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
@@ -164,11 +171,6 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
     public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
         switch (tab.getPosition()) {
@@ -192,48 +194,37 @@ public class AccountActivity extends ActionBarActivity implements AccountDetails
     }
 
     private void logout() {
-        if (mLogoutTask != null) return;
-
-
         showProgress(true);
-        mLogoutTask = new LogoutTask();
-        mLogoutTask.execute((Void) null);
-    }
 
-    private class LogoutTask extends AsyncTask<Void, Void, JSONObject> {
+        RestClient.getUserService().updateStatus(user.getId(), OnlineStatus.EXITED, new Callback<Object>() {
+            @Override
+            public void success(Object o, Response response) {
+                showProgress(false);
+                SessionHelper sessionHelper = new SessionHelper();
+                sessionHelper.setPassword("");
+                sessionHelper.setToken("");
 
-        LogoutTask() {}
+                showProgress(false);
+                Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                ComponentName cn = intent.getComponent();
+                Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                startActivity(mainIntent);
+            }
 
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            try {
-                JSONObject onlineStatus = new JSONObject();
-                onlineStatus.put("online_status", "exited");
-                onlineStatus = ApiService.getInstance().patchRequest(onlineStatus, "users/" + String.valueOf(User.getInstance().id) +"/");
-            } catch (JSONException ignored) {}
-            return ApiService.getInstance().logoutRequest(null, "logout/");
-        }
+            @Override
+            public void failure(RetrofitError error) {
+                showProgress(false);
+                SessionHelper sessionHelper = new SessionHelper();
+                sessionHelper.setPassword("");
+                sessionHelper.setToken("");
 
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            mLogoutTask = null;
-
-            SessionHelper sessionHelper = new SessionHelper();
-            sessionHelper.setPassword("");
-            sessionHelper.setToken("");
-
-            showProgress(false);
-            Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
-            ComponentName cn = intent.getComponent();
-            Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
-            startActivity(mainIntent);
-        }
-
-        @Override
-        protected void onCancelled() {
-            showProgress(false);
-            mLogoutTask = null;
-        }
+                showProgress(false);
+                Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                ComponentName cn = intent.getComponent();
+                Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                startActivity(mainIntent);
+            }
+        });
     }
 
     public void showProgress(final boolean show) {

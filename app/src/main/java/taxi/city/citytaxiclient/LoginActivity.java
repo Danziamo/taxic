@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,10 +35,15 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.OnlineStatus;
+import taxi.city.citytaxiclient.models.Order;
+import taxi.city.citytaxiclient.models.Role;
 import taxi.city.citytaxiclient.models.Session;
 import taxi.city.citytaxiclient.networking.RestClient;
+import taxi.city.citytaxiclient.networking.model.UserStatus;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.Helper;
@@ -278,6 +285,35 @@ public class LoginActivity extends Activity{
                 @Override
                 public void success(taxi.city.citytaxiclient.models.User user, Response response) {
                     GlobalSingleton.getInstance(LoginActivity.this).token = user.getToken();
+                    GlobalSingleton.getInstance(LoginActivity.this).currentUser = user;
+
+                    if (user.hasActiveOrder() && user.getActiveOrder() != null) {
+                        GlobalSingleton.getInstance(LoginActivity.this).currentOrder = user.getActiveOrder();
+                    }
+
+                    UserStatus userStatus = new UserStatus();
+                    userStatus.iosToken = null;
+                    userStatus.onlineStatus = OnlineStatus.ONLINE;
+                    userStatus.role = Role.DRIVER;
+                    RestClient.getUserService().updateStatus(user.getId(), userStatus, new Callback<taxi.city.citytaxiclient.models.User>() {
+                        @Override
+                        public void success(taxi.city.citytaxiclient.models.User user, Response response) {
+                            showProgress(false);
+                            Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            showProgress(false);
+                            Toast.makeText(LoginActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                            startActivity(intent);
+                            finish();
+                            Crashlytics.logException(error);
+                        }
+                    });
                     showProgress(false);
                     Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 }
@@ -285,7 +321,18 @@ public class LoginActivity extends Activity{
                 @Override
                 public void failure(RetrofitError error) {
                     showProgress(false);
-                    Toast.makeText(LoginActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                    String message = "";
+                    if (error.getKind() == RetrofitError.Kind.HTTP) {
+                        String json = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                        if (json.toLowerCase().contains("username or password")) {
+                            message = "Телефон или пароль неверны";
+                        } else if (json.toLowerCase().contains("account")) {
+                            message = "Аккаунт не активирован";
+                        }
+                    } else {
+                        message = "Не удалось подключится к серверу";
+                    }
+                    Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
             });
             /*mAuthTask = new UserLoginTask(phone, password) {

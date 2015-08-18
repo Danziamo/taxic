@@ -26,8 +26,9 @@ import taxi.city.citytaxiclient.OrderDetailsActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.OrderDetail;
-import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.enums.OStatus;
+import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.service.ApiService;
 
 /**
@@ -43,9 +44,9 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
     private ArrayList<OrderDetail> list = new ArrayList<>();
     private Order order = Order.getInstance();
     private ApiService api = ApiService.getInstance();
-    private User user;
     private FetchOrderTask mFetchTask = null;
     private SweetAlertDialog pDialog;
+    private User user;
 
     private OrderDetail orderDetail;
     ListView lvMain;
@@ -66,7 +67,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history_order, container, false);
-        user = User.getInstance();
+        user = GlobalSingleton.getInstance(getActivity()).currentUser;
         limit = 15;
 
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
@@ -95,7 +96,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
                 JSONObject row = array.getJSONObject(i);
                 if (!row.has("status") || row.getString("status").equals(OStatus.CANCELED.toString()))
                     continue;
-                OrderDetail details = new OrderDetail(row, user.id);
+                OrderDetail details = new OrderDetail(row, user.getId());
                 alist.add("#" + String.valueOf(details.id) + " " +details.addressStart);
                 list.add(details);
 
@@ -171,7 +172,7 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
             JSONArray array = null;
             try {
                 array = new JSONArray();
-                JSONObject result = api.getArrayRequest("orders/?client=" + user.id + "&status=finished&ordering=-id&limit=" + limit);
+                JSONObject result = api.getArrayRequest("orders/?client=" + user.getId() + "&status=finished&ordering=-id&limit=" + limit);
                 if (result.getInt("status_code") == HttpStatus.SC_OK) {
                     JSONArray tempArray = result.getJSONArray("result");
                     for (int i = 0; i < tempArray.length(); ++i) {

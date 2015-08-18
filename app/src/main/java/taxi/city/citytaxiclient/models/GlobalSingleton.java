@@ -7,6 +7,7 @@ public class GlobalSingleton {
     private static GlobalSingleton instance;
 
     public User currentUser;
+    public Order currentOrder;
     public String token;
 
 

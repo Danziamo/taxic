@@ -27,7 +27,7 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return AccountDetailsActivityFragment.newInstance(position);
+                return new AccountDetailsActivityFragment();
             case 1:
                 return UserDetailsActivityFragment.newInstance(position);
             default:

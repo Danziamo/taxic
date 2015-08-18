@@ -68,4 +68,142 @@ public class Order implements Serializable{
     @Expose
     @SerializedName("order_distance")
     private double distance;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getClientPhone() {
+        return clientPhone;
+    }
+
+    public void setClientPhone(String clientPhone) {
+        this.clientPhone = clientPhone;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public String getStartName() {
+        return startName;
+    }
+
+    public void setStartName(String startName) {
+        this.startName = startName;
+    }
+
+    public String getStopName() {
+        return stopName;
+    }
+
+    public void setStopName(String stopName) {
+        this.stopName = stopName;
+    }
+
+    public String getStartPoint() {
+        return startPoint;
+    }
+
+    public void setStartPoint(String startPoint) {
+        this.startPoint = startPoint;
+    }
+
+    public String getStopPoint() {
+        return stopPoint;
+    }
+
+    public void setStopPoint(String stopPoint) {
+        this.stopPoint = stopPoint;
+    }
+
+    public String getWaitTime() {
+        return waitTime;
+    }
+
+    public void setWaitTime(String waitTime) {
+        this.waitTime = waitTime;
+    }
+
+    public double getWaitTimePrice() {
+        return waitTimePrice;
+    }
+
+    public void setWaitTimePrice(double waitTimePrice) {
+        this.waitTimePrice = waitTimePrice;
+    }
+
+    public double getFixedPrice() {
+        return fixedPrice;
+    }
+
+    public void setFixedPrice(double fixedPrice) {
+        this.fixedPrice = fixedPrice;
+    }
+
+    public Tariff getTariff() {
+        return tariff;
+    }
+
+    public void setTariff(Tariff tariff) {
+        this.tariff = tariff;
+    }
+
+    public User getDriver() {
+        return driver;
+    }
+
+    public void setDriver(User driver) {
+        this.driver = driver;
+    }
+
+    public User getClient() {
+        return client;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public double getSum() {
+        return sum;
+    }
+
+    public void setSum(double sum) {
+        this.sum = sum;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public Order () {}
 }

@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.apache.http.HttpStatus;
@@ -30,13 +28,17 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import android.support.v4.app.DialogFragment;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import taxi.city.citytaxiclient.ConfirmSignUpActivity;
-import taxi.city.citytaxiclient.MapsActivity;
 import taxi.city.citytaxiclient.R;
-import taxi.city.citytaxiclient.core.User;
+import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.User;
+import taxi.city.citytaxiclient.networking.RestClient;
+import taxi.city.citytaxiclient.networking.model.NUser;
 import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.utils.Helper;
 
@@ -97,7 +99,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         isNew = getActivity().getIntent().getBooleanExtra("NEW", false);
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-        user = User.getInstance();
+        user = GlobalSingleton.getInstance(getActivity()).currentUser;
 
         etLastName = (EditText)rootView.findViewById(R.id.editTextLastName);
         etFirstName = (EditText)rootView.findViewById(R.id.editTextFirstName);
@@ -142,15 +144,10 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         });
 
         if (!isNew) {
-            etLastName.setText(user.lastName);
-            etFirstName.setText(user.firstName);
-            etPassword.setText(user.password);
-            etEmail.setText(user.email);
-            /*String extra = user.phone.substring(0, 4);
-            String phone = user.phone.substring(4);*/
-            etDoB.setText(user.dateOfBirth == null || user.dateOfBirth.equals("null") ? null : user.dateOfBirth);
-            /*etPhone.setText(phone);
-            etPhoneExtra.setText(extra);*/
+            etLastName.setText(user.getLastName());
+            etFirstName.setText(user.getFirstName());
+            etPassword.setText(user.getPassword());
+            etDoB.setText(user.getDateOfBirth());
             llPhone.setVisibility(View.GONE);
         }
 
@@ -264,24 +261,52 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
-        JSONObject json = new JSONObject();
-        try {
-            if (isNew) json.put("phone", phone);
-            //json.put("role", "user");
-            json.put("first_name", !isNew ? firstName : "Имя");
-            json.put("last_name", !isNew ? lastName : "Фамилия");
-            json.put("email", !isNew ? email : null);
-            json.put("date_of_birth", !isNew ? dob : null);
-            json.put("password", password);
-        } catch (JSONException e)  {
-            e.printStackTrace();
+        if (isNew) {
+            JSONObject json = new JSONObject();
+            try {
+                if (isNew) json.put("phone", phone);
+                //json.put("role", "user");
+                json.put("first_name", !isNew ? firstName : "Имя");
+                json.put("last_name", !isNew ? lastName : "Фамилия");
+                json.put("email", !isNew ? email : null);
+                json.put("date_of_birth", !isNew ? dob : null);
+                json.put("password", password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if (json.length() < 1) return;
+
+            showProgress(true);
+            mTask = new UserUpdateTask(json);
+            mTask.execute((Void) null);
+        } else {
+            NUser nuser = new NUser();
+            nuser.firstName = firstName;
+            nuser.lastName = lastName;
+            nuser.password = password;
+            if (!dob.isEmpty())
+                nuser.dob = dob;
+            if (!email.isEmpty())
+                nuser.email = email;
+
+            RestClient.getUserService().updateUser(user.getId(), nuser, new Callback<User>() {
+                @Override
+                public void success(User newUser, Response response) {
+                    user.setFirstName(newUser.getFirstName());
+                    user.setLastName(newUser.getLastName());
+                    user.setPassword(etPassword.getText().toString());
+                    user.setDateOfBirth(newUser.getDateOfBirth());
+                    user.setEmail(newUser.getEmail());
+                    Toast.makeText(getActivity(), "Success updating profile", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast.makeText(getActivity(), "Failure updating profile", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-
-        if (json.length() < 1) return;
-
-        showProgress(true);
-        mTask = new UserUpdateTask(json);
-        mTask.execute((Void) null);
     }
 
     private class UserUpdateTask extends AsyncTask<Void, Void, JSONObject> {
@@ -295,7 +320,7 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
         @Override
         protected JSONObject doInBackground(Void... params) {
             if (isNew) return ApiService.getInstance().signUpRequest(mJson, "users/");
-            return ApiService.getInstance().patchRequest(mJson, "users/" + user.id + "/");
+            return ApiService.getInstance().patchRequest(mJson, "users/" + user.getId() + "/");
         }
 
         @Override
@@ -329,15 +354,14 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     }
 
     private void confirmUpdate(JSONObject object) {
-        user.phone = etPhoneExtra.getText().toString() + etPhone.getText().toString();
-        user.firstName = etFirstName.getText().toString();
-        user.lastName = etLastName.getText().toString();
-        user.password = etPassword.getText().toString();
-        user.email = etEmail.getText().toString();
-        user.dateOfBirth = etDoB.getText().toString();
+        user.setPhone(etPhoneExtra.getText().toString() + etPhone.getText().toString());
+        user.setFirstName(etFirstName.getText().toString());
+        user.setLastName(etLastName.getText().toString());
+        user.setPassword(etPassword.getText().toString());
+        user.setDateOfBirth(etDoB.getText().toString());
         if (isNew) {
             try {
-                user.setUser(object);
+                //user.setUser(object);
                 if (object.has("token")) ApiService.getInstance().setToken(object.getString("token"));
                 goToActivation();
             } catch (JSONException ignored) {}
