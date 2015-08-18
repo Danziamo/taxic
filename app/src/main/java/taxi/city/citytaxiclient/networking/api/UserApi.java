@@ -3,6 +3,7 @@ package taxi.city.citytaxiclient.networking.api;
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.PATCH;
@@ -34,6 +35,7 @@ public interface UserApi {
     @PATCH("/users/{userId}/")
     void updateStatus(@Path("userId") int userId, @Body UserStatus user, Callback<User> callback);
 
+    @FormUrlEncoded
     @PATCH("/users/{userId}/")
     void updateStatus(@Path("userId") int userId, @Field("online_status") OnlineStatus onlineStatus, Callback<Object> callback);
 

@@ -1,13 +1,9 @@
 package taxi.city.citytaxiclient;
 
-import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -17,19 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
 import taxi.city.citytaxiclient.models.OnlineStatus;
 import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.networking.RestClient;
-import taxi.city.citytaxiclient.service.ApiService;
 import taxi.city.citytaxiclient.utils.Helper;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
@@ -44,7 +35,6 @@ public class AccountActivity extends ActionBarActivity implements ActionBar.TabL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //User user = User.getInstance();
         user = GlobalSingleton.getInstance(AccountActivity.this).currentUser;
 
         if (user == null || user.getId() == 0)

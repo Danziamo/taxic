@@ -244,4 +244,8 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getFullName() {
+        return this.lastName + " " + this.firstName;
+    }
 }

@@ -47,10 +47,6 @@ import taxi.city.citytaxiclient.utils.Helper;
  */
 public class UserDetailsActivityFragment extends Fragment implements View.OnClickListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-
     private EditText etLastName;
     private EditText etFirstName;
     private EditText etPhone;
@@ -73,23 +69,12 @@ public class UserDetailsActivityFragment extends Fragment implements View.OnClic
     private User user;
     private UserUpdateTask mTask = null;
 
-    public static UserDetailsActivityFragment newInstance(int position) {
-        UserDetailsActivityFragment fragment = new UserDetailsActivityFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, String.valueOf(position));
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     public UserDetailsActivityFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-        }
     }
 
     @Override

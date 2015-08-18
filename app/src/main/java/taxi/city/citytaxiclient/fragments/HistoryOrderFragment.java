@@ -22,43 +22,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import taxi.city.citytaxiclient.OrderDetailsActivity;
 import taxi.city.citytaxiclient.R;
-import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.core.OrderDetail;
 import taxi.city.citytaxiclient.enums.OStatus;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.Order;
+import taxi.city.citytaxiclient.models.OrderStatus;
 import taxi.city.citytaxiclient.models.User;
+import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.service.ApiService;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
     SwipeRefreshLayout swipeLayout;
 
     private ArrayList<OrderDetail> list = new ArrayList<>();
-    private Order order = Order.getInstance();
-    private ApiService api = ApiService.getInstance();
-    private FetchOrderTask mFetchTask = null;
-    private SweetAlertDialog pDialog;
+    private ArrayList<Order> orderList;
     private User user;
 
-    private OrderDetail orderDetail;
     ListView lvMain;
     private int limit = 15;
-
-    public static HistoryOrderFragment newInstance(int position) {
-        HistoryOrderFragment fragment = new HistoryOrderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, String.valueOf(position));
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public HistoryOrderFragment() {
     }
@@ -78,131 +65,71 @@ public class HistoryOrderFragment extends ListFragment implements SwipeRefreshLa
                 android.R.color.holo_red_light);
 
         lvMain = (ListView) rootView.findViewById(android.R.id.list);
-        fetchData();
+        fetchOrders();
         return rootView;
     }
 
-    private void goOrderDetails(OrderDetail detail) {
+    private void goOrderDetails(Order order) {
         Intent intent = new Intent(getActivity(), OrderDetailsActivity.class);
-        intent.putExtra("DATA", detail);
+        intent.putExtra("DATA", order);
         startActivity(intent);
-    }
-
-    private void InitListView(JSONArray array) {
-        list.clear();
-        ArrayList<String> alist = new ArrayList<>();
-        try {
-            for (int i=0; i < array.length(); ++i) {
-                JSONObject row = array.getJSONObject(i);
-                if (!row.has("status") || row.getString("status").equals(OStatus.CANCELED.toString()))
-                    continue;
-                OrderDetail details = new OrderDetail(row, user.getId());
-                alist.add("#" + String.valueOf(details.id) + " " +details.addressStart);
-                list.add(details);
-
-            }
-            //OrderDetailsAdapter adapter = new OrderDetailsAdapter(getActivity(), list);
-            ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.custom_simple_list_item, alist);
-            setListAdapter(adapter);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void fetchData() {
-        if (mFetchTask != null) {
-            return;
-        }
-
-        //showProgress(true);
-        mFetchTask = new FetchOrderTask();
-        mFetchTask.execute((Void) null);
-
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        //Toast.makeText(getActivity(), "Tada", Toast.LENGTH_LONG).show();
-
-        /*String text = ((TextView) v.findViewById(R.id.orderId)).getText().toString();
-        int orderId = Integer.valueOf(text);
-
-        for (int i = list.size() - 1; i >= 0; i -= 1) {
-            if (orderId == list.get(i).id) {
-                orderDetail = list.get(i);
-                break;
-            }
-        }
-        goOrderDetails(orderDetail);*/
 
         String text = ((TextView) v).getText().toString();
         String[] textArray = text.split(" ");
+        Order order = new Order();
         int orderId = Integer.valueOf(textArray[0].substring(1, textArray[0].length()));
-        for (int i = list.size() - 1; i >= 0; i -= 1) {
-            if (orderId == list.get(i).id) {
-                orderDetail = list.get(i);
+        for (int i = orderList.size() - 1; i >= 0; i -= 1) {
+            if (orderId == orderList.get(i).getId()) {
+                order = orderList.get(i);
                 break;
             }
         }
-        goOrderDetails(orderDetail);
+        if (order != null) {
+            goOrderDetails(order);
+        }
     }
 
     @Override
     public void onRefresh() {
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 limit += 5;
-                fetchData();
+                fetchOrders();
                 swipeLayout.setRefreshing(false);
             }
         }, 1000);
     }
 
-    private class FetchOrderTask extends AsyncTask<Void, Void, JSONArray> {
-
-        FetchOrderTask() {}
-
-        @Override
-        protected JSONArray doInBackground(Void... params) {
-
-            JSONArray array = null;
-            try {
-                array = new JSONArray();
-                JSONObject result = api.getArrayRequest("orders/?client=" + user.getId() + "&status=finished&ordering=-id&limit=" + limit);
-                if (result.getInt("status_code") == HttpStatus.SC_OK) {
-                    JSONArray tempArray = result.getJSONArray("result");
-                    for (int i = 0; i < tempArray.length(); ++i) {
-                        array.put(tempArray.getJSONObject(i));
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-                array = null;
+    private void fetchOrders() {
+        RestClient.getOrderService().getAll(user.getId(), OrderStatus.FINISHED, "-id", limit, new Callback<ArrayList<Order>>() {
+            @Override
+            public void success(ArrayList<Order> orders, Response response) {
+                InitListView(orders);
+                orderList = orders;
             }
 
-            return array;
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray result) {
-            mFetchTask = null;
-            if (result != null) {
-                InitListView(result);
-            } else {
+            @Override
+            public void failure(RetrofitError error) {
                 Toast.makeText(getActivity(), "Не удалось получить данные с сервера", Toast.LENGTH_SHORT).show();
             }
-        }
+        });
+    }
 
-        @Override
-        protected void onCancelled() {
-            mFetchTask = null;
+    private void InitListView(ArrayList<Order> list) {
+        ArrayList<String> alist = new ArrayList<>();
+        for (int i=0; i < list.size(); ++i) {
+            Order order = list.get(i);
+            alist.add("#" + String.valueOf(order.getId()) + " " +order.getStartName());
+
         }
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(), R.layout.custom_simple_list_item, alist);
+        setListAdapter(adapter);
     }
 
 }

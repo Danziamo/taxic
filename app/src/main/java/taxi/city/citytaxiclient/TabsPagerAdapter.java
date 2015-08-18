@@ -29,9 +29,9 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new AccountDetailsActivityFragment();
             case 1:
-                return UserDetailsActivityFragment.newInstance(position);
+                return new UserDetailsActivityFragment();
             default:
-                return HistoryOrderFragment.newInstance(position);
+                return new HistoryOrderFragment();
         }
 
     }

@@ -2,29 +2,20 @@ package taxi.city.citytaxiclient;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.support.v7.app.ActionBarActivity;
 
 import com.google.android.gms.analytics.HitBuilders;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import taxi.city.citytaxiclient.core.Order;
-import taxi.city.citytaxiclient.core.OrderDetail;
+import taxi.city.citytaxiclient.models.Order;
 import taxi.city.citytaxiclient.service.ApiService;
-import taxi.city.citytaxiclient.utils.Helper;
 
 
 /**
@@ -32,11 +23,8 @@ import taxi.city.citytaxiclient.utils.Helper;
  */
 public class OrderDetailsActivityFragment extends Fragment {
 
-
-    private OrderDetail orderDetail;
     private Order order;
     private SweetAlertDialog pDialog;
-    private FetchOrderTask mFetchTask = null;
     Button btnNext;
     ApiService api = ApiService.getInstance();
 
@@ -49,13 +37,12 @@ public class OrderDetailsActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_order_details, container, false);
-        order = Order.getInstance();
 
      //   getActivity().getSupportActionBar().setDisplayShowHomeEnabled(true);
         ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getActivity().getIntent();
-        orderDetail = (OrderDetail)intent.getExtras().getSerializable("DATA");
+        order = (Order)intent.getExtras().getSerializable("DATA");
 
         TextView etAddressStart = (TextView)rootView.findViewById(R.id.editTextStartAddress);
         TextView tvFinishAddress = (TextView) rootView.findViewById(R.id.editTextFinishAddress);
@@ -67,9 +54,9 @@ public class OrderDetailsActivityFragment extends Fragment {
         tvDriverName = (TextView)rootView.findViewById(R.id.textViewDriverName);
         btnNext = (Button) rootView.findViewById(R.id.buttonNext);
 
-        btnNext.setVisibility(orderDetail.active ? View.VISIBLE : View.GONE);
+        btnNext.setVisibility(order.isActive() ? View.VISIBLE : View.GONE);
 
-        if (orderDetail.active) {
+        if (order.isActive()) {
             App.getDefaultTracker().send(new HitBuilders.EventBuilder()
                     .setCategory("order")
                     .setAction("order details page")
@@ -83,77 +70,35 @@ public class OrderDetailsActivityFragment extends Fragment {
                     .build());
         }
 
-        double totalSum = 0;
-        double waitSum = 0;
-        double sum = 0;
-        try {
-            waitSum = Double.valueOf(orderDetail.waitSum);
-            sum = Double.valueOf(orderDetail.sum);
-            totalSum = waitSum + sum;
-        } catch (Exception e) {
-            totalSum = 0;
-        }
+        double waitSum = order.getWaitTimePrice();
+        double sum = order.getSum();
+        double totalSum = waitSum + sum;
 
-        String waitTime = orderDetail.waitTime;
+        String waitTime = order.getWaitTime();
         if (waitTime.length() > 5) {
             waitTime = waitTime.substring(0, waitTime.length() - 3);
         }
 
-        etAddressStart.setText(orderDetail.addressStart);
-        tvFinishAddress.setText(orderDetail.addressEnd == null || orderDetail.addressEnd.equals("null") ? null : orderDetail.addressEnd);
+        etAddressStart.setText(order.getStartName());
+        tvFinishAddress.setText(order.getStopName());
         tvWaitTime.setText(waitTime);
         tvWaitSum.setText(String.valueOf((int)waitSum));
-        tvDistance.setText(orderDetail.distance);
+        tvDistance.setText(String.valueOf(order.getDistance()));
         tvSum.setText(String.valueOf((int)sum));
         tvTotalSum.setText(String.valueOf((int)totalSum));
-        tvDriverName.setText(orderDetail.driverName);
+        tvDriverName.setText(order.getDriver().getFullName());
 
         etAddressStart.setEnabled(false);
-        if (orderDetail.driverName == null) fetch();
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, RatingFragment.newInstance(null, null), "rating");
-// Start the animated transition.
                 ft.commit();
             }
         });
 
         return rootView;
-    }
-
-    private void fetch() {
-        if (mFetchTask != null) return;
-
-        mFetchTask = new FetchOrderTask();
-        mFetchTask.execute((Void) null);
-    }
-
-    private class FetchOrderTask extends AsyncTask<Void, Void, JSONObject> {
-
-        FetchOrderTask() {}
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-
-            return api.getOrderRequest("/users/" + String.valueOf(orderDetail.driver) + "/");
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            mFetchTask = null;
-            try {
-                if (Helper.isSuccess(result)) {
-                    tvDriverName.setText(result.getString("last_name") + " " + result.getString("first_name"));
-                }
-            } catch (JSONException ignored) {}
-        }
-
-        @Override
-        protected void onCancelled() {
-            mFetchTask = null;
-        }
     }
 }

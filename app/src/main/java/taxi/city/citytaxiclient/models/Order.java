@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import taxi.city.citytaxiclient.utils.Constants;
+
 public class Order implements Serializable{
 
     @Expose
@@ -68,6 +70,8 @@ public class Order implements Serializable{
     @Expose
     @SerializedName("order_distance")
     private double distance;
+
+    private boolean isActive;
 
     public int getId() {
         return id;
@@ -134,7 +138,8 @@ public class Order implements Serializable{
     }
 
     public double getWaitTimePrice() {
-        return waitTimePrice;
+        if (this.fixedPrice >= Constants.fixedPrice) return 0;
+        return this.waitTimePrice;
     }
 
     public void setWaitTimePrice(double waitTimePrice) {
@@ -203,6 +208,24 @@ public class Order implements Serializable{
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public double getTotalSum() {
+        if (this.fixedPrice >= Constants.fixedPrice) return this.fixedPrice;
+        return this.sum + this.waitTimePrice;
+    }
+
+    public double getTravelSum() {
+        if (this.fixedPrice >= Constants.fixedPrice) return fixedPrice;
+        return this.sum;
     }
 
     public Order () {}
