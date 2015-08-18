@@ -81,7 +81,7 @@
 
             </LinearLayout>
 
-            <TextView
+            <EditText
                 style="@style/mediumEditText"
                 android:background="@drawable/search_address_style"
                 android:gravity="center_vertical"

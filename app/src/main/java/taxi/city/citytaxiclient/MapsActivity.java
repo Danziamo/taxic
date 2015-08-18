@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -93,7 +94,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
     Button btnRefresh;
     Button btnSettings;
 
-    TextView tvAddress;
+    EditText tvAddress;
     TextView tvOrderStatus;
     TextView tvOrderWaitTime;
     TextView tvOrderWaitSum;
@@ -159,7 +160,7 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
         llOrderSum = (LinearLayout) findViewById(R.id.linearLayoutOrderTravelSum);
         llOrderTotalSum = (LinearLayout) findViewById(R.id.linearLayoutTotalSum);
 
-        tvAddress = (TextView) findViewById(R.id.textViewAddress);
+        tvAddress = (EditText) findViewById(R.id.textViewAddress);
         tvOrderStatus = (TextView) findViewById(R.id.textViewOrderStatus);
         tvOrderDistance = (TextView) findViewById(R.id.textViewOrderDistance);
         tvOrderTotalSum = (TextView) findViewById(R.id.textViewOrderTotalSum);
@@ -830,6 +831,17 @@ public class MapsActivity extends ActionBarActivity  implements GoogleApiClient.
             try {
                 if (!Helper.isSuccess(result)) {
                     Toast.makeText(MapsActivity.this, "Не удалось отправить данные на сервер", Toast.LENGTH_LONG).show();
+                    /*handler.removeCallbacks(thread);
+                    if(doAsynchronousTask != null) {
+                        doAsynchronousTask.cancel();
+                        doAsynchronousTask = null;
+                    }
+                    if (timer != null) {
+                        timer.cancel();
+                        timer = new Timer();
+                    }
+
+                    zoom = MEDIUM_MAP_ZOOM_MIN;*/
                 } else {
                     order.clear();
                     Helper.removeOrderPreferences(MapsActivity.this);

@@ -79,10 +79,8 @@ public class ApiService {
 
         } catch (ClientProtocolException e) {
             res = null;
-            // TODO Auto-generated catch block
         } catch (IOException e) {
             res = null;
-            // TODO Auto-generated catch block
         } catch (Exception e) {
             e.printStackTrace();
             e.getMessage();
