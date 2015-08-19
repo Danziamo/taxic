@@ -38,8 +38,14 @@
     <string name="info_version">EasyTaxi Пассажир  для Андроид\n Версия %1$s.</string>
     <string name="balance_hint">*В скором времени будет\n доступна услуга „Сдача“</string>
     <string name="title_activity_start">StartActivity</string>
-    
-    
+
+
+    <!--MenuDrawer-->
+   <string name="settings">Настройки</string>
+   <string name="history">История</string>
+    <string name="cabinet">Кабинет</string>
+    <string name="icon_history_text">История</string>
+    <string name="icon_orders_text">Заказы</string>
     <!--EditText-->
     <string name="phone.number">Номер телефона</string>
     <string name="password">Пароль</string>
@@ -51,4 +57,5 @@
 
     <!--TextView-->
     <string name="authorization">Вам будет выслано смс с кодом\n подтверждения вашего номера.\n Введите его в поле ниже </string>
+    <string name="title_activity_test_maps">TestMapsActivity</string>
 </resources>

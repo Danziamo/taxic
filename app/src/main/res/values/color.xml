@@ -13,4 +13,6 @@
     <color name="ColorPrimary">#4e4e4d</color>
     <color name="ColorPrimaryDark">#4e4e4d</color>
     <color name="TabsScrollColor">#3E3E3D</color>
+
+    <color name="blacktext">#0f0d00</color>
 </resources>

@@ -1,23 +1,21 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     tools:context="taxi.city.citytaxiclient.fragments.MapsFragment">
 
-    <fragment
+    <com.google.android.gms.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapView"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
         map:cameraTargetLat="@string/map_default_lat"
         map:cameraTargetLng="@string/map_default_lng"
-        tools:ignore="MissingPrefix"/>
+        tools:ignore="MissingPrefix"
+        />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <include layout="@layout/common_map_details"/>
 
-        </RelativeLayout>
-
-</FrameLayout>
+</RelativeLayout>

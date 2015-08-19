@@ -299,7 +299,7 @@ public class LoginActivity extends Activity{
                         @Override
                         public void success(taxi.city.citytaxiclient.models.User user, Response response) {
                             showProgress(false);
-                            Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, TestMapsActivity.class);
                             startActivity(intent);
                             finish();
                         }
@@ -308,7 +308,7 @@ public class LoginActivity extends Activity{
                         public void failure(RetrofitError error) {
                             showProgress(false);
                             Toast.makeText(LoginActivity.this, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, TestMapsActivity.class);
                             startActivity(intent);
                             finish();
                             Crashlytics.logException(error);
