@@ -46,6 +46,7 @@ public class HistoryOrderFragment extends Fragment implements SwipeRefreshLayout
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history_order, container, false);
         user = GlobalSingleton.getInstance(getActivity()).currentUser;
+        orderList = new ArrayList<>();
         limit = 15;
 
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);

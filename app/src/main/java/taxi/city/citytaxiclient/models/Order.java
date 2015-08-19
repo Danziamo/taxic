@@ -41,11 +41,11 @@ public class Order implements Serializable{
 
     @Expose
     @SerializedName("wait_time_price")
-    private String waitTimePrice;
+    private double waitTimePrice;
 
     @Expose
     @SerializedName("fixed_price")
-    private String fixedPrice;
+    private double fixedPrice;
 
     @Expose
     private Tariff tariff;
@@ -65,11 +65,11 @@ public class Order implements Serializable{
 
     @Expose
     @SerializedName("order_sum")
-    private String sum;
+    private double sum;
 
     @Expose
     @SerializedName("order_distance")
-    private String distance;
+    private double distance;
 
     private boolean isActive;
 
@@ -137,20 +137,20 @@ public class Order implements Serializable{
         this.waitTime = waitTime;
     }
 
-    public String getWaitTimePrice() {
-        //if (this.fixedPrice >= Constants.fixedPrice) return 0;
+    public double getWaitTimePrice() {
+        if (this.fixedPrice >= Constants.fixedPrice) return 0;
         return this.waitTimePrice;
     }
 
-    public void setWaitTimePrice(String waitTimePrice) {
+    public void setWaitTimePrice(double waitTimePrice) {
         this.waitTimePrice = waitTimePrice;
     }
 
-    public String getFixedPrice() {
+    public double getFixedPrice() {
         return fixedPrice;
     }
 
-    public void setFixedPrice(String fixedPrice) {
+    public void setFixedPrice(double fixedPrice) {
         this.fixedPrice = fixedPrice;
     }
 
@@ -194,19 +194,19 @@ public class Order implements Serializable{
         this.duration = duration;
     }
 
-    public String getSum() {
+    public double getSum() {
         return sum;
     }
 
-    public void setSum(String sum) {
+    public void setSum(double sum) {
         this.sum = sum;
     }
 
-    public String getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(String distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 
@@ -218,13 +218,13 @@ public class Order implements Serializable{
         this.isActive = isActive;
     }
 
-    public String getTotalSum() {
-        //if (this.fixedPrice >= Constants.fixedPrice) return this.fixedPrice;
+    public double getTotalSum() {
+        if (this.fixedPrice >= Constants.fixedPrice) return this.fixedPrice;
         return this.sum + this.waitTimePrice;
     }
 
-    public String getTravelSum() {
-        //if (this.fixedPrice >= Constants.fixedPrice) return fixedPrice;
+    public double getTravelSum() {
+        if (this.fixedPrice >= Constants.fixedPrice) return fixedPrice;
         return this.sum;
     }
 

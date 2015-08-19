@@ -2,20 +2,28 @@ package taxi.city.citytaxiclient;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.support.v7.app.ActionBarActivity;
 
 import com.google.android.gms.analytics.HitBuilders;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import taxi.city.citytaxiclient.models.Order;
 import taxi.city.citytaxiclient.service.ApiService;
+import taxi.city.citytaxiclient.utils.Helper;
 
 
 /**
@@ -70,8 +78,8 @@ public class OrderDetailsActivityFragment extends Fragment {
                     .build());
         }
 
-        double waitSum = Double.valueOf(order.getWaitTimePrice());
-        double sum = Double.valueOf(order.getSum());
+        double waitSum = order.getWaitTimePrice();
+        double sum = order.getSum();
         double totalSum = waitSum + sum;
 
         String waitTime = order.getWaitTime();
@@ -95,6 +103,7 @@ public class OrderDetailsActivityFragment extends Fragment {
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, RatingFragment.newInstance(null, null), "rating");
+// Start the animated transition.
                 ft.commit();
             }
         });
