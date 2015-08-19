@@ -37,4 +37,18 @@
     <string name="tariff_line7">Доплата за выезд за пределы города Бишкек,\n  + 40 сом к общей сумме</string>
     <string name="info_version">EasyTaxi Пассажир  для Андроид\n Версия %1$s.</string>
     <string name="balance_hint">*В скором времени будет\n доступна услуга „Сдача“</string>
+    <string name="title_activity_start">StartActivity</string>
+    
+    
+    <!--EditText-->
+    <string name="phone.number">Номер телефона</string>
+    <string name="password">Пароль</string>
+    <string name="signin">Войти</string>
+    <string name="forgot.password">Забыли пароль?</string>
+    <string name="btn.authorization">Авторизация</string>
+    <string name="new.sms">Отправить смс заново</string>
+
+
+    <!--TextView-->
+    <string name="authorization">Вам будет выслано смс с кодом\n подтверждения вашего номера.\n Введите его в поле ниже </string>
 </resources>

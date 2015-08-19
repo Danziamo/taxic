@@ -177,8 +177,8 @@ public class CreateOrderActivityFragment extends Fragment implements View.OnClic
             return;
         }
 
-        if (isFixed.isChecked() &&  (fixedPrice.length() == 0 || Double.valueOf(fixedPrice) < 50)) {
-            etFixedPrice.setError("Фиксированная сумма не меньше 50 сомов");
+        if (isFixed.isChecked() &&  (fixedPrice.length() == 0 || Double.valueOf(fixedPrice) < 70)) {
+            etFixedPrice.setError("Фиксированная сумма не меньше 70 сомов");
             etFixedPrice.requestFocus();
             return;
         }
