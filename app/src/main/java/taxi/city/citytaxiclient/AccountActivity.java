@@ -4,10 +4,11 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,9 +25,10 @@ import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.utils.Helper;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
-public class AccountActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class AccountActivity extends AppCompatActivity {
 
     TabsPagerAdapter mPageAdapter;
+    TabLayout tabLayout;
     ViewPager mViewPager;
     private SweetAlertDialog pDialog;
     private User user;
@@ -50,28 +52,18 @@ public class AccountActivity extends ActionBarActivity implements ActionBar.TabL
 
         setContentView(R.layout.activity_account);
 
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mPageAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                getSupportActionBar().setSelectedNavigationItem(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mPageAdapter);
 
-        setUpTabs();
+        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }
 
     @Override
@@ -82,16 +74,6 @@ public class AccountActivity extends ActionBarActivity implements ActionBar.TabL
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    private void setUpTabs() {
-        ActionBar ab = getSupportActionBar();
-        ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        ab.setDisplayShowTitleEnabled(true);
-
-        ab.addTab(ab.newTab().setText("Счет").setIcon(R.drawable.ic_action_account).setTabListener(this));
-        ab.addTab(ab.newTab().setText("Кабинет").setIcon(R.drawable.ic_action_personal).setTabListener(this));
-        ab.addTab(ab.newTab().setText("История").setIcon(R.drawable.ic_action_history).setTabListener(this));
     }
 
     @Override
@@ -157,29 +139,6 @@ public class AccountActivity extends ActionBarActivity implements ActionBar.TabL
                     }
                 })
                 .show();
-
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-        mViewPager.setCurrentItem(tab.getPosition());
-        switch (tab.getPosition()) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-        }
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction fragmentTransaction) {
 
     }
 

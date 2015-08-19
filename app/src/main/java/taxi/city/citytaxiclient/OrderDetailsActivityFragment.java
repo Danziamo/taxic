@@ -70,8 +70,8 @@ public class OrderDetailsActivityFragment extends Fragment {
                     .build());
         }
 
-        double waitSum = order.getWaitTimePrice();
-        double sum = order.getSum();
+        double waitSum = Double.valueOf(order.getWaitTimePrice());
+        double sum = Double.valueOf(order.getSum());
         double totalSum = waitSum + sum;
 
         String waitTime = order.getWaitTime();

@@ -1,25 +1,17 @@
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_container"
+    android:layout_marginTop="22dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="taxi.city.citytaxiclient.fragments.HistoryOrderFragment">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_container"
-        android:layout_marginTop="22dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvOrders"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+            />
 
-        <ListView
-            android:layout_marginTop="10dp"
-            android:id="@id/android:list"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </ListView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-</RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

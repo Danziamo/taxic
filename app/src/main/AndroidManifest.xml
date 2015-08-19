@@ -116,11 +116,8 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".MapsActivity"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan"
-            android:theme="@style/ActionBarTheme"
-            android:uiOptions="splitActionBarWhenNarrow" >
-            <meta-data
-                android:name="android.support.UI_OPTIONS"
-                android:value="splitActionBarWhenNarrow" />
+            android:theme="@style/AppTheme"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="taxi.city.citytaxiclient.MapsActivity" />
