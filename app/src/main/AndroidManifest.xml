@@ -54,7 +54,7 @@
         <service android:name=".GcmIntentService" />
 
         <activity
-            android:name=".SplashScreen"
+            android:name=".StartActivity"
             android:exported="true"
             android:screenOrientation="portrait" >
 

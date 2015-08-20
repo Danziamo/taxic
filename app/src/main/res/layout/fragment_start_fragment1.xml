@@ -3,44 +3,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ColorPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="taxi.city.citytaxiclient.StartFragment1">
 
-
-    <Spinner
-        android:id="@+id/spCodNumber"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_toLeftOf="@+id/metPhoneNumber"
-        android:layout_marginLeft="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginTop="150dp"
-        >
-
-    </Spinner>
-
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/metPhoneNumber"
+    <TextView
+        android:id="@+id/tvPhoneNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Номер телефона"
-        android:textColor="@color/white"
-        android:layout_alignBottom="@+id/spCodNumber"
-        android:layout_alignParentRight="true"
+        android:text="@string/phone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp" />
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/llPhoneNumber"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/llPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:weightSum="1"
+        android:baselineAligned="false"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
-        />
-    <EditText
+        android:layout_below="@+id/tvPhoneNumber"
+        android:gravity="center|center_horizontal">
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/spCodNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:layout_toLeftOf="@+id/metPhoneNumber" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/metPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_weight="0.9"
+            app:met_baseColor="@color/whitetext"
+            android:hint="@string/phone.number"
+            app:met_maxCharacters="9"
+            app:met_primaryColor="@color/white"
+            app:met_errorColor="#ddaa00"
+            android:textColor="@color/white"
+            android:layout_alignBottom="@+id/spCodNumber"
+            android:layout_alignParentRight="true"
+            />
+    </LinearLayout>
+
+
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/metPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:layout_below="@id/metPhoneNumber"
+        app:met_baseColor="@color/whitetext"
+        app:met_maxCharacters="16"
+        android:inputType="textPassword"
+        app:met_primaryColor="@color/white"
+        app:met_errorColor="#ddaa00"
+        android:hint="@string/password1"
+        android:layout_below="@id/tvPassword"
         android:gravity="center_horizontal"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:textColor="@color/white"
-        android:layout_marginTop="20dp"
         />
 
     <Button
@@ -50,14 +85,15 @@
         android:text="@string/signin"
         android:layout_below="@+id/metPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/forgot.password"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView" />
 
 </RelativeLayout>

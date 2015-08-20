@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <item name="colorPrimary">@color/ColorPrimary</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
         <item name="colorAccent">@color/blacktext1</item>
@@ -125,7 +125,7 @@
         <item name="android:layout_marginTop">@dimen/spacing_tiny</item>
         <item name="android:background">@drawable/textbox_background</item>
         <item name="android:popupBackground">@drawable/textbox_background</item>
-        <item name="android:textColor">@color/blacktext2</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:layout_gravity">center_horizontal</item>
 
     </style>
