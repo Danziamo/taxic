@@ -50,6 +50,7 @@
     <string name="phone.number">Номер телефона</string>
     <string name="password">Пароль</string>
     <string name="signin">Войти</string>
+    <string name="regist">Регистрация</string>
     <string name="forgot.password">Забыли пароль?</string>
     <string name="btn.authorization">Авторизация</string>
     <string name="new.sms">Отправить смс заново</string>
@@ -58,4 +59,8 @@
     <!--TextView-->
     <string name="authorization">Вам будет выслано смс с кодом\n подтверждения вашего номера.\n Введите его в поле ниже </string>
     <string name="title_activity_test_maps">TestMapsActivity</string>
+    <string name="title_activity_main_splash">MainSplashActivity</string>
+
+    <string name="s_signin">ВОЙТИ</string>
+    <string name="s_regist">РЕГИСТРАЦИЯ</string>
 </resources>

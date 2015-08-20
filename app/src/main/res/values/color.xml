@@ -10,9 +10,23 @@
     <color name="red">#ff0000</color>
     <color name="blacktext2">#0f0d00</color>
 
-    <color name="ColorPrimary">#4e4e4d</color>
+    <color name = "ColorPrimary">#4e4e4d</color>
     <color name="ColorPrimaryDark">#4e4e4d</color>
     <color name="TabsScrollColor">#3E3E3D</color>
 
     <color name="blacktext">#0f0d00</color>
+
+    //**************New Design
+    <color name = "splashFirst"   >#121223</color>
+    <color name = "splashMiddle"  >#000000</color>
+    <color name = "startBtnFirst" >#FFFFFF</color>
+    <color name = "startBtnFinish">#A1A1A1</color>
+    <color name = "adressBar"     >#ECECEC</color>
+    <color name = "cancelFirst"   >#DF5B42</color>
+    <color name = "cancelFinish"  >#D13030</color>
+    <color name = "splashPStart"  >#454545</color>
+    <color name = "splashPFinish" >#F1F1F1</color>
+    <color name = "line"          >#8e8e8e</color>
+
+    //************************
 </resources>
