@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ColorPrimary">
+    android:background="@drawable/splash_background">
 
     <TextView
+        android:id="@+id/tvSMS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/authorization"
         android:textColor="@color/white"
         android:gravity="center"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130dp" />
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_below="@+id/tvSMS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/password"/>
 
     <EditText
         android:id="@+id/metPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password"
-
+        android:hint="@string/password1"
+        android:layout_below="@+id/tvPassword"
         android:gravity="center_horizontal"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
@@ -32,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn.authorization"
-
+        android:layout_below="@+id/metPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         />
@@ -41,6 +53,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/new.sms"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"/>
+</RelativeLayout>
