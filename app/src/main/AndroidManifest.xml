@@ -190,7 +190,6 @@
         </activity>
         <activity
             android:name=".MainSplashActivity"
-            android:label="@string/title_activity_main_splash"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
