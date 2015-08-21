@@ -123,7 +123,7 @@ public class MapsFragment extends BaseFragment {
         });
     }
 
-    private void canceldOrder(int orderId) {
+    private void cancelOrder(int orderId) {
         RestClient.getOrderService().updateStatus(orderId, OrderStatus.CANCELED, new Callback<Order>() {
             @Override
             public void success(Order order, Response response) {

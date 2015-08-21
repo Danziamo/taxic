@@ -9,9 +9,10 @@
     <color name="white">#fcfcfc</color>
     <color name="red">#ff0000</color>
     <color name="blacktext2">#0f0d00</color>
+    <color name="whitetext">#ffffff</color>
 
-    <color name = "ColorPrimary">#4e4e4d</color>
-    <color name="ColorPrimaryDark">#4e4e4d</color>
+    <!--<color name="ColorPrimary">#4e4e4d</color>
+    <color name="ColorPrimaryDark">#4e4e4d</color>-->
     <color name="ColorPrimary">#000000</color>
     <color name="ColorPrimaryDark">#000000</color>
     <color name="TabsScrollColor">#3E3E3D</color>

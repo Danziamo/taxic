@@ -49,17 +49,8 @@ import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.Helper;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
-
-/**
- * A login screen that offers login via email/password.
- */
 public class LoginActivity extends Activity{
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private static final String url = "http://81.88.192.37/api/v1/";
-    private static final String PREFS_NAME = "MyPrefsFile";
     private UserLoginTask mAuthTask = null;
     private ForgotPasswordTask mForgotTask = null;
 
@@ -198,11 +189,20 @@ public class LoginActivity extends Activity{
         mPasswordView.setText(sessionHelper.getPassword());
     }
 
-    private void saveSassionPreferences(User user) {
+    private void saveSessionPreferences(User user) {
         SessionHelper sessionHelper = new SessionHelper();
         sessionHelper.setPhone(user.phone);
         sessionHelper.setPassword(user.password);
         sessionHelper.setId(user.id);
+        sessionHelper.setToken(user.getToken());
+        api.setToken(user.getToken());
+    }
+
+    private void saveSessionPreferencesNew(taxi.city.citytaxiclient.models.User user) {
+        SessionHelper sessionHelper = new SessionHelper();
+        sessionHelper.setPhone(user.getPhone());
+        sessionHelper.setPassword(mPasswordView.getText().toString());
+        sessionHelper.setId(user.getId());
         sessionHelper.setToken(user.getToken());
         api.setToken(user.getToken());
     }
@@ -286,6 +286,7 @@ public class LoginActivity extends Activity{
                 public void success(taxi.city.citytaxiclient.models.User user, Response response) {
                     GlobalSingleton.getInstance(LoginActivity.this).token = user.getToken();
                     GlobalSingleton.getInstance(LoginActivity.this).currentUser = user;
+                    saveSessionPreferencesNew(user);
 
                     if (user.hasActiveOrder() && user.getActiveOrder() != null) {
                         GlobalSingleton.getInstance(LoginActivity.this).currentOrder = user.getActiveOrder();
@@ -314,7 +315,6 @@ public class LoginActivity extends Activity{
                             Crashlytics.logException(error);
                         }
                     });
-                    showProgress(false);
                     Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
                 }
 
@@ -343,7 +343,7 @@ public class LoginActivity extends Activity{
                     showProgress(false);
 
                     if (statusCode == HttpStatus.SC_OK) {
-                        saveSassionPreferences(user);
+                        saveSessionPreferences(user);
                         Intent intent = new Intent(LoginActivity.this, MapsActivity.class);
                         startActivity(intent);
                         finish();
