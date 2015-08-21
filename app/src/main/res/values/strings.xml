@@ -47,7 +47,9 @@
     <string name="icon_history_text">История</string>
     <string name="icon_orders_text">Заказы</string>
     <!--EditText-->
-    <string name="phone.number">Номер телефона</string>
+    <string name="phone.number">(555) 123-456</string>
+    <string name="phone">Номер телефона</string>
+    <string name="password1">******</string>
     <string name="password">Пароль</string>
     <string name="signin">Войти</string>
     <string name="regist">Регистрация</string>
