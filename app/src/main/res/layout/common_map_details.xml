@@ -16,5 +16,4 @@
         android:layout_below="@+id/etEditAdress"
         android:background="@color/blacktext1"/>
 
-
 </RelativeLayout>

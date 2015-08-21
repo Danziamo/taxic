@@ -13,9 +13,11 @@
 
     <!--<color name="ColorPrimary">#4e4e4d</color>
     <color name="ColorPrimaryDark">#4e4e4d</color>-->
+
     <color name="ColorPrimary">#000000</color>
     <color name="ColorPrimaryDark">#000000</color>
     <color name="TabsScrollColor">#3E3E3D</color>
+    <color name="CardView">#3E3Ee3</color>
 
     <color name="blacktext">#0f0d00</color>
 
