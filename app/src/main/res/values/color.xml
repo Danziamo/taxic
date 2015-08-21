@@ -30,6 +30,7 @@
     <color name = "splashPStart"  >#454545</color>
     <color name = "splashPFinish" >#F1F1F1</color>
     <color name = "line"          >#8e8e8e</color>
+    <color name = "main_button"   >#0e0e1c</color>
 
     //************************
 </resources>

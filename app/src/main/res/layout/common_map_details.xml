@@ -7,14 +7,239 @@
         android:id="@+id/etEditAdress"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/white"
+        android:background="@color/adressBar"
+        android:textColor="@color/blacktext2"
         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:layout_below="@+id/etEditAdress"
-        android:background="@color/blacktext1"/>
+        android:background="@color/main_button"/>
+
+    <RelativeLayout
+        android:id="@+id/map_main_navigation_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/bottom_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/navigation_header">
+
+            <Button
+                android:id="@+id/main_functioanl_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/main_button_selector"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="@string/order_taxi"
+                android:textColor="@color/main_button"
+                android:textSize="12dp"
+                android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/on_the_way_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bottom_panel"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_marginTop="-1dp"
+            android:background="@color/main_button"
+            android:visibility="gone">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toLeftOf="@+id/middle_point2">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/client_waiting"
+                        android:textColor="@color/adressBar"
+                        android:textSize="12.5dp"/>
+                    <TextView
+                        android:id="@+id/waitingTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 1000 min"
+                        android:textSize="11dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/waitingPriceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10005 cом"
+                    android:textColor="@color/adressBar"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_horizontal" />
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/middle_point2"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:visibility="invisible"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toRightOf="@id/middle_point2">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/client_distance"
+                    android:textColor="@color/adressBar"
+                    android:textSize="12.5dp"/>
+                <TextView
+                    android:id="@+id/distanceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 900 km"
+                    android:textSize="11dp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/distancePriceTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="300005 cом"
+                    android:textColor="@color/adressBar"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_horizontal" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/tools_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/on_the_way_panel"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
+            android:layout_marginTop="-1dp"
+            android:background="@color/main_button">
+
+            <RelativeLayout
+                android:id="@+id/main_order_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/etEditPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/main_textbox_style"
+                    android:textColor="@color/blacktext2"
+                    android:hint="@string/phone"
+                    android:textColorHint="@color/blacktext"
+                    android:paddingLeft="10dp"/>
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/etDopInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/main_textbox_style"
+                    android:textColor="@color/blacktext2"
+                    android:hint="@string/add_info"
+                    android:textColorHint="@color/blacktext"
+                    android:paddingLeft="10dp"
+                    android:layout_below="@id/etEditPhone"
+                    android:layout_marginTop="15dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/fixed_order_panel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/etDopInfo"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="15dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fixed"
+                        android:textSize="18dp"/>
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/etOrderTypeSwitcher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:checked="true" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                android:id="@+id/additional_panel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/main_order_panel"
+                android:layout_marginBottom="15dp"
+                android:visibility="gone">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/etAdditionalLoaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/main_textbox_style"
+                    android:textColor="@color/blacktext2"
+                    android:hint="@string/additional_location"
+                    android:textColorHint="@color/blacktext"
+                    android:paddingLeft="10dp"/>
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/etAdditionalPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="@drawable/main_textbox_style"
+                    android:textColor="@color/blacktext2"
+                    android:hint="@string/additional_price"
+                    android:textColorHint="@color/blacktext"
+                    android:paddingLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@id/etAdditionalLoaction"/>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

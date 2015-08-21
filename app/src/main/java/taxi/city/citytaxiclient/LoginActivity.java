@@ -91,6 +91,9 @@ public class LoginActivity extends Activity{
 
         setSessionPreferences();
 
+        mPhoneExtraView.setText("+996");
+        mPhoneView.setText("557656649");
+        mPasswordView.setText("qwerty");
         Button mPhoneSignInButton = (Button) findViewById(R.id.btnSignIn);
         Button mSignUpButton = (Button) findViewById(R.id.btnSignUp);
         mForgotPassword.setOnClickListener(new OnClickListener() {

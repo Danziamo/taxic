@@ -8,8 +8,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -34,9 +37,15 @@ import taxi.city.citytaxiclient.utils.Constants;
 
 public class MapsFragment extends BaseFragment {
 
+    View view;
+
     private MapView mMapView;
     private GoogleMap mGoogleMap;
     private User user;
+
+    Button mainFunctionalButton;
+    YoYo.YoYoString animation;
+    View animView;
 
     public MapsFragment() {
 
@@ -45,7 +54,10 @@ public class MapsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+        view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        animView = view.findViewById(R.id.map_main_navigation_panel);
+        mainFunctionalButton = (Button)view.findViewById(R.id.main_functioanl_button);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -64,6 +76,15 @@ public class MapsFragment extends BaseFragment {
         mGoogleMap = mMapView.getMap();
         mGoogleMap.setMyLocationEnabled(true);
         mGoogleMap.setPadding(0, getPixelFromDpi(48), 0, getPixelFromDpi(48));
+
+        mainFunctionalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animation = YoYo.with(Techniques.SlideInUp)
+                        .duration(800)
+                        .playOn(animView);
+            }
+        });
 
         return view;
     }

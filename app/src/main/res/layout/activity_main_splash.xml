@@ -22,20 +22,28 @@
 
         <ImageView
             android:id="@+id/s_logo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/s_logo"
+            android:src="@drawable/s_logo"
             />
 
         <ImageView
+            android:id="@+id/middle_point"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
             android:id="@+id/s_logo_text"
-            android:layout_width="150dp"
-            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/s_logo_text"
+            android:src="@drawable/s_logo_text"
             android:layout_below="@+id/splash_progress"
             android:layout_marginTop="10dp"/>
 
