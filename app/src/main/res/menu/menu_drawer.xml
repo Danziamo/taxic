@@ -16,5 +16,10 @@
             android:id="@+id/history"
             android:title="@string/history"
             />
+
+       <item
+           android:id="@+id/exit"
+           android:title="@string/action_exit"
+           />
     </group>
 </menu>

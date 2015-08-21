@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import taxi.city.citytaxiclient.core.OrderDetail;
@@ -15,8 +17,10 @@ import taxi.city.citytaxiclient.R;
 public class OrderDetailsAdapter extends ArrayAdapter<OrderDetail> {
 
     private static class ViewHolder {
-        TextView id;
+        TextView infotext;
         TextView address;
+        TextView ordersum;
+        TextView distance;
     }
 
     public OrderDetailsAdapter(Context context, ArrayList<OrderDetail> orderDetails) {
@@ -33,16 +37,18 @@ public class OrderDetailsAdapter extends ArrayAdapter<OrderDetail> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.activity_order_list_item, parent, false);
-            viewHolder.id = (TextView) convertView.findViewById(R.id.orderId);
-            viewHolder.address = (TextView) convertView.findViewById(R.id.orderAddress);
+            viewHolder.infotext = (TextView) convertView.findViewById(R.id.tvInfoText);
+            viewHolder.address = (TextView) convertView.findViewById(R.id.tvAdress);
+            viewHolder.ordersum = (TextView) convertView.findViewById(R.id.tvOrderSum);
+            viewHolder.distance = (TextView) convertView.findViewById(R.id.tvDistance);
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.id.setText(String.valueOf(orderDetail.id));
-        viewHolder.address.setText("#" + String.valueOf(orderDetail.id) + ": " + orderDetail.addressStart);
+       /* viewHolder.id.setText(String.valueOf(orderDetail.id));
+        viewHolder.address.setText("#" + String.valueOf(orderDetail.id) + ": " + orderDetail.addressStart);*/
 
         return convertView;
     }

@@ -9,6 +9,8 @@ import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import taxi.city.citytaxiclient.App;
 import taxi.city.citytaxiclient.R;
+import taxi.city.citytaxiclient.models.Session;
+import taxi.city.citytaxiclient.networking.api.AccountRestoreApi;
 import taxi.city.citytaxiclient.networking.api.OrderApi;
 import taxi.city.citytaxiclient.networking.api.SessionApi;
 import taxi.city.citytaxiclient.networking.api.UserApi;
@@ -49,4 +51,6 @@ public class RestClient {
     public static SessionApi getSessionService() {
         return createService(SessionApi.class);
     }
+
+    public static AccountRestoreApi getAccountService() {return createService(AccountRestoreApi.class); }
 }

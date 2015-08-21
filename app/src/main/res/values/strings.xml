@@ -56,6 +56,8 @@
     <string name="forgot.password">Забыли пароль?</string>
     <string name="btn.authorization">Авторизация</string>
     <string name="new.sms">Отправить смс заново</string>
+    <string name="btn.next">Далее</string>
+    <string name="met.code">Код смс:</string>
 
 
     <!--TextView-->

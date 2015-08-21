@@ -15,7 +15,8 @@
         map:cameraTargetLng="@string/map_default_lng"
         tools:ignore="MissingPrefix"
         />
-
     <include layout="@layout/common_map_details"/>
+
+
 
 </RelativeLayout>
