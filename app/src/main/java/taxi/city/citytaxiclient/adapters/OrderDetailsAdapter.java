@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import taxi.city.citytaxiclient.core.OrderDetail;
@@ -38,7 +36,7 @@ public class OrderDetailsAdapter extends ArrayAdapter<OrderDetail> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.activity_order_list_item, parent, false);
             viewHolder.infotext = (TextView) convertView.findViewById(R.id.tvInfoText);
-            viewHolder.address = (TextView) convertView.findViewById(R.id.tvAdress);
+            viewHolder.address = (TextView) convertView.findViewById(R.id.tvAddress);
             viewHolder.ordersum = (TextView) convertView.findViewById(R.id.tvOrderSum);
             viewHolder.distance = (TextView) convertView.findViewById(R.id.tvDistance);
 

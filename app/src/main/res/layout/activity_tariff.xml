@@ -1,16 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
+    android:background="@drawable/splash_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="taxi.city.citytaxidriver.HelpActivity">
 
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/main_background"
-        android:scaleType="centerCrop"/>
     <ScrollView
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"

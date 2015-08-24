@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.View;
@@ -133,7 +132,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.C
             Helper.getPreferences(this);
             if (user == null || user.id == 0) {
                 Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivityOld.class);
                 startActivity(intent);
                 finish();
             }

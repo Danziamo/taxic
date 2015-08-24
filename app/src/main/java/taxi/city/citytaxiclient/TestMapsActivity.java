@@ -14,7 +14,6 @@ import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +32,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
+import taxi.city.citytaxiclient.fragments.GarajActivityFragment;
+import taxi.city.citytaxiclient.fragments.HistoryOrderFragment;
 import taxi.city.citytaxiclient.fragments.MapsFragment;
 import taxi.city.citytaxiclient.interfaces.ConfirmCallback;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
@@ -80,7 +82,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
         navigationView.setNavigationItemSelectedListener(this);
 
         if (null == savedInstanceState) {
-            mNavItemId = R.id.settings;
+            mNavItemId = R.id.maps;
         } else {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         }
@@ -214,10 +216,23 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
         // perform the actual navigation logic, updating the main content fragment etc
         switch (itemId) {
             case R.id.history:
+                String backStateName = getSupportFragmentManager().getClass().getName();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new HistoryOrderFragment())
+                        .addToBackStack(backStateName)
+                        .commit();
                 break;
-            case R.id.settings:
+            case R.id.tech_support:
+                performState(HelpActivity.class);
                 break;
+            case R.id.tariff_info:
+                performState(TariffActivity.class);
             case R.id.cabinet:
+                String backName = getSupportFragmentManager().getClass().getName();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new AccountDetailsActivityFragment())
+                        .addToBackStack((backName))
+                        .commit();
                 break;
             case R.id.exit:
                 showConfirmDialog(getString(R.string.logout_confirm_title), getString(R.string.logout_confirm_text), getString(R.string.logout_cancel_text), new ConfirmCallback() {
@@ -235,6 +250,12 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
             default:
         }
     }
+
+    private void performState(Class<?> activity){
+        Intent intent = new Intent(TestMapsActivity.this, activity);
+        startActivity(intent);
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(final MenuItem menuItem) {
@@ -291,6 +312,12 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
     public void onConnected(Bundle connectionHint) {
         startLocationUpdates();
 
@@ -331,8 +358,10 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
     }
 
     private void handleNewLocation(Location location) {
-        MapsFragment fragment = (MapsFragment)getSupportFragmentManager().findFragmentById(R.id.container);
-        fragment.showOnMap(location);
+        if (getSupportFragmentManager().findFragmentById(R.id.container) instanceof MapsFragment) {
+            MapsFragment fragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+            fragment.showOnMap(location);
+        }
     }
 
 
@@ -347,7 +376,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                 sessionHelper.setPassword("");
                 sessionHelper.setToken("");
 
-                Intent intent = new Intent(TestMapsActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TestMapsActivity.this, MainSplashActivity.class);
                 ComponentName cn = intent.getComponent();
                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                 startActivity(mainIntent);
@@ -360,7 +389,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                 sessionHelper.setPassword("");
                 sessionHelper.setToken("");
 
-                Intent intent = new Intent(TestMapsActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TestMapsActivity.this, MainSplashActivity.class);
                 ComponentName cn = intent.getComponent();
                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                 startActivity(mainIntent);

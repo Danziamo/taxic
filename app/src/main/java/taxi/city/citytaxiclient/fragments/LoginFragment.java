@@ -1,4 +1,4 @@
-package taxi.city.citytaxiclient;
+package taxi.city.citytaxiclient.fragments;
 
 
 import android.content.Intent;
@@ -19,8 +19,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
-import taxi.city.citytaxiclient.fragments.AuthorizationFragment;
-import taxi.city.citytaxiclient.fragments.BaseFragment;
+import taxi.city.citytaxiclient.ForgotPasswordFragment;
+import taxi.city.citytaxiclient.R;
+import taxi.city.citytaxiclient.TestMapsActivity;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
 import taxi.city.citytaxiclient.models.OnlineStatus;
 import taxi.city.citytaxiclient.models.Role;
@@ -30,7 +31,7 @@ import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.networking.model.UserStatus;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
-public class StartFragment1 extends BaseFragment {
+public class LoginFragment extends BaseFragment {
 
     AppCompatSpinner spinner;
     private MaterialEditText phoneView;
@@ -38,7 +39,7 @@ public class StartFragment1 extends BaseFragment {
     private TextView forgotView;
 
 
-    public StartFragment1() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -47,7 +48,7 @@ public class StartFragment1 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_start_fragment1, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         phoneView = (MaterialEditText) view.findViewById(R.id.metPhoneNumber);
         passwordView = (MaterialEditText) view.findViewById(R.id.metPassword);
@@ -124,18 +125,22 @@ public class StartFragment1 extends BaseFragment {
                         @Override
                         public void success(User user, Response response) {
                             Intent intent = new Intent(getActivity(), TestMapsActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+                            getActivity().finish();
                         }
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Toast.makeText(getActivity(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getActivity(), TestMapsActivity.class);
-                            startActivity(intent);
                             Crashlytics.logException(error);
+                            Toast.makeText(getActivity(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(getActivity(), TestMapsActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
                     });
-                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override

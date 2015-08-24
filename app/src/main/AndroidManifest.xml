@@ -61,7 +61,7 @@
 
 
         <activity
-            android:name=".StartActivity"
+            android:name=".LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait" >
         </activity>
@@ -75,12 +75,10 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginActivityOld"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" >
@@ -159,7 +157,7 @@
                 android:value="taxi.city.citytaxiclient.AccountActivity" />
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".TariffActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName=".AccountActivity"
             android:screenOrientation="portrait"
