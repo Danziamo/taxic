@@ -29,6 +29,7 @@ import taxi.city.citytaxiclient.models.Session;
 import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.networking.model.UserStatus;
+import taxi.city.citytaxiclient.utils.Constants;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
 public class LoginFragment extends BaseFragment {
@@ -54,8 +55,7 @@ public class LoginFragment extends BaseFragment {
         passwordView = (MaterialEditText) view.findViewById(R.id.metPassword);
         forgotView = (TextView)view.findViewById(R.id.tvForgotPassword);
 
-        String[] ITEMS = {"+996", "+7", "+998"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.PHONE_PREFIXES);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner = (AppCompatSpinner) view.findViewById(R.id.spCodNumber);
         spinner.setAdapter(adapter);
@@ -156,7 +156,7 @@ public class LoginFragment extends BaseFragment {
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.container, AuthorizationFragment.newInstance(spinner.getSelectedItem().toString() + phoneView.getText().toString()
-                                            , true, passwordView.getText().toString()))
+                                            , passwordView.getText().toString(), false))
                                     .addToBackStack(backStateName)
                                     .commit();
                         }

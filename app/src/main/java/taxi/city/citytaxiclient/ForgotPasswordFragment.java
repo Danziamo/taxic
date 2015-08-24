@@ -17,9 +17,11 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import taxi.city.citytaxiclient.fragments.AuthorizationFragment;
+import taxi.city.citytaxiclient.fragments.BaseFragment;
 import taxi.city.citytaxiclient.networking.RestClient;
+import taxi.city.citytaxiclient.utils.Constants;
 
-public class ForgotPasswordFragment extends Fragment {
+public class ForgotPasswordFragment extends BaseFragment {
     private static final String ARG_PHONE = "PHONE_KEY";
     private static final String ARG_EXTRA = "EXTRA_KEY";
 
@@ -58,8 +60,7 @@ public class ForgotPasswordFragment extends Fragment {
         phoneView.setText(phone);
         Button btnSubmit = (Button)view.findViewById(R.id.btnSubmit);
 
-        String[] ITEMS = {"+996", "+7", "+998"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.PHONE_PREFIXES);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner = (AppCompatSpinner) view.findViewById(R.id.spCodNumber);
         spinner.setAdapter(adapter);
@@ -77,20 +78,33 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private void sendForgotPasswordRequest(final String mPhone) {
+
+        if(mPhone.length() != 13){
+            phoneView.setError(getString(R.string.error_invalid_phone));
+            phoneView.requestFocus();
+            return;
+        }
+
         RestClient.getAccountService().forgotPasswordRequest(mPhone, new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
                 String backStateName = getActivity().getFragmentManager().getClass().getName();
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.container, AuthorizationFragment.newInstance(mPhone, true, null))
+                        .replace(R.id.container, AuthorizationFragment.newInstance(mPhone, null, true))
                         .addToBackStack(backStateName)
                         .commit();
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), "Не удалось отправить данные на сервер", Toast.LENGTH_SHORT).show();
+                if (error.getKind() == RetrofitError.Kind.HTTP) {
+                    if(error.getResponse().getStatus() == 404){
+                        Toast.makeText(getActivity(), getString(R.string.error_phone_not_registered), Toast.LENGTH_LONG).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), "Не удалось отправить данные на сервер", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

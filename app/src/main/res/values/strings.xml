@@ -12,6 +12,7 @@
     <string name="title_activity_driver_details">DriverDetails</string>
     <string name="title_activity_garaj">GarajActivity</string>
     <string name="title_activity_tabbed">TabbedActivity</string>
+    <string name="title_activity_signup">Регистрация</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -95,6 +96,23 @@
     <string name="error_invalid_password">Пароль слишком корткий</string>
     <string name="error_incorrect_password">Телефон или пароль указаны неверно</string>
     <string name="error_field_required">Это поле обязяательное</string>
+    <string name="error_phone_must_be_unique">Пользователь с таким номером уже существует</string>
+    <string name="error_an_error_has_occurred_try_again">Произошла ошибка, попробуйте еще раз</string>
+    <string name="error_could_not_connect_to_server">Не удалось подключится к серверу</string>
+    <string name="error_invalid_phone_format">Телефон должен состоять из 13 символов</string>
+    <string name="error_phone_not_registered">Пользователь с таким номером не зарегистрирован</string>
+    <string name="error_could_not_activate">Не удалось активировать</string>
+    <string name="error_invalid_activation_code">Неверный код активации</string>
+
+    <!-- Sign up -->
+    <string name="signup.submit">Подтвердить</string>
+    <string name="signup.default_first_name">Имя</string>
+    <string name="signup.default_last_name">Фамилия</string>
+    
+    <string name="wait_please">Пожалуйста, подождите</string>
+    <string name="sms_sent">СМС выслан</string>
+    <string name="new_password">Новый пароль:</string>
+    <string name="password_changed">Пароль изменен</string>
 
     <string name="som">сом</string>
     <string name="km">км</string>

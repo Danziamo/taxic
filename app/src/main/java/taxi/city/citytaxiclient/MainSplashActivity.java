@@ -168,13 +168,18 @@ public class MainSplashActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
 
+        Intent intent;
+
         switch (id){
             case R.id.s_signin:
-                Intent intent = new Intent(MainSplashActivity.this, LoginActivity.class);
+                intent = new Intent(MainSplashActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.s_regist: break;
+            case R.id.s_regist:
+                intent = new Intent(MainSplashActivity.this, SignupActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 }

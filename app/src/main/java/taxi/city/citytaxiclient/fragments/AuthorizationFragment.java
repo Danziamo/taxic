@@ -1,5 +1,6 @@
 package taxi.city.citytaxiclient.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,15 +10,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.rengwuxian.materialedittext.MaterialEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
+import taxi.city.citytaxiclient.LoginActivity;
 import taxi.city.citytaxiclient.R;
-import taxi.city.citytaxiclient.core.User;
+import taxi.city.citytaxiclient.TestMapsActivity;
+import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.networking.RestClient;
-import taxi.city.citytaxiclient.networking.model.AccountActivation;
+import taxi.city.citytaxiclient.utils.SessionHelper;
 
 
 public class AuthorizationFragment extends BaseFragment implements View.OnClickListener {
@@ -32,10 +41,11 @@ public class AuthorizationFragment extends BaseFragment implements View.OnClickL
 
     private MaterialEditText metPassword;
     private MaterialEditText metSmscode;
-    Button btnActivate;
 
 
-    public static AuthorizationFragment newInstance(String phone, boolean isFromForgetPassword, String password){
+    public boolean test;
+
+    public static AuthorizationFragment newInstance(String phone, String password, boolean isFromForgetPassword){
         AuthorizationFragment fragment = new AuthorizationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PHONE, phone);
@@ -69,14 +79,22 @@ public class AuthorizationFragment extends BaseFragment implements View.OnClickL
         metPassword = (MaterialEditText)view.findViewById(R.id.metPassword);
         metSmscode = (MaterialEditText)view.findViewById(R.id.metCode);
 
-        LinearLayout llPassword = (LinearLayout) view.findViewById(R.id.llPassword);
-        if(isFromForgetPassword){
-            llPassword.setVisibility(View.VISIBLE);
-        }else{
-            llPassword.setVisibility(View.INVISIBLE);
-        }
+        metPassword.setText(password);
 
-        btnActivate = (Button)view.findViewById(R.id.btnActivate);
+
+        Button btnActivate = (Button)view.findViewById(R.id.btnActivate);
+        if(isFromForgetPassword){
+            btnActivate.setText(getString(R.string.signup_submit));
+            metPassword.setVisibility(View.VISIBLE);
+
+            LinearLayout llPassword = (LinearLayout) view.findViewById(R.id.llPassword);
+            llPassword.setVisibility(View.VISIBLE);
+
+            TextView tvPassword = (TextView) view.findViewById(R.id.tvPassword);
+            tvPassword.setText(getString(R.string.new_password));
+        }else{
+            metPassword.setFocusable(false);
+        }
         btnActivate.setOnClickListener(this);
 
         TextView btnResendSms = (TextView) view.findViewById(R.id.btnResendSms);
@@ -91,63 +109,127 @@ public class AuthorizationFragment extends BaseFragment implements View.OnClickL
         int id = v.getId();
 
         if(id == R.id.btnActivate){
-            Toast.makeText(getActivity(), "Activate", Toast.LENGTH_LONG).show();
+            if(isFromForgetPassword){
+                updatePassword();
+            }else {
+                activate();
+            }
         }else if(id == R.id.btnResendSms){
             resendSmsRequest();
-            activate();
         }
     }
 
     private void resendSmsRequest() {
-        //@TODO show progress bar
+        showProgress(getString(R.string.wait_please));
         RestClient.getAccountService().forgotPasswordRequest(phone, new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
-                //@TODO hide progress bar and maybe need to show text
+                hideProgress();
+                Toast.makeText(getActivity(), getString(R.string.sms_sent), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), "Не удалось отправить данные на сервер", Toast.LENGTH_SHORT).show();
+                hideProgress();
+                if (error.getKind() == RetrofitError.Kind.HTTP) {
+                    Toast.makeText(getActivity(), getString(R.string.error_an_error_has_occurred_try_again), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.error_could_not_connect_to_server), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void updatePasswordRequest(){
-        //@TODO show progress bar
-
-        String password = metPassword.getText().toString();
+    private void updatePassword(){
+        String newPassword = metPassword.getText().toString();
         String smsCode = metSmscode.getText().toString();
 
-        RestClient.getAccountService().updateForgotPassword(phone, password, smsCode, new Callback<Object>() {
+        if(smsCode.length() < 4){
+            metSmscode.setError(getString(R.string.error_invalid_activation_code));
+            metSmscode.requestFocus();
+            return;
+        }
+
+        if(newPassword.length() < 4){
+            metPassword.setError(getString(R.string.error_invalid_password));
+            metPassword.requestFocus();
+            return;
+        }
+
+        showProgress(getString(R.string.wait_please));
+
+        RestClient.getAccountService().updateForgotPassword(phone, newPassword, smsCode, new Object(), new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
-
+                hideProgress();
+                Toast.makeText(getActivity(), getString(R.string.password_changed), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                getActivity().startActivity(intent);
+                getActivity().finish();
             }
 
             @Override
             public void failure(RetrofitError error) {
+                hideProgress();
+                String message = getString(R.string.error_could_not_connect_to_server);
+                if (error.getKind() == RetrofitError.Kind.HTTP) {
+                    String result = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
+                    try {
+                        JSONObject json = new JSONObject(result);
+                        String detail = "";
+                        if(json.has("detail")){
+                            detail = json.getString("detail");
+                            if(detail.equals("Invalid activation code")){
+                                message = getString(R.string.error_invalid_activation_code);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Crashlytics.logException(e);
+                        message = getString(R.string.error_an_error_has_occurred_try_again);
+                    }
+                }
 
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void activate(){
+        showProgress(getString(R.string.wait_please));
         String smsCode = metSmscode.getText().toString();
 
-        AccountActivation activation = new AccountActivation();
-        activation.activationCode = smsCode;
-        activation.phone = phone;
-        activation.password = password;
-        RestClient.getAccountService().activate(activation, new Callback<User>() {
+        RestClient.getAccountService().activate(phone, password, smsCode, new Callback<User>() {
             @Override
             public void success(User user, Response response) {
+                hideProgress();
+                GlobalSingleton globalSingleton = GlobalSingleton.getInstance(getActivity());
+                globalSingleton.currentUser = user;
+                globalSingleton.token = user.getToken();
 
+                SessionHelper sessionHelper = new SessionHelper();
+                sessionHelper.setPhone(user.getPhone());
+                sessionHelper.setPassword(password);
+                sessionHelper.setId(user.getId());
+                sessionHelper.setToken(user.getToken());
+
+                Intent intent = new Intent(getActivity(), TestMapsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                getActivity().finish();
             }
 
             @Override
             public void failure(RetrofitError error) {
-
+                hideProgress();
+                if (error.getKind() == RetrofitError.Kind.HTTP) {
+                    if(error.getResponse().getStatus() == 401){
+                        Toast.makeText(getActivity(), getString(R.string.error_could_not_activate), Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getActivity(), getString(R.string.error_an_error_has_occurred_try_again), Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity(), getString(R.string.error_could_not_connect_to_server), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

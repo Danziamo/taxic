@@ -10,4 +10,7 @@ public class Constants {
     public final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     public final static int DEFAULT_ORDER_TARIFF = 1;
+
+    public final static String[] PHONE_PREFIXES = {"+996", "+7", "+998"};
+
 }
