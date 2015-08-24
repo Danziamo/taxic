@@ -32,6 +32,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import taxi.city.citytaxiclient.fragments.HistoryOrderFragment;
 import taxi.city.citytaxiclient.fragments.MapsFragment;
 import taxi.city.citytaxiclient.interfaces.ConfirmCallback;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
@@ -213,6 +214,11 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
         // perform the actual navigation logic, updating the main content fragment etc
         switch (itemId) {
             case R.id.history:
+                String backStateName = getSupportFragmentManager().getClass().getName();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new HistoryOrderFragment())
+                        .addToBackStack(backStateName)
+                        .commit();
                 break;
             case R.id.settings:
                 break;
@@ -290,6 +296,12 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
     public void onConnected(Bundle connectionHint) {
         startLocationUpdates();
 
@@ -330,8 +342,10 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
     }
 
     private void handleNewLocation(Location location) {
-        MapsFragment fragment = (MapsFragment)getSupportFragmentManager().findFragmentById(R.id.container);
-        fragment.showOnMap(location);
+        if (getSupportFragmentManager().findFragmentById(R.id.container) instanceof MapsFragment) {
+            MapsFragment fragment = (MapsFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+            fragment.showOnMap(location);
+        }
     }
 
 

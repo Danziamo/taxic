@@ -61,7 +61,7 @@ public class HistoryOrderFragment extends Fragment implements SwipeRefreshLayout
         //rvOrders.addItemDecoration(new RecyclerViewSimpleDivider(getActivity()));
         rvOrders.setHasFixedSize(true);
 
-        orderAdapter = new OrderAdapter(orderList, R.layout.item_order_history, getActivity());
+        orderAdapter = new OrderAdapter(orderList, R.layout.sample_cardview, getActivity());
 
         rvOrders.setAdapter(orderAdapter);
         rvOrders.setItemAnimator(new DefaultItemAnimator());
@@ -81,6 +81,12 @@ public class HistoryOrderFragment extends Fragment implements SwipeRefreshLayout
                 swipeLayout.setRefreshing(false);
             }
         }, 1000);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchOrders();
     }
 
     private void fetchOrders() {

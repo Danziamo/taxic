@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import taxi.city.citytaxiclient.OrderDetailsActivity;
@@ -26,13 +28,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mIdView;
+        public TextView mInfoView;
         public TextView mAddressView;
+        public TextView mPriceView;
+        public TextView mDistanceView;
 
         public ViewHolder(final View v) {
             super(v);
-            mIdView = (TextView) itemView.findViewById(R.id.tv_order_id);
-            mAddressView = (TextView) itemView.findViewById(R.id.tv_order_address);
+            mInfoView = (TextView) itemView.findViewById(R.id.tvInfoText);
+            mAddressView = (TextView) itemView.findViewById(R.id.tvAddress);
+            mDistanceView = (TextView) itemView.findViewById(R.id.tvDistance);
+            mPriceView = (TextView) itemView.findViewById(R.id.tvPrice);
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -57,7 +63,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Order item = items.get(position);
         holder.mAddressView.setText(item.getStartName());
-        holder.mIdView.setText("#" + item.getId());
+        holder.mInfoView.setText("#" + item.getId());
+        holder.mPriceView.setText(String.valueOf(item.getTotalSum()));
+        holder.mDistanceView.setText(String.valueOf(item.getDistance()));
         holder.itemView.setTag(item);
     }
 
