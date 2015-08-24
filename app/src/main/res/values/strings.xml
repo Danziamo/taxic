@@ -75,4 +75,22 @@
     <string name="client_waiting">ОЖИДАНИЕ</string>
     <string name="client_distance">РАССТОЯНИЕ</string>
 
+    <!-- logout -->
+    <string name="logout.confirm_title">Вы хотите выйти?</string>
+    <string name="logout.confirm_text">Выйти</string>
+    <string name="logout.cancel_text">Отмена</string>
+
+
+    <!-- Strings related to login -->
+    <string name="prompt_phone_number">Телефон</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_in_short">Войти</string>
+
+    <string name="error_invalid_phone">Это поле не правильно заполнено</string>
+    <string name="error_invalid_password">Пароль слишком корткий</string>
+    <string name="error_incorrect_password">Телефон или пароль указаны неверно</string>
+    <string name="error_field_required">Это поле обязяательное</string>
+
+
 </resources>

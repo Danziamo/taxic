@@ -1,5 +1,6 @@
 package taxi.city.citytaxiclient;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
@@ -9,6 +10,7 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -28,13 +30,20 @@ import com.google.android.gms.location.LocationServices;
 import java.io.IOException;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 import taxi.city.citytaxiclient.fragments.MapsFragment;
+import taxi.city.citytaxiclient.interfaces.ConfirmCallback;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
+import taxi.city.citytaxiclient.models.OnlineStatus;
 import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.utils.Constants;
+import taxi.city.citytaxiclient.utils.SessionHelper;
 
-public class TestMapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class TestMapsActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final long DRAWER_CLOSE_DELAY_MS = 250;
     private static final String NAV_ITEM_ID = "navItemId";
@@ -210,6 +219,19 @@ public class TestMapsActivity extends AppCompatActivity implements NavigationVie
                 break;
             case R.id.cabinet:
                 break;
+            case R.id.exit:
+                showConfirmDialog(getString(R.string.logout_confirm_title), getString(R.string.logout_confirm_text), getString(R.string.logout_cancel_text), new ConfirmCallback() {
+                    @Override
+                    public void confirm() {
+                        logout();
+                    }
+
+                    @Override
+                    public void cancel() {
+
+                    }
+                });
+                break;
             default:
         }
     }
@@ -312,4 +334,38 @@ public class TestMapsActivity extends AppCompatActivity implements NavigationVie
         MapsFragment fragment = (MapsFragment)getSupportFragmentManager().findFragmentById(R.id.container);
         fragment.showOnMap(location);
     }
+
+
+    private void logout() {
+        showProgress(getString(R.string.action_exit));
+
+        RestClient.getUserService().updateStatus(user.getId(), OnlineStatus.EXITED, new Callback<Object>() {
+            @Override
+            public void success(Object o, Response response) {
+                hideProgress();
+                SessionHelper sessionHelper = new SessionHelper();
+                sessionHelper.setPassword("");
+                sessionHelper.setToken("");
+
+                Intent intent = new Intent(TestMapsActivity.this, LoginActivity.class);
+                ComponentName cn = intent.getComponent();
+                Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                startActivity(mainIntent);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                hideProgress();
+                SessionHelper sessionHelper = new SessionHelper();
+                sessionHelper.setPassword("");
+                sessionHelper.setToken("");
+
+                Intent intent = new Intent(TestMapsActivity.this, LoginActivity.class);
+                ComponentName cn = intent.getComponent();
+                Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
+                startActivity(mainIntent);
+            }
+        });
+    }
+
 }
