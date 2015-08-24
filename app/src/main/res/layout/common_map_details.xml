@@ -1,22 +1,74 @@
 <RelativeLayout
-    android:id="@+id/global_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
+
+    <RelativeLayout
+        android:id="@+id/false_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/locker"
+        android:visibility="invisible"/>
+
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/etEditAdress"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="@color/adressBar"
         android:textColor="@color/blacktext2"
-        />
+        android:gravity="center_vertical|center_horizontal"
+        android:textCursorDrawable="@color/locker_out" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:layout_below="@+id/etEditAdress"
         android:background="@color/main_button"/>
+
+    <RelativeLayout
+        android:id="@+id/search_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/splash_progress"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:indeterminateDrawable="@drawable/progress_main_button"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/main_button"
+            android:text="@string/search_taxi"
+            android:textColor="@color/main_button"
+            android:textSize="12dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/main_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="@string/cancel_order"
+        android:background="@drawable/cancel_button_background"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"/>
+
 
     <RelativeLayout
         android:id="@+id/map_main_navigation_panel"

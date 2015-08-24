@@ -14,10 +14,9 @@
             android:width="100dp" />
 
         <gradient
-            android:centerColor="@color/main_button"
             android:centerY="0.50"
             android:endColor="@color/main_button"
-            android:startColor="@color/main_button"
+            android:startColor="@color/locker_out"
             android:type="sweep"
             android:useLevel="false"/>
     </shape>

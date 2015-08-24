@@ -36,12 +36,12 @@ public class SlideInUpAnimator extends BaseViewAnimator {
         ViewGroup parent = (ViewGroup)target.getParent();
         int distance = parent.getHeight() - target.getTop();
 
-       if(startPoint == 350)
-           getAnimatorAgent().playTogether(
-                   ObjectAnimator.ofFloat(target,"translationY",distance - startPoint,0));
-        else
+//       if(startPoint == 350)
+//           getAnimatorAgent().playTogether(
+//                   ObjectAnimator.ofFloat(target,"translationY",distance - startPoint,0));
+//        else
             getAnimatorAgent().playTogether(
-                    ObjectAnimator.ofFloat(target, "alpha", 0, 1),
+                 //   ObjectAnimator.ofFloat(target, "alpha", 0, 1),
                     ObjectAnimator.ofFloat(target,"translationY",distance - startPoint,0));
     }
 }

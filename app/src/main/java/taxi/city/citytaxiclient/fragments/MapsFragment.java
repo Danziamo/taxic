@@ -2,8 +2,10 @@ package taxi.city.citytaxiclient.fragments;
 
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.SwitchCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -24,6 +26,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.nineoldandroids.animation.Animator;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -49,15 +53,20 @@ public class MapsFragment extends BaseFragment {
 
     SwitchCompat orderTypeSwitcher;
     Button mainFunctionalButton;
+    Button searchButton;
+    Button cancelButton;
+
     YoYo.YoYoString animation;
     View animView;
     View createOrderPanel;
     View additionalPanel;
-    View globalLayout;
     View bottomPanel;
+    View falseLayout;
+    View searchViews;
+    View onTheWayPanel;
 
     public static int ANIMATION_SPEED = 450;
-    public static int CREATE_ORDER_START_POINT = 100;
+    public static int CREATE_ORDER_START_POINT = 10;
     public static int TYPE_SWITCHER_START_POINT = 350;
 
     public MapsFragment() {
@@ -68,14 +77,18 @@ public class MapsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        animView = view.findViewById(R.id.map_main_navigation_panel);
+        animView         = view.findViewById(R.id.map_main_navigation_panel);
         createOrderPanel = view.findViewById(R.id.main_order_panel);
-        additionalPanel = view.findViewById(R.id.additional_panel);
-        globalLayout = view.findViewById(R.id.global_layout);
-        bottomPanel = view.findViewById(R.id.bottom_panel);
+        additionalPanel  = view.findViewById(R.id.additional_panel);
+        searchViews      = view.findViewById(R.id.search_views);
+        bottomPanel      = view.findViewById(R.id.bottom_panel);
+        falseLayout      = view.findViewById(R.id.false_layout);
+        onTheWayPanel     = view.findViewById(R.id.on_the_way_panel);
 
         mainFunctionalButton = (Button)view.findViewById(R.id.main_functioanl_button);
+        searchButton = (Button)view.findViewById(R.id.search_button);
         orderTypeSwitcher = (SwitchCompat)view.findViewById(R.id.etOrderTypeSwitcher);
+        cancelButton = (Button)view.findViewById(R.id.main_cancel_button);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -90,46 +103,11 @@ public class MapsFragment extends BaseFragment {
             e.printStackTrace();
         }
 
-
         mGoogleMap = mMapView.getMap();
         mGoogleMap.setMyLocationEnabled(true);
         mGoogleMap.setPadding(0, getPixelFromDpi(48), 0, getPixelFromDpi(48));
 
-        mainFunctionalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                createOrderPanel.setVisibility(View.VISIBLE);
-                animation = YoYo.with(Techniques.SlideInUp)
-                        .duration(1)
-                        .interpolate(new AccelerateDecelerateInterpolator())
-                        .startPoint(CREATE_ORDER_START_POINT)
-                        .withListener(new Animator.AnimatorListener() {
-                            @Override
-                            public void onAnimationStart(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                createOrderPanel.setVisibility(View.GONE);
-                                performAnimation();
-                            }
-
-                            @Override
-                            public void onAnimationCancel(Animator animation) {
-
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animator animation) {
-
-                            }
-                        })
-                        .playOn(animView);
-
-            }
-        });
+        mainFunctionalButton.setOnClickListener(mainFunctionalButtonListener);
 
         orderTypeSwitcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -146,6 +124,15 @@ public class MapsFragment extends BaseFragment {
             }
         });
 
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animView.setVisibility(View.VISIBLE);
+                searchViews.setVisibility(View.INVISIBLE);
+                cancelButton.setVisibility(View.GONE);
+            }
+        });
+
         bottomPanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,10 +140,17 @@ public class MapsFragment extends BaseFragment {
             }
         });
 
-        globalLayout.setOnClickListener(new View.OnClickListener() {
+        falseLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 invalidateAnimation();
+            }
+        });
+
+        animView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -167,8 +161,55 @@ public class MapsFragment extends BaseFragment {
         createOrderPanel.setVisibility(View.GONE);
         additionalPanel.setVisibility(View.GONE);
         orderTypeSwitcher.setChecked(false);
-        globalLayout.setBackgroundColor(getResources().getColor(R.color.locker_out));
+        falseLayout.setVisibility(View.INVISIBLE);
+        mainFunctionalButton.setText(getResources().getString(R.string.order_taxi));
     }
+
+
+    View.OnClickListener mainFunctionalButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(mainFunctionalButton.getText().equals(getResources().getString(R.string.order_taxi))){
+//                animView.setVisibility(View.INVISIBLE);
+//                animation = YoYo.with(Techniques.SlideInUp)
+//                        .duration(0)
+//                        .interpolate(new AccelerateDecelerateInterpolator())
+//                        .startPoint(CREATE_ORDER_START_POINT)
+//                        .withListener(new Animator.AnimatorListener() {
+//                            @Override
+//                            public void onAnimationStart(Animator animation) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onAnimationEnd(Animator animation) {
+//                                animView.setVisibility(View.VISIBLE);
+//                                performAnimation();
+//                            }
+//
+//                            @Override
+//                            public void onAnimationCancel(Animator animation) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onAnimationRepeat(Animator animation) {
+//
+//                            }
+//                        })
+//                        .playOn(animView);
+                performAnimation();
+            }
+            if(mainFunctionalButton.getText().equals(getResources().getString(R.string.issue_taxi))) {
+                invalidateAnimation();
+                animView.setVisibility(View.GONE);
+                searchViews.setVisibility(View.VISIBLE);
+                cancelButton.setVisibility(View.VISIBLE);
+            }
+
+        }
+    };
+
     public void performAnimation(){
         createOrderPanel.setVisibility(View.VISIBLE);
         animation = YoYo.with(Techniques.SlideInUp)
@@ -182,7 +223,8 @@ public class MapsFragment extends BaseFragment {
 
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        globalLayout.setBackgroundColor(getResources().getColor(R.color.locker));
+                        mainFunctionalButton.setText(getResources().getString(R.string.issue_taxi));
+                        falseLayout.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -196,8 +238,6 @@ public class MapsFragment extends BaseFragment {
                     }
                 })
                 .playOn(animView);
-
-
     }
 
     @Override

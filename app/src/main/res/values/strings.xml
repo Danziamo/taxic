@@ -68,12 +68,15 @@
     <string name="s_signin">ВОЙТИ</string>
     <string name="s_regist">РЕГИСТРАЦИЯ</string>
     <string name="order_taxi">Заказать\nтакси</string>
+    <string name="issue_taxi">Оформить\nтакси</string>
+    <string name="search_taxi">Идет\nпоиск\nмашины</string>
     <string name="add_info">Доп.инфо</string>
     <string name="fixed">Фиксированная</string>
     <string name="additional_location">Куда Вас доставить</string>
     <string name="additional_price">Плата</string>
     <string name="client_waiting">ОЖИДАНИЕ</string>
     <string name="client_distance">РАССТОЯНИЕ</string>
+    <string name="cancel_order">Отмена</string>
 
     <!-- logout -->
     <string name="logout.confirm_title">Вы хотите выйти?</string>
