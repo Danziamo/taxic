@@ -24,7 +24,7 @@ public class AboutActivity extends ActionBarActivity {
             Helper.getPreferences(this);
             if (user == null || user.id == 0) {
                 Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivityOld.class);
                 startActivity(intent);
                 finish();
             }

@@ -4,12 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
-import org.apache.http.HttpStatus;
-
-import taxi.city.citytaxiclient.core.User;
-import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
 /**
@@ -80,7 +75,7 @@ public class SplashScreen extends Activity {
     }
 
     private void goToLoginActivity(){
-        Intent i = new Intent(SplashScreen.this, LoginActivity.class);
+        Intent i = new Intent(SplashScreen.this, LoginActivityOld.class);
         startActivity(i);
 
         finish();

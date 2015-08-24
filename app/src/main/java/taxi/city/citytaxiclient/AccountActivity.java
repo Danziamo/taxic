@@ -44,7 +44,7 @@ public class AccountActivity extends AppCompatActivity {
             Helper.getPreferences(this);
             if (user == null || user.getId() == 0) {
                 Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivityOld.class);
                 startActivity(intent);
                 finish();
             }
@@ -154,7 +154,7 @@ public class AccountActivity extends AppCompatActivity {
                 sessionHelper.setToken("");
 
                 showProgress(false);
-                Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                Intent intent = new Intent(AccountActivity.this, LoginActivityOld.class);
                 ComponentName cn = intent.getComponent();
                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                 startActivity(mainIntent);
@@ -168,7 +168,7 @@ public class AccountActivity extends AppCompatActivity {
                 sessionHelper.setToken("");
 
                 showProgress(false);
-                Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
+                Intent intent = new Intent(AccountActivity.this, LoginActivityOld.class);
                 ComponentName cn = intent.getComponent();
                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                 startActivity(mainIntent);

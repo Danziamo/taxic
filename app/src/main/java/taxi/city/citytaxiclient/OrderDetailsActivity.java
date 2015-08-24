@@ -3,10 +3,8 @@ package taxi.city.citytaxiclient;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.support.v4.app.Fragment;
 
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.utils.Helper;
@@ -23,7 +21,7 @@ public class OrderDetailsActivity extends ActionBarActivity {
             Helper.getPreferences(this);
             if (user == null || user.id == 0) {
                 Toast.makeText(getApplicationContext(), "Сессия вышла, пожалуйста перезайдите", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivityOld.class);
                 startActivity(intent);
                 finish();
             }

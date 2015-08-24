@@ -1,27 +1,20 @@
 package taxi.city.citytaxiclient;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
-import org.apache.http.HttpStatus;
-
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
-import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
 import taxi.city.citytaxiclient.models.OnlineStatus;
 import taxi.city.citytaxiclient.models.Role;
@@ -29,10 +22,9 @@ import taxi.city.citytaxiclient.models.Session;
 import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.networking.model.UserStatus;
 import taxi.city.citytaxiclient.service.ApiService;
-import taxi.city.citytaxiclient.tasks.UserLoginTask;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
-public class MainSplashActivity extends AppCompatActivity {
+public class MainSplashActivity extends BaseActivity implements View.OnClickListener {
 
     View animContainer;
     View bottomMiniPanel;
@@ -57,6 +49,13 @@ public class MainSplashActivity extends AppCompatActivity {
             performLogIn(phone,password);
 
         }else {
+
+            TextView tvLogin = (TextView) findViewById(R.id.s_signin);
+            TextView tvSignup = (TextView) findViewById(R.id.s_regist);
+
+            tvLogin.setOnClickListener(this);
+            tvSignup.setOnClickListener(this);
+
             openAnimation();
         }
 
@@ -165,4 +164,17 @@ public class MainSplashActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        switch (id){
+            case R.id.s_signin:
+                Intent intent = new Intent(MainSplashActivity.this, LoginActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.s_regist: break;
+        }
+    }
 }

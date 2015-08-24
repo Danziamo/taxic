@@ -14,7 +14,6 @@ import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -347,7 +346,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                 sessionHelper.setPassword("");
                 sessionHelper.setToken("");
 
-                Intent intent = new Intent(TestMapsActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TestMapsActivity.this, MainSplashActivity.class);
                 ComponentName cn = intent.getComponent();
                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                 startActivity(mainIntent);
@@ -360,7 +359,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                 sessionHelper.setPassword("");
                 sessionHelper.setToken("");
 
-                Intent intent = new Intent(TestMapsActivity.this, LoginActivity.class);
+                Intent intent = new Intent(TestMapsActivity.this, MainSplashActivity.class);
                 ComponentName cn = intent.getComponent();
                 Intent mainIntent = IntentCompat.makeRestartActivityTask(cn);
                 startActivity(mainIntent);
