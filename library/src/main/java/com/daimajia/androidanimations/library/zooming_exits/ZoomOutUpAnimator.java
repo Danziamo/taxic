@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class ZoomOutUpAnimator extends BaseViewAnimator {
     @Override
-    protected void prepare(View target) {
+    protected void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "alpha", 1, 1, 0),
                 ObjectAnimator.ofFloat(target,"scaleX",1,0.475f,0.1f),

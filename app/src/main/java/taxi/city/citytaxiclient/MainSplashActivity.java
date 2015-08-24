@@ -96,6 +96,7 @@ public class MainSplashActivity extends AppCompatActivity {
         bottomMiniPanel.setVisibility(View.VISIBLE);
         animation = YoYo.with(Techniques.SlideInUp)
                 .duration(800)
+                .startPoint(0)
                 .playOn(animContainer);
     }
 

@@ -4,11 +4,14 @@ package taxi.city.citytaxiclient.fragments;
 import android.content.res.Resources;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -18,6 +21,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nineoldandroids.animation.Animator;
 
 import java.util.ArrayList;
 
@@ -43,21 +47,35 @@ public class MapsFragment extends BaseFragment {
     private GoogleMap mGoogleMap;
     private User user;
 
+    SwitchCompat orderTypeSwitcher;
     Button mainFunctionalButton;
     YoYo.YoYoString animation;
     View animView;
+    View createOrderPanel;
+    View additionalPanel;
+    View globalLayout;
+    View bottomPanel;
+
+    public static int ANIMATION_SPEED = 450;
+    public static int CREATE_ORDER_START_POINT = 100;
+    public static int TYPE_SWITCHER_START_POINT = 350;
 
     public MapsFragment() {
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_maps, container, false);
 
         animView = view.findViewById(R.id.map_main_navigation_panel);
+        createOrderPanel = view.findViewById(R.id.main_order_panel);
+        additionalPanel = view.findViewById(R.id.additional_panel);
+        globalLayout = view.findViewById(R.id.global_layout);
+        bottomPanel = view.findViewById(R.id.bottom_panel);
+
         mainFunctionalButton = (Button)view.findViewById(R.id.main_functioanl_button);
+        orderTypeSwitcher = (SwitchCompat)view.findViewById(R.id.etOrderTypeSwitcher);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -80,13 +98,106 @@ public class MapsFragment extends BaseFragment {
         mainFunctionalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                createOrderPanel.setVisibility(View.VISIBLE);
                 animation = YoYo.with(Techniques.SlideInUp)
-                        .duration(800)
+                        .duration(1)
+                        .interpolate(new AccelerateDecelerateInterpolator())
+                        .startPoint(CREATE_ORDER_START_POINT)
+                        .withListener(new Animator.AnimatorListener() {
+                            @Override
+                            public void onAnimationStart(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                createOrderPanel.setVisibility(View.GONE);
+                                performAnimation();
+                            }
+
+                            @Override
+                            public void onAnimationCancel(Animator animation) {
+
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animator animation) {
+
+                            }
+                        })
                         .playOn(animView);
+
+            }
+        });
+
+        orderTypeSwitcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    additionalPanel.setVisibility(View.VISIBLE);
+                    animation = YoYo.with(Techniques.SlideInUp)
+                            .duration(ANIMATION_SPEED)
+                            .startPoint(TYPE_SWITCHER_START_POINT)
+                            .playOn(animView);
+                } else {
+                    additionalPanel.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        bottomPanel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                invalidateAnimation();
+            }
+        });
+
+        globalLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                invalidateAnimation();
             }
         });
 
         return view;
+    }
+
+    public void invalidateAnimation(){
+        createOrderPanel.setVisibility(View.GONE);
+        additionalPanel.setVisibility(View.GONE);
+        orderTypeSwitcher.setChecked(false);
+        globalLayout.setBackgroundColor(getResources().getColor(R.color.locker_out));
+    }
+    public void performAnimation(){
+        createOrderPanel.setVisibility(View.VISIBLE);
+        animation = YoYo.with(Techniques.SlideInUp)
+                .duration(ANIMATION_SPEED)
+                .startPoint(CREATE_ORDER_START_POINT)
+                .withListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        globalLayout.setBackgroundColor(getResources().getColor(R.color.locker));
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
+                .playOn(animView);
+
+
     }
 
     @Override

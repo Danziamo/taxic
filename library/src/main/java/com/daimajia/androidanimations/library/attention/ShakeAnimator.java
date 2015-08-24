@@ -32,7 +32,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class ShakeAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "translationX", 0, 25, -25, 25, -25,15, -15, 6, -6, 0)
         );

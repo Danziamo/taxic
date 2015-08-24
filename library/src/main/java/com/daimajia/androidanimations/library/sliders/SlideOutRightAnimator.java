@@ -32,7 +32,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class SlideOutRightAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         ViewGroup parent = (ViewGroup)target.getParent();
         int distance = parent.getWidth() - target.getLeft();
         getAnimatorAgent().playTogether(

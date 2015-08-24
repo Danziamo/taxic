@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class SwingAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "rotation", 0, 10, -10, 6, -6, 3, -3, 0)
         );

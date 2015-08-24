@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class RotateInAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "rotation", -200, 0),
                 ObjectAnimator.ofFloat(target, "alpha", 0, 1)

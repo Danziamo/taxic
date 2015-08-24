@@ -43,11 +43,11 @@ public abstract class BaseViewAnimator {
     }
 
 
-    protected abstract void prepare(View target);
+    protected abstract void prepare(View target,int startPoint);
 
-    public BaseViewAnimator setTarget(View target) {
+    public BaseViewAnimator setTarget(View target,int startPoint) {
         reset(target);
-        prepare(target);
+        prepare(target,startPoint);
         return this;
     }
 

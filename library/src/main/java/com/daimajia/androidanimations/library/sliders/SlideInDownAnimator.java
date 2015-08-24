@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class SlideInDownAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         int distance = target.getTop() + target.getHeight();
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target,"alpha",0,1),

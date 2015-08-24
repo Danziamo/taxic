@@ -32,7 +32,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class SlideOutLeftAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "alpha", 1, 0),
                 ObjectAnimator.ofFloat(target,"translationX",0,-target.getRight())

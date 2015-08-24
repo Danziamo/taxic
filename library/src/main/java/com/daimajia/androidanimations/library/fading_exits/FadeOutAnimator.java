@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class FadeOutAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target,"alpha",1,0)
         );

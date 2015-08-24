@@ -32,7 +32,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class SlideOutUpAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         ViewGroup parent = (ViewGroup)target.getParent();
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "alpha", 1, 0),

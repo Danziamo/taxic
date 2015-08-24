@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class FlipInYAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         getAnimatorAgent().playTogether(
                 ObjectAnimator.ofFloat(target, "rotationY", 90, -15, 15, 0),
                 ObjectAnimator.ofFloat(target, "alpha", 0.25f, 0.5f, 0.75f, 1)

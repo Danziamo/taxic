@@ -44,6 +44,7 @@ public class YoYo {
     private Interpolator interpolator;
     private List<Animator.AnimatorListener> callbacks;
     private View target;
+    private int startPoint;
 
     private YoYo(AnimationComposer animationComposer) {
         animator = animationComposer.animator;
@@ -52,6 +53,7 @@ public class YoYo {
         interpolator = animationComposer.interpolator;
         callbacks = animationComposer.callbacks;
         target = animationComposer.target;
+        startPoint = animationComposer.startPoint;
     }
 
     public static AnimationComposer with(Techniques techniques) {
@@ -86,6 +88,7 @@ public class YoYo {
         private long delay = NO_DELAY;
         private Interpolator interpolator;
         private View target;
+        private int startPoint;
 
         private AnimationComposer(Techniques techniques) {
             this.animator = techniques.getAnimator();
@@ -97,6 +100,11 @@ public class YoYo {
 
         public AnimationComposer duration(long duration) {
             this.duration = duration;
+            return this;
+        }
+
+        public AnimationComposer startPoint(int startPoint) {
+            this.startPoint = startPoint;
             return this;
         }
 
@@ -186,7 +194,7 @@ public class YoYo {
     }
 
     private BaseViewAnimator play() {
-        animator.setTarget(target);
+        animator.setTarget(target,startPoint);
         animator.setDuration(duration)
                 .setInterpolator(interpolator)
                 .setStartDelay(delay);

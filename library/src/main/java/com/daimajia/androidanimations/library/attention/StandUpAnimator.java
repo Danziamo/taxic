@@ -33,7 +33,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class StandUpAnimator extends BaseViewAnimator{
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         float x = (target.getWidth() - target.getPaddingLeft() - target.getPaddingRight())/2
                 + target.getPaddingLeft();
         float y = target.getHeight() - target.getPaddingBottom();

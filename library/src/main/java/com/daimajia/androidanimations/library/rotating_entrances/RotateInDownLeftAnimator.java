@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class RotateInDownLeftAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         float x = target.getPaddingLeft();
         float y = target.getHeight() - target.getPaddingBottom();
         getAnimatorAgent().playTogether(

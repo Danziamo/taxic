@@ -33,6 +33,7 @@
     <color name = "splashPFinish" >#F1F1F1</color>
     <color name = "line"          >#8e8e8e</color>
     <color name = "main_button"   >#0e0e1c</color>
-
+    <color name = "locker"        >#70000000</color>
+    <color name = "locker_out"    >#00000000</color>
     //************************
 </resources>

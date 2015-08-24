@@ -32,7 +32,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class ZoomOutDownAnimator extends BaseViewAnimator {
     @Override
-    protected void prepare(View target) {
+    protected void prepare(View target,int startPoint) {
         ViewGroup parent = (ViewGroup)target.getParent();
         int distance = parent.getHeight() - target.getTop();
         getAnimatorAgent().playTogether(

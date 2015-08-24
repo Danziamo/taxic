@@ -31,7 +31,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class WobbleAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         float width = target.getWidth();
         float one = (float)(width/100.0);
         getAnimatorAgent().playTogether(

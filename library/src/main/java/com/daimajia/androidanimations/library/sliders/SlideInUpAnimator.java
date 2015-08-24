@@ -32,12 +32,16 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 public class SlideInUpAnimator extends BaseViewAnimator {
     @Override
-    public void prepare(View target) {
+    public void prepare(View target,int startPoint) {
         ViewGroup parent = (ViewGroup)target.getParent();
         int distance = parent.getHeight() - target.getTop();
-        getAnimatorAgent().playTogether(
-                ObjectAnimator.ofFloat(target, "alpha", 0, 1),
-                ObjectAnimator.ofFloat(target,"translationY",distance,0)
-        );
+
+       if(startPoint == 350)
+           getAnimatorAgent().playTogether(
+                   ObjectAnimator.ofFloat(target,"translationY",distance - startPoint,0));
+        else
+            getAnimatorAgent().playTogether(
+                    ObjectAnimator.ofFloat(target, "alpha", 0, 1),
+                    ObjectAnimator.ofFloat(target,"translationY",distance - startPoint,0));
     }
 }
