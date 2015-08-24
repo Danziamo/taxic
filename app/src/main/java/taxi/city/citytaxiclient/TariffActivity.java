@@ -12,7 +12,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.utils.Helper;
 
-public class AboutActivity extends ActionBarActivity {
+public class TariffActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class AboutActivity extends ActionBarActivity {
             }
         }
 
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_tariff);
 
         App.getDefaultTracker().send(new HitBuilders.EventBuilder()
                 .setCategory("ui_views")

@@ -95,7 +95,7 @@ public class AccountActivity extends AppCompatActivity {
                 signOut();
                 return true;
             case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
+                startActivity(new Intent(this, TariffActivity.class));
                 return true;
             case R.id.action_help:
                 startActivity(new Intent(this, HelpActivity.class));

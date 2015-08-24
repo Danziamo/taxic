@@ -64,8 +64,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
         Order item = items.get(position);
         holder.mAddressView.setText(item.getStartName());
         holder.mInfoView.setText("#" + item.getId());
-        holder.mPriceView.setText(String.valueOf(item.getTotalSum()));
-        holder.mDistanceView.setText(String.valueOf(item.getDistance()));
+        holder.mPriceView.setText(String.valueOf((int)item.getTotalSum()) + mContext.getResources().getString(R.string.som));
+        holder.mDistanceView.setText(String.valueOf((int)item.getDistance()) + mContext.getResources().getString(R.string.km));
         holder.itemView.setTag(item);
     }
 

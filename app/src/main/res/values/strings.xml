@@ -41,11 +41,12 @@
 
 
     <!--MenuDrawer-->
-   <string name="settings">Настройки</string>
+   <string name="tech.support">Техподдержка</string>
    <string name="history">История</string>
-    <string name="cabinet">Кабинет</string>
+    <string name="account.bill">Счёт</string>
     <string name="icon_history_text">История</string>
     <string name="icon_orders_text">Заказы</string>
+    <string name="tariff.info">О такси (тарифы)</string>
     <!--EditText-->
     <string name="phone.number">(555) 123-456</string>
     <string name="phone">Номер телефона</string>
@@ -91,6 +92,10 @@
     <string name="error_invalid_password">Пароль слишком корткий</string>
     <string name="error_incorrect_password">Телефон или пароль указаны неверно</string>
     <string name="error_field_required">Это поле обязяательное</string>
+
+    <string name="som">сом</string>
+    <string name="km">км</string>
+    <string name="map">Карта</string>
 
 
 </resources>

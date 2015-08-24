@@ -3,19 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/maps"
+            android:title="@string/map"
+            />
         <item
             android:id="@+id/cabinet"
-            android:title="@string/cabinet"
+            android:title="@string/account.bill"
             />
-    <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
-        />
 
         <item
             android:id="@+id/history"
             android:title="@string/history"
             />
+        <item
+            android:id="@+id/tariff_info"
+            android:title="@string/tariff.info"/>
+    <item
+        android:id="@+id/tech_support"
+        android:title="@string/tech.support"
+        />
+
+
 
        <item
            android:id="@+id/exit"

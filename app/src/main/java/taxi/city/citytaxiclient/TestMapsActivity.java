@@ -32,6 +32,8 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
+import taxi.city.citytaxiclient.fragments.GarajActivityFragment;
 import taxi.city.citytaxiclient.fragments.HistoryOrderFragment;
 import taxi.city.citytaxiclient.fragments.MapsFragment;
 import taxi.city.citytaxiclient.interfaces.ConfirmCallback;
@@ -80,7 +82,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
         navigationView.setNavigationItemSelectedListener(this);
 
         if (null == savedInstanceState) {
-            mNavItemId = R.id.settings;
+            mNavItemId = R.id.maps;
         } else {
             mNavItemId = savedInstanceState.getInt(NAV_ITEM_ID);
         }
@@ -220,9 +222,17 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                         .addToBackStack(backStateName)
                         .commit();
                 break;
-            case R.id.settings:
+            case R.id.tech_support:
+                performState(HelpActivity.class);
                 break;
+            case R.id.tariff_info:
+                performState(TariffActivity.class);
             case R.id.cabinet:
+                String backName = getSupportFragmentManager().getClass().getName();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new AccountDetailsActivityFragment())
+                        .addToBackStack((backName))
+                        .commit();
                 break;
             case R.id.exit:
                 showConfirmDialog(getString(R.string.logout_confirm_title), getString(R.string.logout_confirm_text), getString(R.string.logout_cancel_text), new ConfirmCallback() {
@@ -240,6 +250,12 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
             default:
         }
     }
+
+    private void performState(Class<?> activity){
+        Intent intent = new Intent(TestMapsActivity.this, activity);
+        startActivity(intent);
+    }
+
 
     @Override
     public boolean onNavigationItemSelected(final MenuItem menuItem) {
