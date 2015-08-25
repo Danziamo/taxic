@@ -41,18 +41,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <receiver
-            android:name=".GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.example.gcm" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".GcmIntentService" />
-
         <activity
             android:name=".SplashScreen"
             android:exported="true"
@@ -62,13 +50,17 @@
 
         <activity
             android:name=".LoginActivity"
+
             android:exported="true"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainSplashActivity">
         </activity>
         <activity
             android:name=".MainSplashActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -121,17 +113,6 @@
                 android:value="taxi.city.citytaxiclient.MapsActivity" />
         </activity>
         <activity
-            android:name=".AccountActivity"
-            android:label="@string/title_activity_account"
-            android:parentActivityName=".MapsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.MapsActivity" />
-        </activity>
-        <activity
             android:name=".HistoryOrder"
             android:label="@string/title_activity_history_order"
             android:screenOrientation="portrait" >
@@ -162,6 +143,20 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="taxi.city.citytaxiclient.AccountActivity" />
+        </activity>
+
+        <activity
+            android:name=".TestMapsActivity"
+            android:label="@string/title_activity_test_maps"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
+        </activity>
+        <activity
+            android:name=".SignupActivity"
+            android:label="@string/title_activity_signup"
+            android:parentActivityName=".MainSplashActivity"
+            >
         </activity>
 
         <meta-data
@@ -199,16 +194,17 @@
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 
-        <activity
-            android:name=".TestMapsActivity"
-            android:label="@string/title_activity_test_maps"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
-        </activity>
-        <activity
-            android:name=".SignupActivity"
-            android:label="@string/title_activity_signup" >
-        </activity>
+        <receiver
+            android:name=".GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".GcmIntentService" />
     </application>
 
 </manifest>

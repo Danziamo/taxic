@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient.fragments;
 
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -20,6 +21,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import taxi.city.citytaxiclient.ForgotPasswordFragment;
+import taxi.city.citytaxiclient.LoginActivity;
+import taxi.city.citytaxiclient.MainSplashActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.TestMapsActivity;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
@@ -50,6 +53,8 @@ public class LoginFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        setActionBarTitle("Войти");
 
         phoneView = (MaterialEditText) view.findViewById(R.id.metPhoneNumber);
         passwordView = (MaterialEditText) view.findViewById(R.id.metPassword);
@@ -90,7 +95,7 @@ public class LoginFragment extends BaseFragment {
 
         if (phoneView.getText().toString().isEmpty()) {
             if (spinner.getSelectedItem().toString().equals("+996")) {
-                phoneView.setError("XXXYYYYYY");
+                phoneView.setError("(XXX) XXX-XXX");
             } else {
                 phoneView.setError("Не должен быть пустым");
             }

@@ -23,4 +23,9 @@ public class BaseFragment extends Fragment {
         BaseActivity activity = (BaseActivity) getActivity();
         activity.showConfirmDialog(titleText, confirmText, cancelText, callback);
     }
+
+    public void setActionBarTitle(String title) {
+        BaseActivity activity = (BaseActivity) getActivity();
+        activity.setActionBarTitle(title);
+    }
 }

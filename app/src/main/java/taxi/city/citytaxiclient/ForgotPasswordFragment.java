@@ -56,6 +56,9 @@ public class ForgotPasswordFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_forgot_password, container, false);
+
+        setActionBarTitle(getString(R.string.title_fragment_forgot_password));
+
         phoneView = (MaterialEditText)view.findViewById(R.id.metPhoneNumber);
         phoneView.setText(phone);
         Button btnSubmit = (Button)view.findViewById(R.id.btnSubmit);
