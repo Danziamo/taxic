@@ -3,7 +3,9 @@ package taxi.city.citytaxiclient.fragments;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.SwitchCompat;
@@ -11,19 +13,25 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.dtx12.android_animations_actions.actions.Interpolations;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.nineoldandroids.animation.Animator;
+import android.animation.Animator;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -43,6 +51,17 @@ import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.networking.model.NOrder;
 import taxi.city.citytaxiclient.utils.Constants;
 
+import static com.dtx12.android_animations_actions.actions.Actions.color;
+import static com.dtx12.android_animations_actions.actions.Actions.delay;
+import static com.dtx12.android_animations_actions.actions.Actions.fadeIn;
+import static com.dtx12.android_animations_actions.actions.Actions.fadeOut;
+import static com.dtx12.android_animations_actions.actions.Actions.moveBy;
+import static com.dtx12.android_animations_actions.actions.Actions.moveTo;
+import static com.dtx12.android_animations_actions.actions.Actions.parallel;
+import static com.dtx12.android_animations_actions.actions.Actions.play;
+import static com.dtx12.android_animations_actions.actions.Actions.scaleTo;
+import static com.dtx12.android_animations_actions.actions.Actions.sequence;
+
 public class MapsFragment extends BaseFragment {
 
     View view;
@@ -55,6 +74,7 @@ public class MapsFragment extends BaseFragment {
     Button mainFunctionalButton;
     Button searchButton;
     Button cancelButton;
+    Button falseMovementButton;
 
     YoYo.YoYoString animation;
     View animView;
@@ -64,6 +84,7 @@ public class MapsFragment extends BaseFragment {
     View falseLayout;
     View searchViews;
     View onTheWayPanel;
+    View globalView;
 
     public static int ANIMATION_SPEED = 450;
     public static int CREATE_ORDER_START_POINT = 10;
@@ -77,18 +98,20 @@ public class MapsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_maps, container, false);
 
-        animView         = view.findViewById(R.id.map_main_navigation_panel);
-        createOrderPanel = view.findViewById(R.id.main_order_panel);
-        additionalPanel  = view.findViewById(R.id.additional_panel);
-        searchViews      = view.findViewById(R.id.search_views);
-        bottomPanel      = view.findViewById(R.id.bottom_panel);
-        falseLayout      = view.findViewById(R.id.false_layout);
-        onTheWayPanel     = view.findViewById(R.id.on_the_way_panel);
+        animView            = view.findViewById(R.id.map_main_navigation_panel);
+        createOrderPanel    = view.findViewById(R.id.main_order_panel);
+        additionalPanel     = view.findViewById(R.id.additional_panel);
+        searchViews         = view.findViewById(R.id.search_views);
+        bottomPanel         = view.findViewById(R.id.bottom_panel);
+        falseLayout         = view.findViewById(R.id.false_layout);
+        onTheWayPanel       = view.findViewById(R.id.on_the_way_panel);
+        globalView          = view.findViewById(R.id.global_view);
 
         mainFunctionalButton = (Button)view.findViewById(R.id.main_functioanl_button);
-        searchButton = (Button)view.findViewById(R.id.search_button);
-        orderTypeSwitcher = (SwitchCompat)view.findViewById(R.id.etOrderTypeSwitcher);
-        cancelButton = (Button)view.findViewById(R.id.main_cancel_button);
+        searchButton         = (Button)view.findViewById(R.id.search_button);
+        orderTypeSwitcher    = (SwitchCompat)view.findViewById(R.id.etOrderTypeSwitcher);
+        cancelButton         = (Button)view.findViewById(R.id.main_cancel_button);
+        falseMovementButton  = (Button)view.findViewById(R.id.false_movement_button);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -102,6 +125,8 @@ public class MapsFragment extends BaseFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+     //   setFalseMovementButtonParams(-100);
 
         mGoogleMap = mMapView.getMap();
         mGoogleMap.setMyLocationEnabled(true);
@@ -117,6 +142,7 @@ public class MapsFragment extends BaseFragment {
                     animation = YoYo.with(Techniques.SlideInUp)
                             .duration(ANIMATION_SPEED)
                             .startPoint(TYPE_SWITCHER_START_POINT)
+                                    //   .interpolate(new AccelerateDecelerateInterpolator())
                             .playOn(animView);
                 } else {
                     additionalPanel.setVisibility(View.GONE);
@@ -130,6 +156,8 @@ public class MapsFragment extends BaseFragment {
                 animView.setVisibility(View.VISIBLE);
                 searchViews.setVisibility(View.INVISIBLE);
                 cancelButton.setVisibility(View.GONE);
+                invalidateAnimation();
+                setFalseMovementButtonParams(-(falseMovementButtonHeight/2));
             }
         });
 
@@ -157,6 +185,18 @@ public class MapsFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setFalseMovementButtonParams(-(mainFunctionalButton.getMeasuredHeight()/2));
+            }
+        },1);
+
+    }
+
     public void invalidateAnimation(){
         createOrderPanel.setVisibility(View.GONE);
         additionalPanel.setVisibility(View.GONE);
@@ -165,75 +205,170 @@ public class MapsFragment extends BaseFragment {
         mainFunctionalButton.setText(getResources().getString(R.string.order_taxi));
     }
 
-
+    int falseMovementButtonHeight = 0;
     View.OnClickListener mainFunctionalButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if(mainFunctionalButton.getText().equals(getResources().getString(R.string.order_taxi))){
-//                animView.setVisibility(View.INVISIBLE);
-//                animation = YoYo.with(Techniques.SlideInUp)
-//                        .duration(0)
-//                        .interpolate(new AccelerateDecelerateInterpolator())
-//                        .startPoint(CREATE_ORDER_START_POINT)
-//                        .withListener(new Animator.AnimatorListener() {
-//                            @Override
-//                            public void onAnimationStart(Animator animation) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onAnimationEnd(Animator animation) {
-//                                animView.setVisibility(View.VISIBLE);
-//                                performAnimation();
-//                            }
-//
-//                            @Override
-//                            public void onAnimationCancel(Animator animation) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onAnimationRepeat(Animator animation) {
-//
-//                            }
-//                        })
-//                        .playOn(animView);
                 performAnimation();
             }
             if(mainFunctionalButton.getText().equals(getResources().getString(R.string.issue_taxi))) {
-                invalidateAnimation();
-                animView.setVisibility(View.GONE);
-                searchViews.setVisibility(View.VISIBLE);
-                cancelButton.setVisibility(View.VISIBLE);
+                animView.setVisibility(View.INVISIBLE);
+                falseLayout.setVisibility(View.VISIBLE);
+                falseMovementButton.setVisibility(View.VISIBLE);
+
+                falseMovementButtonHeight = mainFunctionalButton.getMeasuredHeight();
+              //  setFalseMovementButtonParams(-mainFunctionalButton.getMeasuredHeight());
+
+                Point center = new Point(view.getMeasuredWidth() / 2,view.getMeasuredHeight() / 2);
+                Animator animator = moveTo(
+                        center.x - falseMovementButton.getMeasuredWidth() / 2,
+                        center.y - falseMovementButton.getMeasuredHeight()/2,
+                        2);
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animator) {
+                        searchViews.setVisibility(View.VISIBLE);
+                        cancelButton.setVisibility(View.VISIBLE);
+                        falseMovementButton.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animator) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animator) {
+
+                    }
+                });
+               // play(animator, falseMovementButton);
+
+                TranslateAnimation anim =
+                        new TranslateAnimation( 0, 0 ,
+                               // animView.getMeasuredHeight() + falseMovementButton.getMeasuredHeight() / 2,-
+                                0,-100);
+                anim.setDuration(1000);
+                anim.setFillAfter(true);
+                anim.setInterpolator(new LinearInterpolator());
+                anim.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        searchViews.setVisibility(View.VISIBLE);
+                        cancelButton.setVisibility(View.VISIBLE);
+                        falseMovementButton.clearAnimation();
+                        falseMovementButton.setVisibility(View.INVISIBLE);
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                falseMovementButton.startAnimation(anim);
+
             }
 
         }
     };
+
+    int px = 0;
+
+//    ViewTreeObserver.OnGlobalLayoutListener treeObserverListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+//        @Override
+//        public void onGlobalLayout() {
+//            Resources r = getActivity().getResources();
+//            px = (int) TypedValue.applyDimension(
+//                    TypedValue.COMPLEX_UNIT_DIP,
+//                    mainFunctionalButton.getMeasuredHeight(),
+//                    r.getDisplayMetrics()
+//
+//            );
+//            params = new RelativeLayout.LayoutParams(
+//                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+//                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+//
+//            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//            params.addRule(RelativeLayout.ABOVE, R.id.map_main_navigation_panel);
+//            params.setMargins(0, 0, 0, -px);
+//            falseMovementButton.setLayoutParams(params);
+//
+//            removeOnGlobalLayoutListener(falseMovementButton, treeObserverListener);
+//        }
+//    };
+
+    public void setFalseMovementButtonParams(final int bottomMargin){
+        falseMovementButton.setVisibility(View.INVISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)falseMovementButton.getLayoutParams();
+//                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//                params.addRule(RelativeLayout.ABOVE, R.id.map_main_navigation_panel);
+                params.setMargins(0, 0, 0, getPixelFromDpi(bottomMargin));
+                falseMovementButton.setLayoutParams(params);
+            }
+        },5);
+      //  falseMovementButton.getViewTreeObserver().addOnGlobalLayoutListener(treeObserverListener);
+     //   Resources r = getActivity().getResources();
+//        px = (int) TypedValue.applyDimension(
+//                TypedValue.COMPLEX_UNIT_DIP,
+//                bottomMargin,
+//                r.getDisplayMetrics()
+
+     //   );
+
+//        params.bottomMargin = px;
+//
+    }
+
+    public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener){
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
+        } else {
+            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
+        }
+    }
 
     public void performAnimation(){
         createOrderPanel.setVisibility(View.VISIBLE);
         animation = YoYo.with(Techniques.SlideInUp)
                 .duration(ANIMATION_SPEED)
                 .startPoint(CREATE_ORDER_START_POINT)
-                .withListener(new Animator.AnimatorListener() {
+               // .interpolate(new AccelerateDecelerateInterpolator())
+                .withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationStart(Animator animation) {
+                    public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
 
                     }
 
                     @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
                         mainFunctionalButton.setText(getResources().getString(R.string.issue_taxi));
                         falseLayout.setVisibility(View.VISIBLE);
+                      //  setFalseMovementButtonParams();
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
+                    public void onAnimationCancel(com.nineoldandroids.animation.Animator animation) {
 
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animator animation) {
+                    public void onAnimationRepeat(com.nineoldandroids.animation.Animator animation) {
 
                     }
                 })

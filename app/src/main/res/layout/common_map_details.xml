@@ -1,4 +1,5 @@
 <RelativeLayout
+    android:id="@+id/global_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -70,11 +71,25 @@
         android:layout_alignParentBottom="true"/>
 
 
+
+    <Button
+        android:id="@+id/false_movement_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_button"
+        android:text="@string/issue_taxi"
+        android:textColor="@color/main_button"
+        android:textSize="12dp"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/map_main_navigation_panel" />
+
     <RelativeLayout
         android:id="@+id/map_main_navigation_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+       >
 
         <RelativeLayout
             android:id="@+id/bottom_panel"
@@ -92,7 +107,8 @@
                 android:text="@string/order_taxi"
                 android:textColor="@color/main_button"
                 android:textSize="12dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:visibility="visible"/>
 
         </RelativeLayout>
 
@@ -290,8 +306,10 @@
 
 
         </RelativeLayout>
-
-
     </RelativeLayout>
+
+
+
+
 
 </RelativeLayout>
