@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +48,13 @@ public class OrderDetailsActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_order_details, container, false);
 
      //   getActivity().getSupportActionBar().setDisplayShowHomeEnabled(true);
-        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getActivity().getIntent();
         order = (Order)intent.getExtras().getSerializable("DATA");
 
         TextView etAddressStart = (TextView)rootView.findViewById(R.id.editTextStartAddress);
-        TextView tvFinishAddress = (TextView) rootView.findViewById(R.id.editTextFinishAddress);
+     //   TextView tvFinishAddress = (TextView) rootView.findViewById(R.id.editTextFinishAddress);
         TextView tvWaitTime = (TextView)rootView.findViewById(R.id.textViewWaitingTime);
         TextView tvWaitSum = (TextView)rootView.findViewById(R.id.textViewWaitingSum);
         TextView tvDistance = (TextView)rootView.findViewById(R.id.textViewDistance);
@@ -88,7 +89,7 @@ public class OrderDetailsActivityFragment extends Fragment {
         }
 
         etAddressStart.setText(order.getStartName());
-        tvFinishAddress.setText(order.getStopName());
+       // tvFinishAddress.setText(order.getStopName());
         tvWaitTime.setText(waitTime);
         tvWaitSum.setText(String.valueOf((int)waitSum));
         tvDistance.setText(String.valueOf(order.getDistance()));

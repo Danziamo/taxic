@@ -2,14 +2,122 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/main_background">
+        android:background="@drawable/splash_background">
 
+    <RatingBar
+        android:progressDrawable="@drawable/ratingbar_yellow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:isIndicator="true"
+        android:stepSize="0.5"
+        android:numStars="5"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/ratingBarDriver"/>
+    <LinearLayout
+        android:id="@+id/llDriverName"
+        android:layout_below="@id/ratingBarDriver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        >
+
+    <TextView
+        android:id="@+id/textViewLastName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:text="Иванов"
+        android:layout_below="@+id/ratingBarDriver"
+        android:layout_marginRight="5dp"
+        />
+    <TextView
+        android:id="@+id/textViewFirstName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:text="Иван"
+        android:layout_below="@+id/ratingBarDriver"
+         />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/llDriverName"
+        android:layout_marginTop="10dp"
+        >
         <TextView
-            style="@style/TextTitle"
-            android:id="@+id/textViewTitle"
-            android:text="Ваш водитель и авто" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Телефон"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/textViewDriverPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="+996555111222"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Машина"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/textViewCarBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="Toyota Camry"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Цвет"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/textViewCarColor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="Серебро"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Номер машины"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            />
+        <TextView
+            android:id="@+id/textViewCarNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25dp"
+            android:text="B7777B"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            />
+    </LinearLayout>
 
-        <LinearLayout
+</RelativeLayout>
+      <!--  <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -18,16 +126,6 @@
             android:layout_below="@id/textViewTitle"
             android:layout_centerHorizontal="true"
             android:id="@+id/linearLayout7">
-
-            <TextView
-                style="@style/mediumEditText"
-                android:hint="Фамилия "
-                android:id="@+id/textViewLastName" />
-
-            <TextView
-                style="@style/mediumEditText"
-                android:hint="Имя"
-                android:id="@+id/textViewFirstName" />
 
             <RelativeLayout
 
@@ -70,19 +168,7 @@
                 android:hint="Номер автомобиля"
                 android:id="@+id/textViewCarNumber" />
             
-            <TextView
-                style="@style/TextSubTitle"
-                android:text="Рейтинг водителя"/>
 
-            <RatingBar
-                android:progressDrawable="@drawable/ratingbar_yellow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:stepSize="0.5"
-                android:numStars="5"
-                android:layout_gravity="center"
-                android:id="@+id/ratingBarDriver"/>
 
             <TextView
                 android:id="@+id/textViewRating"
@@ -92,6 +178,5 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""/>
-        </LinearLayout>
+        </LinearLayout>-->
 
-    </RelativeLayout>

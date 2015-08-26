@@ -423,10 +423,10 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
             setTitle ("Счёт");
             //set selected item position, etc
         }
-       /* else if (fragClassName.equals(AccountDetailsActivityFragment.class.getName())){
+        else if (fragClassName.equals(AccountDetailsActivityFragment.class.getName())){
             setTitle ("Счёт");
             //set selected item position, etc
-        }*/
+        }
     }
 
 }

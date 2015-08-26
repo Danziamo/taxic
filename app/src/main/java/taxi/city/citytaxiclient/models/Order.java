@@ -20,6 +20,10 @@ public class Order implements Serializable{
     private OrderStatus status;
 
     @Expose
+    @SerializedName("order_time")
+    private String orderTime;
+
+    @Expose
     @SerializedName("address_start_name")
     private String startName;
 
@@ -51,7 +55,7 @@ public class Order implements Serializable{
     private Tariff tariff;
 
     @Expose
-    private User driver;
+    private OrderUser driver;
 
     @Expose
     private User client;
@@ -162,11 +166,11 @@ public class Order implements Serializable{
         this.tariff = tariff;
     }
 
-    public User getDriver() {
+    public OrderUser getDriver() {
         return driver;
     }
 
-    public void setDriver(User driver) {
+    public void setDriver(OrderUser driver) {
         this.driver = driver;
     }
 
@@ -229,4 +233,12 @@ public class Order implements Serializable{
     }
 
     public Order () {}
+
+    public String getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(String orderTime) {
+        this.orderTime = orderTime;
+    }
 }

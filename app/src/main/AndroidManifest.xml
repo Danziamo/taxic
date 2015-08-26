@@ -121,7 +121,7 @@
             android:name=".OrderDetailsActivity"
             android:label="@string/title_activity_order_details"
             android:screenOrientation="portrait"
-            android:theme="@style/ActionBarTheme"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
         </activity>
         <activity

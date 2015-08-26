@@ -47,6 +47,7 @@
     <string name="icon_history_text">История</string>
     <string name="icon_orders_text">Заказы</string>
     <string name="tariff.info">О такси (тарифы)</string>
+    <string name="share">Поделиться</string>
     <!--EditText-->
     <string name="phone.number">(555) 123-456</string>
     <string name="phone">Номер телефона</string>
