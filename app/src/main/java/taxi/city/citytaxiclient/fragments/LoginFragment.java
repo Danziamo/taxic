@@ -1,6 +1,7 @@
 package taxi.city.citytaxiclient.fragments;
 
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSpinner;
@@ -20,6 +21,8 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import taxi.city.citytaxiclient.ForgotPasswordFragment;
+import taxi.city.citytaxiclient.LoginActivity;
+import taxi.city.citytaxiclient.MainSplashActivity;
 import taxi.city.citytaxiclient.R;
 import taxi.city.citytaxiclient.TestMapsActivity;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
@@ -29,6 +32,7 @@ import taxi.city.citytaxiclient.models.Session;
 import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.networking.RestClient;
 import taxi.city.citytaxiclient.networking.model.UserStatus;
+import taxi.city.citytaxiclient.utils.Constants;
 import taxi.city.citytaxiclient.utils.SessionHelper;
 
 public class LoginFragment extends BaseFragment {
@@ -50,12 +54,13 @@ public class LoginFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_login, container, false);
 
+        setActionBarTitle("Войти");
+
         phoneView = (MaterialEditText) view.findViewById(R.id.metPhoneNumber);
         passwordView = (MaterialEditText) view.findViewById(R.id.metPassword);
         forgotView = (TextView)view.findViewById(R.id.tvForgotPassword);
 
-        String[] ITEMS = {"+996", "+7", "+998"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, ITEMS);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Constants.PHONE_PREFIXES);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner = (AppCompatSpinner) view.findViewById(R.id.spCodNumber);
         spinner.setAdapter(adapter);
@@ -90,7 +95,7 @@ public class LoginFragment extends BaseFragment {
 
         if (phoneView.getText().toString().isEmpty()) {
             if (spinner.getSelectedItem().toString().equals("+996")) {
-                phoneView.setError("XXXYYYYYY");
+                phoneView.setError("(XXX) XXX-XXX");
             } else {
                 phoneView.setError("Не должен быть пустым");
             }
@@ -156,7 +161,7 @@ public class LoginFragment extends BaseFragment {
                             getActivity().getSupportFragmentManager()
                                     .beginTransaction()
                                     .replace(R.id.container, AuthorizationFragment.newInstance(spinner.getSelectedItem().toString() + phoneView.getText().toString()
-                                            , true, passwordView.getText().toString()))
+                                            , passwordView.getText().toString(), false))
                                     .addToBackStack(backStateName)
                                     .commit();
                         }

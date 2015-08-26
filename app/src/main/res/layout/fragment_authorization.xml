@@ -58,7 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/password"/>
+            android:text="@string/password"
+            android:visibility="invisible"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/metPassword"
@@ -86,7 +87,7 @@
         android:text="@string/btn.authorization"
         android:layout_below="@+id/llPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         />
 
     <TextView

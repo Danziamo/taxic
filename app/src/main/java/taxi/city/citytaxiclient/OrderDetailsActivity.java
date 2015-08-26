@@ -3,6 +3,7 @@ package taxi.city.citytaxiclient;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -10,7 +11,7 @@ import taxi.city.citytaxiclient.core.User;
 import taxi.city.citytaxiclient.utils.Helper;
 
 
-public class OrderDetailsActivity extends ActionBarActivity {
+public class OrderDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

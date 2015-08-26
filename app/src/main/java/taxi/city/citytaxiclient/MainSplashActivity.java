@@ -3,6 +3,8 @@ package taxi.city.citytaxiclient;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import taxi.city.citytaxiclient.fragments.LoginFragment;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
 import taxi.city.citytaxiclient.models.OnlineStatus;
 import taxi.city.citytaxiclient.models.Role;
@@ -40,6 +43,18 @@ public class MainSplashActivity extends BaseActivity implements View.OnClickList
 
         animContainer   = findViewById(R.id.main_navigation_panel);
         bottomMiniPanel = findViewById(R.id.anim_panel);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+
+            @Override
+            public void onBackStackChanged() {
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.container);
+                if (f != null){
+                    updateTitleAndDrawer (f);
+                }
+
+            }
+        });
 
         final SessionHelper sessionHelper = new SessionHelper();
         String phone = sessionHelper.getPhone();
@@ -168,13 +183,37 @@ public class MainSplashActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         int id = v.getId();
 
+        Intent intent;
+
         switch (id){
             case R.id.s_signin:
-                Intent intent = new Intent(MainSplashActivity.this, LoginActivity.class);
+                intent = new Intent(MainSplashActivity.this, LoginActivity.class);
                 startActivity(intent);
+                setTitle("Войти");
                 break;
 
-            case R.id.s_regist: break;
+            case R.id.s_regist:
+                intent = new Intent(MainSplashActivity.this, SignupActivity.class);
+                startActivity(intent);
+                setTitle("Регистрация");
+                break;
         }
+    }
+
+    private void updateTitleAndDrawer (Fragment fragment){
+        String fragClassName = fragment.getClass().getName();
+
+        if (fragClassName.equals(LoginFragment.class.getName())){
+            setTitle ("Войти");
+            //set selected item position, etc
+        }
+        else if (fragClassName.equals(SignupActivity.class.getName())){
+            setTitle ("Регистрация");
+            //set selected item position, etc
+        }
+        /*else if (fragClassName.equals(C.class.getName())){
+            setTitle ("C");
+            //set selected item position, etc
+        }*/
     }
 }

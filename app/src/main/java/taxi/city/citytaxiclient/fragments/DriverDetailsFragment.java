@@ -19,13 +19,13 @@ import taxi.city.citytaxiclient.core.Order;
 import taxi.city.citytaxiclient.enums.OStatus;
 import taxi.city.citytaxiclient.utils.Helper;
 
-import static taxi.city.citytaxiclient.R.id.imageButtonCallDriver;
+//import static taxi.city.citytaxiclient.R.id.imageButtonCallDriver;
 
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DriverDetailsFragment extends Fragment implements View.OnClickListener /*implements View.OnClickListener/*/ {
+public class DriverDetailsFragment extends Fragment /*implements View.OnClickListener*/ /*implements View.OnClickListener/*/ {
 
     TextView tvLastName;
     TextView tvFirstName;
@@ -52,12 +52,12 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         tvLastName = (TextView) rootView.findViewById(R.id.textViewLastName);
         tvPhone = (TextView) rootView.findViewById(R.id.textViewDriverPhone);
         tvCarBrand = (TextView) rootView.findViewById(R.id.textViewCarBrand);
-        tvCarModel = (TextView) rootView.findViewById(R.id.textViewCarModel);
+      //  tvCarModel = (TextView) rootView.findViewById(R.id.textViewCarModel);
         tvCarColor = (TextView) rootView.findViewById(R.id.textViewCarColor);
         tvCarNumber = (TextView) rootView.findViewById(R.id.textViewCarNumber);
-        imgBtnCallDriver = (ImageButton) rootView.findViewById(imageButtonCallDriver);
+       // imgBtnCallDriver = (ImageButton) rootView.findViewById(imageButtonCallDriver);
         ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBarDriver);
-        tvRating = (TextView) rootView.findViewById(R.id.textViewRating);
+       // tvRating = (TextView) rootView.findViewById(R.id.textViewRating);
 
         tvFirstName.setText(order.driver.firstName);
         tvLastName.setText(order.driver.lastName);
@@ -66,20 +66,20 @@ public class DriverDetailsFragment extends Fragment implements View.OnClickListe
         tvCarModel.setText(order.driver.carModel);
         tvCarNumber.setText(order.driver.carNumber);
         tvCarColor.setText(order.driver.carColor);
-        imgBtnCallDriver.setOnClickListener(this);
+       // imgBtnCallDriver.setOnClickListener(this);
         ratingBar.setRating(order.driver.rating);
         tvRating.setText(Helper.getRatingText(order.driver.rating));
         return rootView;
     }
 
-    @Override
+  /*  @Override
     public void onClick(View v) {
         switch (v.getId()){
             case imageButtonCallDriver:
                 callDriver();
                 break;
         }
-    }
+    }*/
 
     private void callDriver() {
         SweetAlertDialog pDialog = new SweetAlertDialog(getActivity(), SweetAlertDialog.WARNING_TYPE);

@@ -6,17 +6,17 @@
     <string name="action_settings">Settings</string>
     <string name="action_exit">Выход</string>
     <string name="title_activity_sing_up">SingUpActivity</string>
-    <string name="title_activity_confirm_sign_up">ConfirmSIgnUpActivity</string>
+    <string name="title_activity_confirm_sign_up">Регистрация</string>
     <string name="title_activity_user_details">UserDetailsActivity</string>
     <string name="title_activity_create_order">CreateOrderActivity</string>
     <string name="title_activity_driver_details">DriverDetails</string>
     <string name="title_activity_garaj">GarajActivity</string>
     <string name="title_activity_tabbed">TabbedActivity</string>
-
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_activity_signup">Регистрация</string>
+    <string name="title_activity_login">Войти</string>
     <string name="title_activity_account">Настройки</string>
+
+    <string name="title_fragment_forgot_password">Забыли пароль?</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -47,6 +47,7 @@
     <string name="icon_history_text">История</string>
     <string name="icon_orders_text">Заказы</string>
     <string name="tariff.info">О такси (тарифы)</string>
+    <string name="share">Поделиться</string>
     <!--EditText-->
     <string name="phone.number">(555) 123-456</string>
     <string name="phone">Номер телефона</string>
@@ -60,10 +61,9 @@
     <string name="btn.next">Далее</string>
     <string name="met.code">Код смс:</string>
 
-
     <!--TextView-->
     <string name="authorization">Вам будет выслано смс с кодом\n подтверждения вашего номера.\n Введите его в поле ниже </string>
-    <string name="title_activity_test_maps">TestMapsActivity</string>
+    <string name="title_activity_test_maps">Карта</string>
     <string name="title_activity_main_splash">MainSplashActivity</string>
 
     <string name="s_signin">ВОЙТИ</string>
@@ -95,6 +95,23 @@
     <string name="error_invalid_password">Пароль слишком корткий</string>
     <string name="error_incorrect_password">Телефон или пароль указаны неверно</string>
     <string name="error_field_required">Это поле обязяательное</string>
+    <string name="error_phone_must_be_unique">Пользователь с таким номером уже существует</string>
+    <string name="error_an_error_has_occurred_try_again">Произошла ошибка, попробуйте еще раз</string>
+    <string name="error_could_not_connect_to_server">Не удалось подключится к серверу</string>
+    <string name="error_invalid_phone_format">Телефон должен состоять из 13 символов</string>
+    <string name="error_phone_not_registered">Пользователь с таким номером не зарегистрирован</string>
+    <string name="error_could_not_activate">Не удалось активировать</string>
+    <string name="error_invalid_activation_code">Неверный код активации</string>
+
+    <!-- Sign up -->
+    <string name="signup.submit">Подтвердить</string>
+    <string name="signup.default_first_name">Имя</string>
+    <string name="signup.default_last_name">Фамилия</string>
+    
+    <string name="wait_please">Пожалуйста, подождите</string>
+    <string name="sms_sent">СМС выслан</string>
+    <string name="new_password">Новый пароль:</string>
+    <string name="password_changed">Пароль изменен</string>
 
     <string name="som">сом</string>
     <string name="km">км</string>

@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.IntentCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +37,7 @@ import retrofit.client.Response;
 import taxi.city.citytaxiclient.fragments.AccountDetailsActivityFragment;
 import taxi.city.citytaxiclient.fragments.GarajActivityFragment;
 import taxi.city.citytaxiclient.fragments.HistoryOrderFragment;
+import taxi.city.citytaxiclient.fragments.LoginFragment;
 import taxi.city.citytaxiclient.fragments.MapsFragment;
 import taxi.city.citytaxiclient.interfaces.ConfirmCallback;
 import taxi.city.citytaxiclient.models.GlobalSingleton;
@@ -80,6 +83,18 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+
+            @Override
+            public void onBackStackChanged() {
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.container);
+                if (f != null) {
+                    updateTitleAndDrawer(f);
+                }
+
+            }
+        });
 
         if (null == savedInstanceState) {
             mNavItemId = R.id.maps;
@@ -395,6 +410,23 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                 startActivity(mainIntent);
             }
         });
+    }
+
+    private void updateTitleAndDrawer (Fragment fragment){
+        String fragClassName = fragment.getClass().getName();
+
+        if (fragClassName.equals(HistoryOrderFragment.class.getName())){
+            setTitle ("История");
+            //set selected item position, etc
+        }
+        else if (fragClassName.equals(AccountDetailsActivityFragment.class.getName())){
+            setTitle ("Счёт");
+            //set selected item position, etc
+        }
+        else if (fragClassName.equals(AccountDetailsActivityFragment.class.getName())){
+            setTitle ("Счёт");
+            //set selected item position, etc
+        }
     }
 
 }

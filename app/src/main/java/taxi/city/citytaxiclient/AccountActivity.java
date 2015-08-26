@@ -61,7 +61,7 @@ public class AccountActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mPageAdapter);
 
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+ //       tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
     }

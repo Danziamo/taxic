@@ -13,6 +13,9 @@ public class NUser {
     public String lastName;
 
     @Expose
+    public String phone;
+
+    @Expose
     @SerializedName("password")
     public String password;
 

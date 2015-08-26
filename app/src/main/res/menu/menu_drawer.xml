@@ -17,6 +17,12 @@
             android:id="@+id/history"
             android:title="@string/history"
             />
+
+        <item
+            android:id="@+id/share"
+            android:title="@string/share"
+            />
+
         <item
             android:id="@+id/tariff_info"
             android:title="@string/tariff.info"/>
@@ -24,8 +30,6 @@
         android:id="@+id/tech_support"
         android:title="@string/tech.support"
         />
-
-
 
        <item
            android:id="@+id/exit"
