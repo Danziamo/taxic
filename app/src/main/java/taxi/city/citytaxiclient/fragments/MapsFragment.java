@@ -126,8 +126,6 @@ public class MapsFragment extends BaseFragment {
             e.printStackTrace();
         }
 
-     //   setFalseMovementButtonParams(-100);
-
         mGoogleMap = mMapView.getMap();
         mGoogleMap.setMyLocationEnabled(true);
         mGoogleMap.setPadding(0, getPixelFromDpi(48), 0, getPixelFromDpi(48));
@@ -142,7 +140,6 @@ public class MapsFragment extends BaseFragment {
                     animation = YoYo.with(Techniques.SlideInUp)
                             .duration(ANIMATION_SPEED)
                             .startPoint(TYPE_SWITCHER_START_POINT)
-                                    //   .interpolate(new AccelerateDecelerateInterpolator())
                             .playOn(animView);
                 } else {
                     additionalPanel.setVisibility(View.GONE);
@@ -220,41 +217,12 @@ public class MapsFragment extends BaseFragment {
                 falseMovementButtonHeight = mainFunctionalButton.getMeasuredHeight();
               //  setFalseMovementButtonParams(-mainFunctionalButton.getMeasuredHeight());
 
-                Point center = new Point(view.getMeasuredWidth() / 2,view.getMeasuredHeight() / 2);
-                Animator animator = moveTo(
-                        center.x - falseMovementButton.getMeasuredWidth() / 2,
-                        center.y - falseMovementButton.getMeasuredHeight()/2,
-                        2);
-                animator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animator) {
-                        searchViews.setVisibility(View.VISIBLE);
-                        cancelButton.setVisibility(View.VISIBLE);
-                        falseMovementButton.setVisibility(View.INVISIBLE);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
-                });
-               // play(animator, falseMovementButton);
+            //    int ii = view.getMeasuredHeight()/2 - animView.getMeasuredHeight();
 
                 TranslateAnimation anim =
-                        new TranslateAnimation( 0, 0 ,
-                               // animView.getMeasuredHeight() + falseMovementButton.getMeasuredHeight() / 2,-
-                                0,-100);
-                anim.setDuration(1000);
+                        new TranslateAnimation( 0, 0 ,0,
+                        -( Math.abs((view.getMeasuredHeight()/2) - animView.getMeasuredHeight()) + (falseMovementButton.getMeasuredHeight()/2) ) );
+                anim.setDuration(500);
                 anim.setFillAfter(true);
                 anim.setInterpolator(new LinearInterpolator());
                 anim.setAnimationListener(new Animation.AnimationListener() {
@@ -267,6 +235,7 @@ public class MapsFragment extends BaseFragment {
                     public void onAnimationEnd(Animation animation) {
                         searchViews.setVisibility(View.VISIBLE);
                         cancelButton.setVisibility(View.VISIBLE);
+                        falseLayout.setVisibility(View.INVISIBLE);
                         falseMovementButton.clearAnimation();
                         falseMovementButton.setVisibility(View.INVISIBLE);
 
@@ -279,36 +248,9 @@ public class MapsFragment extends BaseFragment {
                 });
 
                 falseMovementButton.startAnimation(anim);
-
             }
-
         }
     };
-
-    int px = 0;
-
-//    ViewTreeObserver.OnGlobalLayoutListener treeObserverListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-//        @Override
-//        public void onGlobalLayout() {
-//            Resources r = getActivity().getResources();
-//            px = (int) TypedValue.applyDimension(
-//                    TypedValue.COMPLEX_UNIT_DIP,
-//                    mainFunctionalButton.getMeasuredHeight(),
-//                    r.getDisplayMetrics()
-//
-//            );
-//            params = new RelativeLayout.LayoutParams(
-//                    RelativeLayout.LayoutParams.WRAP_CONTENT,
-//                    RelativeLayout.LayoutParams.WRAP_CONTENT);
-//
-//            params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//            params.addRule(RelativeLayout.ABOVE, R.id.map_main_navigation_panel);
-//            params.setMargins(0, 0, 0, -px);
-//            falseMovementButton.setLayoutParams(params);
-//
-//            removeOnGlobalLayoutListener(falseMovementButton, treeObserverListener);
-//        }
-//    };
 
     public void setFalseMovementButtonParams(final int bottomMargin){
         falseMovementButton.setVisibility(View.INVISIBLE);
@@ -322,33 +264,15 @@ public class MapsFragment extends BaseFragment {
                 falseMovementButton.setLayoutParams(params);
             }
         },5);
-      //  falseMovementButton.getViewTreeObserver().addOnGlobalLayoutListener(treeObserverListener);
-     //   Resources r = getActivity().getResources();
-//        px = (int) TypedValue.applyDimension(
-//                TypedValue.COMPLEX_UNIT_DIP,
-//                bottomMargin,
-//                r.getDisplayMetrics()
-
-     //   );
-
-//        params.bottomMargin = px;
-//
     }
 
-    public static void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener){
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
-        } else {
-            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
-        }
-    }
+
 
     public void performAnimation(){
         createOrderPanel.setVisibility(View.VISIBLE);
         animation = YoYo.with(Techniques.SlideInUp)
                 .duration(ANIMATION_SPEED)
                 .startPoint(CREATE_ORDER_START_POINT)
-               // .interpolate(new AccelerateDecelerateInterpolator())
                 .withListener(new com.nineoldandroids.animation.Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(com.nineoldandroids.animation.Animator animation) {
@@ -359,7 +283,6 @@ public class MapsFragment extends BaseFragment {
                     public void onAnimationEnd(com.nineoldandroids.animation.Animator animation) {
                         mainFunctionalButton.setText(getResources().getString(R.string.issue_taxi));
                         falseLayout.setVisibility(View.VISIBLE);
-                      //  setFalseMovementButtonParams();
                     }
 
                     @Override
