@@ -78,6 +78,10 @@
     <string name="client_waiting">ОЖИДАНИЕ</string>
     <string name="client_distance">РАССТОЯНИЕ</string>
     <string name="cancel_order">Отмена</string>
+    <string name="cancel_order_upper">ОТМЕНА</string>
+    <string name="about_driver">О ВОДИТЕЛЕ</string>
+
+
 
     <!-- logout -->
     <string name="logout.confirm_title">Вы хотите выйти?</string>

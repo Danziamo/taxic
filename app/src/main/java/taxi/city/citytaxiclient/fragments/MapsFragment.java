@@ -85,6 +85,7 @@ public class MapsFragment extends BaseFragment {
     View searchViews;
     View onTheWayPanel;
     View globalView;
+    View toolsPanel;
 
     public static int ANIMATION_SPEED = 450;
     public static int CREATE_ORDER_START_POINT = 10;
@@ -106,6 +107,7 @@ public class MapsFragment extends BaseFragment {
         falseLayout         = view.findViewById(R.id.false_layout);
         onTheWayPanel       = view.findViewById(R.id.on_the_way_panel);
         globalView          = view.findViewById(R.id.global_view);
+        toolsPanel          = view.findViewById(R.id.tools_panel);
 
         mainFunctionalButton = (Button)view.findViewById(R.id.main_functioanl_button);
         searchButton         = (Button)view.findViewById(R.id.search_button);
@@ -203,6 +205,7 @@ public class MapsFragment extends BaseFragment {
     }
 
     int falseMovementButtonHeight = 0;
+    int movementDistance = 0;
     View.OnClickListener mainFunctionalButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -215,14 +218,14 @@ public class MapsFragment extends BaseFragment {
                 falseMovementButton.setVisibility(View.VISIBLE);
 
                 falseMovementButtonHeight = mainFunctionalButton.getMeasuredHeight();
-              //  setFalseMovementButtonParams(-mainFunctionalButton.getMeasuredHeight());
 
-            //    int ii = view.getMeasuredHeight()/2 - animView.getMeasuredHeight();
+                movementDistance = (view.getMeasuredHeight()/2)
+                        - toolsPanel.getMeasuredHeight()
+                        - (falseMovementButton.getMeasuredHeight()/2)
+                        - getPixelFromDpi(10);
 
-                TranslateAnimation anim =
-                        new TranslateAnimation( 0, 0 ,0,
-                        -( Math.abs((view.getMeasuredHeight()/2) - animView.getMeasuredHeight()) + (falseMovementButton.getMeasuredHeight()/2) ) );
-                anim.setDuration(500);
+                TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, - movementDistance );
+                anim.setDuration(800);
                 anim.setFillAfter(true);
                 anim.setInterpolator(new LinearInterpolator());
                 anim.setAnimationListener(new Animation.AnimationListener() {

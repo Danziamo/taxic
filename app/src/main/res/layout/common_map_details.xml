@@ -123,7 +123,6 @@
             android:background="@color/main_button"
             android:visibility="gone">
 
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -172,46 +171,123 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_toRightOf="@id/middle_point2">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/client_distance"
-                    android:textColor="@color/adressBar"
-                    android:textSize="12.5dp"/>
-                <TextView
-                    android:id="@+id/distanceTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" 900 km"
-                    android:textSize="11dp"/>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/distancePriceTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="300005 cом"
-                    android:textColor="@color/adressBar"
-                    android:textSize="18dp"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/client_distance"
+                        android:textColor="@color/adressBar"
+                        android:textSize="12.5dp"/>
+                    <TextView
+                        android:id="@+id/distanceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" 900 km"
+                        android:textSize="11dp"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/distancePriceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="300005 cом"
+                        android:textColor="@color/adressBar"
+                        android:textSize="18dp"
+                        android:layout_gravity="center_horizontal" />
             </LinearLayout>
 
         </RelativeLayout>
 
+        <LinearLayout
+            android:id="@+id/trip_runtime_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/main_button"
+            android:layout_below="@id/on_the_way_panel"
+            android:visibility="gone"
+            android:paddingBottom="5dp"
+            android:layout_marginTop="-1dp">
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/about_driver"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_driver"
+                        android:textSize="18dp"
+                        />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="center">
+                    <TextView
+                        android:id="@+id/cancel_order_from_trip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cancel_order_upper"
+                        android:textSize="18dp"
+                        />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/choose_car_type_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/trip_runtime_panel"
+            android:orientation="horizontal"
+            android:background="@color/main_button"
+            android:paddingBottom="5dp"
+            android:layout_marginTop="-1dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EASY"
+                android:layout_weight="0.33"
+                android:gravity="center"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EASY"
+                android:layout_weight="0.33"
+                android:gravity="center"
+                android:textSize="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EASY"
+                android:layout_weight="0.33"
+                android:gravity="center"
+                android:textSize="16dp"/>
+
+
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/tools_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/on_the_way_panel"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingLeft="35dp"
             android:paddingRight="35dp"
             android:layout_marginTop="-1dp"
-            android:background="@color/main_button">
+            android:background="@color/main_button"
+            android:layout_below="@id/trip_runtime_panel">
 
             <RelativeLayout
                 android:id="@+id/main_order_panel"
@@ -304,12 +380,8 @@
 
             </RelativeLayout>
 
-
         </RelativeLayout>
+
     </RelativeLayout>
-
-
-
-
 
 </RelativeLayout>
