@@ -1,4 +1,5 @@
 <RelativeLayout
+    android:id="@+id/splash_global_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,48 +7,51 @@
     android:background="@drawable/splash_background"
     tools:context="taxi.city.citytaxiclient.MainSplashActivity">
 
+
     <RelativeLayout
         android:id="@+id/main_animation_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/main_navigation_panel"
-        android:layout_alignParentTop="true">
-        <ProgressBar
-            android:id="@+id/splash_progress"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:indeterminateDrawable="@drawable/splash_progress"/>
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
 
-        <ImageView
-            android:id="@+id/s_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/s_logo"
-            />
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/jush"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_="@+id/s_logo_text">-->
+            <ProgressBar
+                android:id="@+id/splash_progress"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminateDrawable="@drawable/splash_progress"/>
 
-        <ImageView
-            android:id="@+id/middle_point"
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            android:visibility="invisible"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            <ImageView
+                android:id="@+id/s_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/s_logo"
+                />
+
+        <!--</RelativeLayout>-->
+
+    </RelativeLayout>
 
         <ImageView
             android:id="@+id/s_logo_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:src="@drawable/s_logo_text"
-            android:layout_below="@+id/splash_progress"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/main_animation_panel"
             android:layout_marginTop="10dp"/>
 
-    </RelativeLayout>
 
 
     <RelativeLayout
@@ -69,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/bottom_mini_panel"
             android:background="@drawable/splash_navigation_background"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/middle_line"
@@ -110,11 +114,7 @@
                     android:textSize="19dp"/>
 
             </LinearLayout>
-
-
         </RelativeLayout>
-
-
 
     </RelativeLayout>
 
