@@ -72,17 +72,7 @@
 
 
 
-    <Button
-        android:id="@+id/false_movement_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_button"
-        android:text="@string/issue_taxi"
-        android:textColor="@color/main_button"
-        android:textSize="12dp"
-        android:visibility="visible"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/map_main_navigation_panel" />
+
 
     <RelativeLayout
         android:id="@+id/map_main_navigation_panel"
@@ -383,5 +373,18 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/false_movement_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_normal"
+        android:text="@string/issue_taxi"
+        android:textColor="@color/main_button"
+        android:textSize="12dp"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/map_main_navigation_panel" />
 
 </RelativeLayout>

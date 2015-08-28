@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/bottom_mini_panel"
             android:background="@drawable/splash_navigation_background"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/middle_line"
