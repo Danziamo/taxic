@@ -27,10 +27,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-
-import org.w3c.dom.Text;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
@@ -46,6 +46,7 @@ import taxi.city.citytaxiclient.models.OrderStatus;
 import taxi.city.citytaxiclient.models.Role;
 import taxi.city.citytaxiclient.models.User;
 import taxi.city.citytaxiclient.networking.RestClient;
+import taxi.city.citytaxiclient.networking.model.CreateOrder;
 import taxi.city.citytaxiclient.networking.model.NOrder;
 import taxi.city.citytaxiclient.utils.Constants;
 import taxi.city.citytaxiclient.utils.Helper;
@@ -94,6 +95,18 @@ public class MapsFragment extends BaseFragment {
     public MapsFragment() {
 
     }
+
+    Handler globalTimerHandler = new Handler();
+    Runnable globalTimerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            getDrivers();
+            if (mOrder == null) return;
+            getOrder(mOrder.getId());
+            globalTimerHandler.postDelayed(this, 30 * 1000);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -203,6 +216,7 @@ public class MapsFragment extends BaseFragment {
 
         etPhone.setText(user.getPhone());
         updateViews();
+        globalTimerHandler.postDelayed(globalTimerRunnable, 0);
 
         return view;
     }
@@ -367,13 +381,13 @@ public class MapsFragment extends BaseFragment {
         } else if (mOrder.getStatus() == OrderStatus.ACCEPTED) {
 
         } else if (mOrder.getStatus() == OrderStatus.WAITING) {
-
+            onTheWayPanel.setVisibility(View.VISIBLE);
         } else if (mOrder.getStatus() == OrderStatus.ONTHEWAY) {
-
+            onTheWayPanel.setVisibility(View.VISIBLE);
         } else if (mOrder.getStatus() == OrderStatus.PENDING) {
-
+            onTheWayPanel.setVisibility(View.VISIBLE);
         } else {
-
+            onTheWayPanel.setVisibility(View.VISIBLE);
         }
     }
 
@@ -394,7 +408,7 @@ public class MapsFragment extends BaseFragment {
     }
 
     private void createNewOrder() {
-        NOrder newOrder = new NOrder();
+        CreateOrder newOrder = new CreateOrder();
         newOrder.client = user.getId();
         newOrder.clientPhone = etPhone.getText().toString();
         newOrder.startName = mAddressText;
@@ -412,14 +426,14 @@ public class MapsFragment extends BaseFragment {
 
         showProgress("Создание");
 
-        RestClient.getOrderService().createOrder(newOrder, new Callback<Order>() {
+        RestClient.getOrderService().createOrder(newOrder, new Callback<NOrder>() {
             @Override
-            public void success(Order order, Response response) {
+            public void success(NOrder order, Response response) {
                 hideProgress();
                 animateAfterCreationOfOrder();
                 Toast.makeText(getActivity(), "SUCCESS NEW ORDER", Toast.LENGTH_SHORT).show();
-                GlobalSingleton.getInstance(getActivity()).currentOrder = order;
-                mOrder = order;
+                mOrder = new Order(order);
+                GlobalSingleton.getInstance(getActivity()).currentOrder = mOrder;
                 updateViews();
             }
 
@@ -435,7 +449,15 @@ public class MapsFragment extends BaseFragment {
         RestClient.getOrderService().getById(orderId, new Callback<Order>() {
             @Override
             public void success(Order order, Response response) {
-                GlobalSingleton.getInstance(getActivity()).currentOrder = order;
+                if (order.getStatus() != OrderStatus.FINISHED && order.getStatus() != OrderStatus.CANCELED) {
+                    GlobalSingleton.getInstance(getActivity()).currentOrder = order;
+                    mOrder = order;
+                    setCounter(order);
+                } else {
+                    mOrder = null;
+                    GlobalSingleton.getInstance(getActivity()).currentOrder = null;
+                    setCounter(null);
+                }
             }
 
             @Override
@@ -443,6 +465,20 @@ public class MapsFragment extends BaseFragment {
                 Toast.makeText(getActivity(), "FAIL FETCH ORDER", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void setCounter(Order order) {
+        if (order != null) {
+            waitingTextView.setText(order.getWaitTime());
+            waitingPriceTextView.setText(String.valueOf((int) order.getWaitTimePrice()));
+            distanceTextView.setText(String.valueOf(order.getDistance()));
+            distancePriceTextView.setText(String.valueOf((int) order.getTravelSum()));
+        } else {
+            waitingTextView.setText(null);
+            waitingPriceTextView.setText(null);
+            distanceTextView.setText(null);
+            distancePriceTextView.setText(null);
+        }
     }
 
     private void cancelOrderAnimation() {
@@ -474,16 +510,31 @@ public class MapsFragment extends BaseFragment {
     }
 
     private void getDrivers() {
-        RestClient.getUserService().getDrivers(OnlineStatus.ONLINE, Role.DRIVER, new Callback<ArrayList<User>>() {
-            @Override
-            public void success(ArrayList<User> users, Response response) {
+        if (mOrder == null || mOrder.getStatus() == OrderStatus.NEW) {
+            RestClient.getUserService().getDrivers(OnlineStatus.ONLINE, Role.DRIVER, new Callback<ArrayList<User>>() {
+                @Override
+                public void success(ArrayList<User> users, Response response) {
+                    if (users.size() == 0) return;
+                    if (mGoogleMap == null) return;
+                    mGoogleMap.clear();
+                    for (int i = 0; i < users.size(); ++i) {
+                        User driver = users.get(i);
+                        LatLng position = Helper.getLatLng(driver.getCurPosition());
+                        if (driver.getOnlineStatus() == OnlineStatus.EXITED || position == null)
+                            continue;
+                        mGoogleMap.addMarker(new MarkerOptions()
+                                .position(position)
+                                .icon(driver.getOnlineStatus() == OnlineStatus.ONLINE
+                                        ? BitmapDescriptorFactory.fromResource(R.drawable.car)
+                                        : BitmapDescriptorFactory.fromResource(R.drawable.car_offline)));
+                    }
+                }
 
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), "Error fetching drivers", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast.makeText(getActivity(), "Error fetching drivers", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }

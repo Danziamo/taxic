@@ -13,6 +13,7 @@ import retrofit.http.Path;
 import retrofit.http.Query;
 import taxi.city.citytaxiclient.models.Order;
 import taxi.city.citytaxiclient.models.OrderStatus;
+import taxi.city.citytaxiclient.networking.model.CreateOrder;
 import taxi.city.citytaxiclient.networking.model.NOrder;
 
 public interface OrderApi {
@@ -23,7 +24,7 @@ public interface OrderApi {
     void getById(@Path("orderId") int orderId, Callback<Order> cb);
 
     @POST("/orders/")
-    void createOrder(@Body NOrder order, Callback<Order> cb);
+    void createOrder(@Body CreateOrder order, Callback<NOrder> cb);
 
     @FormUrlEncoded
     @PATCH("/orders/{orderId}/")

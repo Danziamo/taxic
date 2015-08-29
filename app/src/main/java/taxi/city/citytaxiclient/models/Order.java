@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import taxi.city.citytaxiclient.networking.model.NOrder;
 import taxi.city.citytaxiclient.utils.Constants;
 
 public class Order implements Serializable{
@@ -234,6 +235,27 @@ public class Order implements Serializable{
     }
 
     public Order () {}
+
+    public Order(NOrder order) {
+        this.id = order.getOrderId();
+        this.status = order.getStatus();
+        OrderUser user = new OrderUser();
+        user.setId(order.getDriverId());
+        this.driver = user;
+        this.startName = order.getStartName();
+        this.stopName = order.getStopName();
+        this.startPoint = order.getStartPoint();
+        this.stopPoint = order.getStopPoint();
+        this.fixedPrice = order.getFixedPrice();
+        this.clientId = order.getClientId();
+        this.clientPhone = order.getClientPhone();
+        this.description = order.getDescription();
+        this.waitTimePrice = order.getWaitTimePrice();
+        this.waitTime = order.getWaitTime();
+        this.distance = order.getDistance();
+        this.sum = order.getSum();
+
+    }
 
     public String getOrderTime() {
         return orderTime;

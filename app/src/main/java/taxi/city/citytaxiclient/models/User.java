@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import taxi.city.citytaxiclient.networking.model.NOrder;
+
 public class User implements Serializable {
 
     @Expose
@@ -65,7 +67,7 @@ public class User implements Serializable {
 
     @Expose
     @SerializedName("is_order_active")
-    private ArrayList<Order> activeOrders;
+    private ArrayList<NOrder> activeOrders;
 
     @Expose
     private String token;
@@ -211,10 +213,10 @@ public class User implements Serializable {
     public Order getActiveOrder() {
         if (hasActiveOrder()) {
             for (int i = this.activeOrders.size() - 1; i >= 0; i -= 1) {
-                Order order = activeOrders.get(i);
-                if (order.getClient() == 0) continue;
-                if (order.getClient() != this.id) continue;
-                return order;
+                NOrder order = activeOrders.get(i);
+                if (order.getClientId() == 0) continue;
+                if (order.getClientId() != this.id) continue;
+                return new Order(order);
             }
         }
         return null;
