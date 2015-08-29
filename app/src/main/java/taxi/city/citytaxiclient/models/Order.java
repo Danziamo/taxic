@@ -51,14 +51,15 @@ public class Order implements Serializable{
     @SerializedName("fixed_price")
     private double fixedPrice;
 
-    @Expose
+    //@Expose
     private Tariff tariff;
 
     @Expose
     private OrderUser driver;
 
-    @Expose
-    private User client;
+    //@Expose
+    @SerializedName("client")
+    private int clientId;
 
     @Expose
     private String description;
@@ -174,12 +175,12 @@ public class Order implements Serializable{
         this.driver = driver;
     }
 
-    public User getClient() {
-        return client;
+    public int getClient() {
+        return clientId;
     }
 
-    public void setClient(User client) {
-        this.client = client;
+    public void setClient(int client) {
+        this.clientId = client;
     }
 
     public String getDescription() {

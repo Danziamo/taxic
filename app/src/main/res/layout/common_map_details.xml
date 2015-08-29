@@ -13,10 +13,10 @@
         android:visibility="invisible"/>
 
     <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/etEditAdress"
+        android:id="@+id/etAddress"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/adressBar"
+        android:background="@color/addressBar"
         android:textColor="@color/blacktext2"
         android:gravity="center_vertical|center_horizontal"
         android:textCursorDrawable="@color/locker_out" />
@@ -24,7 +24,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:layout_below="@+id/etEditAdress"
+        android:layout_below="@+id/etAddress"
         android:background="@color/main_button"/>
 
     <RelativeLayout
@@ -125,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/client_waiting"
-                        android:textColor="@color/adressBar"
+                        android:textColor="@color/addressBar"
                         android:textSize="12.5dp"/>
                     <TextView
                         android:id="@+id/waitingTextView"
@@ -139,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="10005 cом"
-                    android:textColor="@color/adressBar"
+                    android:textColor="@color/addressBar"
                     android:textSize="18dp"
                     android:layout_gravity="center_horizontal" />
 
@@ -168,7 +168,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/client_distance"
-                        android:textColor="@color/adressBar"
+                        android:textColor="@color/addressBar"
                         android:textSize="12.5dp"/>
                     <TextView
                         android:id="@+id/distanceTextView"
@@ -182,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="300005 cом"
-                        android:textColor="@color/adressBar"
+                        android:textColor="@color/addressBar"
                         android:textSize="18dp"
                         android:layout_gravity="center_horizontal" />
             </LinearLayout>
@@ -288,7 +288,7 @@
                 android:visibility="gone">
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/etEditPhone"
+                    android:id="@+id/etClientPhone"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:background="@drawable/main_textbox_style"
@@ -306,7 +306,7 @@
                     android:hint="@string/add_info"
                     android:textColorHint="@color/blacktext"
                     android:paddingLeft="10dp"
-                    android:layout_below="@id/etEditPhone"
+                    android:layout_below="@id/etClientPhone"
                     android:layout_marginTop="15dp"/>
 
                 <RelativeLayout
@@ -347,7 +347,7 @@
                 android:visibility="gone">
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/etAdditionalLoaction"
+                    android:id="@+id/etEndLocation"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:background="@drawable/main_textbox_style"
@@ -357,16 +357,17 @@
                     android:paddingLeft="10dp"/>
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/etAdditionalPrice"
+                    android:id="@+id/etFixedPrice"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:background="@drawable/main_textbox_style"
                     android:textColor="@color/blacktext2"
                     android:hint="@string/additional_price"
+                    android:inputType="number"
                     android:textColorHint="@color/blacktext"
                     android:paddingLeft="10dp"
                     android:layout_marginTop="15dp"
-                    android:layout_below="@id/etAdditionalLoaction"/>
+                    android:layout_below="@id/etEndLocation"/>
 
             </RelativeLayout>
 

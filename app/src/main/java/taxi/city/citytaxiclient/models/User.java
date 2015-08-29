@@ -212,8 +212,8 @@ public class User implements Serializable {
         if (hasActiveOrder()) {
             for (int i = this.activeOrders.size() - 1; i >= 0; i -= 1) {
                 Order order = activeOrders.get(i);
-                if (order.getClient() == null) continue;
-                if (order.getClient().getId() != this.id) continue;
+                if (order.getClient() == 0) continue;
+                if (order.getClient() != this.id) continue;
                 return order;
             }
         }

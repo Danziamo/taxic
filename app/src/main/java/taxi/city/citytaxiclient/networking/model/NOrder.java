@@ -25,14 +25,17 @@ public class NOrder {
     public double fixedPrice;
 
     @Expose
-    @SerializedName("adress_start_name")
+    @SerializedName("address_start_name")
     public String  startName;
 
     @Expose
-    @SerializedName("adress_stop_name")
+    @SerializedName("address_stop_name")
     public String stopName;
 
     @Expose
-    @SerializedName("adress_start")
+    @SerializedName("address_start")
     public String startPoint;
+
+    @Expose
+    public String description;
 }

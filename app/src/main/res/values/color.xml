@@ -29,7 +29,7 @@
     <color name = "splashMiddle"  >#000000</color>
     <color name = "startBtnFirst" >#FFFFFF</color>
     <color name = "startBtnFinish">#A1A1A1</color>
-    <color name = "adressBar"     >#ECECEC</color>
+    <color name = "addressBar"     >#ECECEC</color>
     <color name = "cancelFirst"   >#DF5B42</color>
     <color name = "cancelFinish"  >#D13030</color>
     <color name = "splashPStart"  >#454545</color>
