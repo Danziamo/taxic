@@ -97,8 +97,8 @@
                 android:text="@string/order_taxi"
                 android:textColor="@color/main_button"
                 android:textSize="12dp"
-                android:layout_marginBottom="10dp"
-                android:visibility="visible"/>
+                android:visibility="visible"
+                android:layout_marginBottom="10dp"/>
 
         </RelativeLayout>
 
@@ -202,7 +202,7 @@
             <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
+                    android:layout_weight="0.35"
                     android:gravity="center">
                     <TextView
                         android:id="@+id/about_driver"
@@ -234,36 +234,95 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/trip_runtime_panel"
             android:orientation="horizontal"
-            android:background="@color/main_button"
-            android:paddingBottom="5dp"
+            android:background="@color/addressBar"
+            android:paddingBottom="0dp"
             android:layout_marginTop="-1dp"
             android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/big_linear"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="EASY"
                 android:layout_weight="0.33"
                 android:gravity="center"
-                android:textSize="16dp"/>
+                android:orientation="vertical"
+                android:paddingTop="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/car_big"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_big"
+                    android:textSize="16dp"
+                    android:textColor="@color/main_button"/>
+
+                <ImageView
+                    android:id="@+id/car_selector1"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/main_button"
+                    android:layout_marginTop="3dp"
+                    android:visibility="invisible"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/easy_linear"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="EASY"
                 android:layout_weight="0.33"
                 android:gravity="center"
-                android:textSize="16dp"/>
+                android:orientation="vertical"
+                android:paddingTop="5dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/car_big"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_easy"
+                    android:textSize="16dp"
+                    android:textColor="@color/main_button"/>
+                <ImageView
+                    android:id="@+id/car_selector2"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/main_button"
+                    android:layout_marginTop="3dp"
+                    android:visibility="invisible"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/vip_linear"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="EASY"
                 android:layout_weight="0.33"
                 android:gravity="center"
-                android:textSize="16dp"/>
-
-
+                android:orientation="vertical"
+                android:paddingTop="5dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/car_big"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_vip"
+                    android:textSize="16dp"
+                    android:textColor="@color/main_button"/>
+                <ImageView
+                    android:id="@+id/car_selector3"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:background="@color/main_button"
+                    android:layout_marginTop="3dp"
+                    android:visibility="invisible"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -277,7 +336,7 @@
             android:paddingRight="35dp"
             android:layout_marginTop="-1dp"
             android:background="@color/main_button"
-            android:layout_below="@id/trip_runtime_panel">
+            android:layout_below="@id/choose_car_type_panel">
 
             <RelativeLayout
                 android:id="@+id/main_order_panel"
@@ -384,8 +443,9 @@
         android:text="@string/issue_taxi"
         android:textColor="@color/main_button"
         android:textSize="12dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/map_main_navigation_panel" />
+        android:layout_above="@+id/map_main_navigation_panel"
+        android:layout_marginBottom="-110dp"/>
 
 </RelativeLayout>

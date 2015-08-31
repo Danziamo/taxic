@@ -17,6 +17,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,6 +79,11 @@ public class MapsFragment extends BaseFragment {
     View onTheWayPanel;
     View globalView;
     View toolsPanel;
+    View bigLinear;
+    View easyLinear;
+    View vipLinear;
+    View chooseCarTypePanel;
+
     EditText etAddress;
     EditText etPhone;
     EditText etDescription;
@@ -87,6 +93,11 @@ public class MapsFragment extends BaseFragment {
     TextView waitingPriceTextView;
     TextView distanceTextView;
     TextView distancePriceTextView;
+
+    ImageView carSelector1;
+    ImageView carSelector2;
+    ImageView carSelector3;
+
 
     public static int ANIMATION_SPEED = 450;
     public static int CREATE_ORDER_START_POINT = 10;
@@ -121,6 +132,10 @@ public class MapsFragment extends BaseFragment {
         onTheWayPanel       = view.findViewById(R.id.on_the_way_panel);
         globalView          = view.findViewById(R.id.global_view);
         toolsPanel          = view.findViewById(R.id.tools_panel);
+        bigLinear           = view.findViewById(R.id.big_linear);
+        easyLinear          = view.findViewById(R.id.easy_linear);
+        vipLinear           = view.findViewById(R.id.vip_linear);
+        chooseCarTypePanel  = view.findViewById(R.id.choose_car_type_panel);
 
         mainFunctionalButton = (Button)view.findViewById(R.id.main_functioanl_button);
         searchButton         = (Button)view.findViewById(R.id.search_button);
@@ -138,6 +153,10 @@ public class MapsFragment extends BaseFragment {
         waitingPriceTextView = (TextView)view.findViewById(R.id.waitingPriceTextView);
         distanceTextView = (TextView)view.findViewById(R.id.distanceTextView);
         distancePriceTextView = (TextView)view.findViewById(R.id.distancePriceTextView);
+
+        carSelector1 = (ImageView)view.findViewById(R.id.car_selector1);
+        carSelector2 = (ImageView)view.findViewById(R.id.car_selector2);
+        carSelector3 = (ImageView)view.findViewById(R.id.car_selector3);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
@@ -176,7 +195,8 @@ public class MapsFragment extends BaseFragment {
                     additionalPanel.setVisibility(View.VISIBLE);
                     animation = YoYo.with(Techniques.SlideInUp)
                             .duration(ANIMATION_SPEED)
-                            .startPoint(TYPE_SWITCHER_START_POINT)
+                          //  .startPoint(toolsPanel.getMeasuredHeight() + chooseCarTypePanel.getMeasuredHeight() + 10)
+                            .startPoint(toolsPanel.getMeasuredHeight() + bottomPanel.getMeasuredHeight()/3)
                             .playOn(animView);
                 } else {
                     additionalPanel.setVisibility(View.GONE);
@@ -187,7 +207,8 @@ public class MapsFragment extends BaseFragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelOrder(mOrder.getId());
+               // cancelOrder(mOrder.getId());
+                cancelOrderAnimation();
             }
         });
 
@@ -218,9 +239,58 @@ public class MapsFragment extends BaseFragment {
         updateViews();
         globalTimerHandler.postDelayed(globalTimerRunnable, 0);
 
+
+
+        bigLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchLinearBachground(R.id.big_linear);
+            }
+        });
+        easyLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchLinearBachground(R.id.easy_linear);
+            }
+        });
+        vipLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchLinearBachground(R.id.vip_linear);
+            }
+        });
+
         return view;
     }
 
+    public void switchLinearBachground(int id){
+        switch(id){
+            case R.id.big_linear:
+                bigLinear.setBackgroundColor(getResources().getColor(R.color.startBtnFinish));
+                easyLinear.setBackgroundColor(getResources().getColor(R.color.addressBar));
+                vipLinear.setBackgroundColor(getResources().getColor(R.color.addressBar));
+                carSelector1.setVisibility(View.VISIBLE);
+                carSelector2.setVisibility(View.INVISIBLE);
+                carSelector3.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.easy_linear:
+                bigLinear.setBackgroundColor(getResources().getColor(R.color.addressBar));
+                easyLinear.setBackgroundColor(getResources().getColor(R.color.startBtnFinish));
+                vipLinear.setBackgroundColor(getResources().getColor(R.color.addressBar));
+                carSelector1.setVisibility(View.INVISIBLE);
+                carSelector2.setVisibility(View.VISIBLE);
+                carSelector3.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.vip_linear:
+                bigLinear.setBackgroundColor(getResources().getColor(R.color.addressBar));
+                easyLinear.setBackgroundColor(getResources().getColor(R.color.addressBar));
+                vipLinear.setBackgroundColor(getResources().getColor(R.color.startBtnFinish));
+                carSelector1.setVisibility(View.INVISIBLE);
+                carSelector2.setVisibility(View.INVISIBLE);
+                carSelector3.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
     private void setAddressText(String text) {
         mAddressText = text;
         if (text == null)
@@ -235,7 +305,7 @@ public class MapsFragment extends BaseFragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                setFalseMovementButtonParams(-(mainFunctionalButton.getMeasuredHeight()/2));
+                //setFalseMovementButtonParams(-(mainFunctionalButton.getMeasuredHeight()/2));
             }
         },1);
 
@@ -258,14 +328,15 @@ public class MapsFragment extends BaseFragment {
                 performAnimation();
             }
             if(mainFunctionalButton.getText().equals(getResources().getString(R.string.issue_taxi))) {
-                createNewOrder();
+               // createNewOrder();
+                animateAfterCreationOfOrder();
 
             }
         }
     };
 
     public void setFalseMovementButtonParams(final int bottomMargin){
-        falseMovementButton.setVisibility(View.INVISIBLE);
+        falseMovementButton.setVisibility(View.VISIBLE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -337,8 +408,7 @@ public class MapsFragment extends BaseFragment {
 
         movementDistance = (view.getMeasuredHeight()/2)
                 - toolsPanel.getMeasuredHeight()
-                - (falseMovementButton.getMeasuredHeight()/2)
-                - getPixelFromDpi(10);
+                - (falseMovementButton.getMeasuredHeight()/2);
 
         TranslateAnimation anim = new TranslateAnimation( 0, 0, 0, - movementDistance );
         anim.setDuration(800);
@@ -486,7 +556,8 @@ public class MapsFragment extends BaseFragment {
         searchViews.setVisibility(View.INVISIBLE);
         cancelButton.setVisibility(View.GONE);
         invalidateAnimation();
-        setFalseMovementButtonParams(-(falseMovementButtonHeight / 2));
+        falseMovementButton.setVisibility(View.INVISIBLE);
+       // setFalseMovementButtonParams(-(falseMovementButtonHeight / 2));
     }
 
     private void cancelOrder(int orderId) {

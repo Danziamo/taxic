@@ -120,6 +120,10 @@
     <string name="som">сом</string>
     <string name="km">км</string>
     <string name="map">Карта</string>
+    
+    <string name="car_big">EASY BIG</string>
+    <string name="car_easy">EASY</string>
+    <string name="car_vip">VIP</string>
 
 
 </resources>
