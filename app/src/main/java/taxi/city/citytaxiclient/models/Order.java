@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+import taxi.city.citytaxiclient.networking.model.NOrder;
 import taxi.city.citytaxiclient.utils.Constants;
 
 public class Order implements Serializable{
@@ -51,14 +52,15 @@ public class Order implements Serializable{
     @SerializedName("fixed_price")
     private double fixedPrice;
 
-    @Expose
+    //@Expose
     private Tariff tariff;
 
     @Expose
     private OrderUser driver;
 
-    @Expose
-    private User client;
+    //@Expose
+    @SerializedName("client")
+    private int clientId;
 
     @Expose
     private String description;
@@ -174,12 +176,12 @@ public class Order implements Serializable{
         this.driver = driver;
     }
 
-    public User getClient() {
-        return client;
+    public int getClient() {
+        return clientId;
     }
 
-    public void setClient(User client) {
-        this.client = client;
+    public void setClient(int client) {
+        this.clientId = client;
     }
 
     public String getDescription() {
@@ -233,6 +235,27 @@ public class Order implements Serializable{
     }
 
     public Order () {}
+
+    public Order(NOrder order) {
+        this.id = order.getOrderId();
+        this.status = order.getStatus();
+        OrderUser user = new OrderUser();
+        user.setId(order.getDriverId());
+        this.driver = user;
+        this.startName = order.getStartName();
+        this.stopName = order.getStopName();
+        this.startPoint = order.getStartPoint();
+        this.stopPoint = order.getStopPoint();
+        this.fixedPrice = order.getFixedPrice();
+        this.clientId = order.getClientId();
+        this.clientPhone = order.getClientPhone();
+        this.description = order.getDescription();
+        this.waitTimePrice = order.getWaitTimePrice();
+        this.waitTime = order.getWaitTime();
+        this.distance = order.getDistance();
+        this.sum = order.getSum();
+
+    }
 
     public String getOrderTime() {
         return orderTime;

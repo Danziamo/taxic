@@ -47,14 +47,13 @@
             android:screenOrientation="portrait" >
         </activity>
 
-
         <activity
             android:name=".LoginActivity"
-
             android:exported="true"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainSplashActivity">
         </activity>
+
         <activity
             android:name=".MainSplashActivity"
             android:exported="true"
@@ -66,83 +65,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivityOld"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" >
-        </activity>
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".MakeOrderActivity"
-            android:label="@string/title_activity_make_order"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".ConfirmSignUpActivity"
-            android:label="@string/title_activity_confirm_sign_up"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".UserDetailsActivity"
-            android:label="@string/title_activity_user_details"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".CreateOrderActivity"
-            android:label="@string/title_activity_create_order"
-            android:parentActivityName=".MapsActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.MapsActivity" />
-        </activity>
+
         <activity
             android:name=".DriverDetails"
             android:label="@string/title_activity_driver_details"
-            android:parentActivityName=".MapsActivity"
+            android:parentActivityName=".TestMapsActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.MapsActivity" />
+                android:value="taxi.city.citytaxiclient.TestMapsActivity" />
         </activity>
+
         <activity
             android:name=".HistoryOrder"
             android:label="@string/title_activity_history_order"
             android:screenOrientation="portrait" >
         </activity>
+
         <activity
             android:name=".OrderDetailsActivity"
             android:label="@string/title_activity_order_details"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
+            >
         </activity>
+
         <activity
             android:name=".HelpActivity"
             android:label="@string/title_activity_help"
-            android:parentActivityName=".AccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActionBarTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.AccountActivity" />
         </activity>
+
         <activity
             android:name=".TariffActivity"
             android:label="@string/title_activity_about"
-            android:parentActivityName=".AccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ActionBarTheme" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="taxi.city.citytaxiclient.AccountActivity" />
         </activity>
 
         <activity
@@ -152,6 +110,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateUnchanged|stateHidden|adjustPan" >
         </activity>
+
         <activity
             android:name=".SignupActivity"
             android:label="@string/title_activity_signup"

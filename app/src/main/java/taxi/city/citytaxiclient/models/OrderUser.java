@@ -3,9 +3,10 @@ package taxi.city.citytaxiclient.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class OrderUser {
+public class OrderUser implements Serializable {
     @Expose
     private String phone;
 

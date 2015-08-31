@@ -355,7 +355,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
 
     @Override
     public void onLocationChanged(Location location) {
-        handleNewLocation(location);
+        //handleNewLocation(location);
     }
 
     @Override
