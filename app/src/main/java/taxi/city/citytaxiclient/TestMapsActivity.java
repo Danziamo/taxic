@@ -242,6 +242,7 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                 break;
             case R.id.tariff_info:
                 performState(TariffActivity.class);
+                break;
             case R.id.cabinet:
                 String backName = getSupportFragmentManager().getClass().getName();
                 getSupportFragmentManager().beginTransaction()
@@ -249,6 +250,8 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
                         .addToBackStack((backName))
                         .commit();
                 break;
+            case R.id.share:
+                shareLink();break;
             case R.id.exit:
                 showConfirmDialog(getString(R.string.logout_confirm_title), getString(R.string.logout_confirm_text), getString(R.string.logout_cancel_text), new ConfirmCallback() {
                     @Override
@@ -269,6 +272,17 @@ public class TestMapsActivity extends BaseActivity implements NavigationView.OnN
     private void performState(Class<?> activity){
         Intent intent = new Intent(TestMapsActivity.this, activity);
         startActivity(intent);
+    }
+
+    private void shareLink(){
+        String text = "Я пользуюсь Easy Taxi. Это удобное приложение для мгновенного вызова такси. \nhttp://onelink.to/r94mvp \nEasy Taxi\nНам с тобой по пути!";
+        Intent intent = new Intent(Intent.ACTION_SEND);
+
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "Я пользуюсь мобильным приложением Easy Taxi.");
+
+        startActivity(Intent.createChooser(intent, "Поделиться"));
     }
 
 
